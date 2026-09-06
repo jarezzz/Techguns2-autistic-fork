@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "techguns:itemshared",
+    "data": 158
+  },
+  "pattern": [
+    " is",
+    " f ",
+    "si "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "s": {
+      "item": "techguns:itemshared",
+      "data": 103
+    },
+    "f": {
+      "item": "techguns:itemshared",
+      "data": 159
+    },
+    "i": {
+      "item": "techguns:itemshared",
+      "data": 70
+    }
+  }
+}

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.render.TGRenderHelper;
 import techguns.client.render.TGRenderHelper.RenderType;
 import techguns.entities.projectiles.AdvancedBulletProjectile;
@@ -14,7 +14,7 @@ import techguns.entities.projectiles.GenericProjectile;
 
 public class RenderAdvancedBulletProjectile<T extends AdvancedBulletProjectile> extends RenderGenericProjectile<T> {
 
-	private static ResourceLocation textureLoc = new ResourceLocation(Techguns.MODID,"textures/entity/bullet_blue.png");
+	private static ResourceLocation textureLoc = new ResourceLocation(Tags.MOD_ID,"textures/entity/bullet_blue.png");
 	
 	public RenderAdvancedBulletProjectile(RenderManager renderManager) {
 		super(renderManager);

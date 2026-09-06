@@ -11,8 +11,7 @@ public class TGShooterValuesStorage implements IStorage<ITGShooterValues> {
 
 	@Override
 	public NBTBase writeNBT(Capability<ITGShooterValues> capability, ITGShooterValues instance, EnumFacing side) {
-		final NBTTagCompound tags = new NBTTagCompound();
-		return tags;
+		return new NBTTagCompound();
 	}
 
 	@Override

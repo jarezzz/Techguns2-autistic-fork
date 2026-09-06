@@ -26,7 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 import techguns.items.armors.ICamoChangeable;
 
 public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends GenericBlock implements ICamoChangeable {
@@ -75,7 +76,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 		setLightOpacity(0);
 	}
 	
-	public BlockStateContainer getBlockState() {
+	public @NotNull BlockStateContainer getBlockState() {
 		return this.blockStateOverride;
 	}
 	
@@ -85,7 +86,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	}
 	
 	@Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess source, @NotNull BlockPos pos)
     {
         state = this.getActualState(state, source, pos);
        if(state.getValue(LAMP_TYPE)==clazz.getEnumConstants()[0] || state.getValue(LAMP_TYPE)==clazz.getEnumConstants()[1]) {
@@ -115,12 +116,12 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	  /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
-    public boolean isOpaqueCube(IBlockState state)
+    public boolean isOpaqueCube(@NotNull IBlockState state)
     {
         return false;
     }
 
-    public boolean isFullCube(IBlockState state)
+    public boolean isFullCube(@NotNull IBlockState state)
     {
         return false;
     }
@@ -132,12 +133,12 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public @NotNull IBlockState getStateFromMeta(int meta) {
 		IBlockState s = this.getDefaultState();
 		if (meta <6) {
-			s = s.withProperty(LAMP_TYPE, this.clazz.getEnumConstants()[0]).withProperty(FACING_ALL,EnumFacing.getFront(meta));
+			s = s.withProperty(LAMP_TYPE, this.clazz.getEnumConstants()[0]).withProperty(FACING_ALL,EnumFacing.byIndex(meta));
 		} else if (meta <12) {
-			s = s.withProperty(LAMP_TYPE, this.clazz.getEnumConstants()[1]).withProperty(FACING_ALL,EnumFacing.getFront(meta-6));
+			s = s.withProperty(LAMP_TYPE, this.clazz.getEnumConstants()[1]).withProperty(FACING_ALL,EnumFacing.byIndex(meta-6));
 		} else if (meta == 12) {
 			s = s.withProperty(LAMP_TYPE, this.clazz.getEnumConstants()[2]);
 		} else if (meta == 13) {
@@ -162,7 +163,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public @NotNull IBlockState getActualState(IBlockState state, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 		int type = state.getValue(LAMP_TYPE).ordinal();
 		if (type==0 || type==1) {
 			return state.withProperty(CONNECT_UP, false).withProperty(CONNECT_DOWN,false).withProperty(CONNECT_E,false)
@@ -183,21 +184,21 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	}
 	
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+	public @NotNull IBlockState getStateForPlacement(@NotNull World world, @NotNull BlockPos pos, EnumFacing facing, float hitX, float hitY,
+													 float hitZ, int meta, @NotNull EntityLivingBase placer, @NotNull EnumHand hand) {
 		IBlockState state = this.getStateFromMeta(meta);
 		return state.withProperty(FACING_ALL, facing.getOpposite());
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs tab, @NotNull NonNullList<ItemStack> items) {
 		for (T t : clazz.getEnumConstants()) {
 			items.add(new ItemStack(this,1,this.getMetaFromState(getDefaultState().withProperty(LAMP_TYPE, t))));
 		}
 	}
 
 	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+	public boolean canPlaceBlockAt(@NotNull World worldIn, @NotNull BlockPos pos)
     {
         for (EnumFacing enumfacing : FACING_ALL.getAllowedValues())
         {
@@ -241,7 +242,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
      * Called after the block is set in the Chunk data, but before the Tile Entity is set
      */
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
+    public void onBlockAdded(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state)
     {
         this.checkForDrop(worldIn, pos, state);
     }
@@ -252,15 +253,10 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
      * block, etc.
      */
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    public void neighborChanged(@NotNull IBlockState state, @NotNull World worldIn, @NotNull BlockPos pos, @NotNull Block blockIn, @NotNull BlockPos fromPos)
     {
-        if (!this.checkForDrop(worldIn, pos, state))
-        {
-            return;
-        }
-        else
-        {
-            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING_ALL);
+        if (this.checkForDrop(worldIn, pos, state)) {
+            EnumFacing enumfacing = state.getValue(FACING_ALL);
             EnumFacing.Axis enumfacing$axis = enumfacing.getAxis();
             //EnumFacing enumfacing1 = enumfacing.getOpposite();
             BlockPos blockpos = pos.offset(enumfacing);
@@ -285,7 +281,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
     
     protected boolean checkForDrop(World worldIn, BlockPos pos, IBlockState state)
     {
-        if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing)state.getValue(FACING_ALL)))
+        if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, state.getValue(FACING_ALL)))
         {
             return true;
         }
@@ -306,13 +302,13 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	public void registerItemBlockModels() {
 		for(int i = 0; i< clazz.getEnumConstants().length;i++) {
 			IBlockState state = getDefaultState().withProperty(LAMP_TYPE, clazz.getEnumConstants()[i]);
-			ModelLoader.setCustomModelResourceLocation(itemblock, this.getMetaFromState(state), new ModelResourceLocation(new ResourceLocation(Techguns.MODID,"lamp_inventory_"+clazz.getEnumConstants()[i].getName()),"inventory"));
+			ModelLoader.setCustomModelResourceLocation(itemblock, this.getMetaFromState(state), new ModelResourceLocation(new ResourceLocation(Tags.MOD_ID,"lamp_inventory_"+clazz.getEnumConstants()[i].getName()),"inventory"));
 		}
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState state, BlockPos p_193383_3_,
-			EnumFacing p_193383_4_) {
+	public @NotNull BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess p_193383_1_, @NotNull IBlockState state, @NotNull BlockPos p_193383_3_,
+													 @NotNull EnumFacing p_193383_4_) {
 		return BlockFaceShape.UNDEFINED;
 	}
 
@@ -322,7 +318,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 	}
 
 	@Override
-	public int switchCamo(ItemStack item, boolean back) {
+	public void switchCamo(ItemStack item, boolean back) {
 		IBlockState state = this.getStateFromMeta(item.getMetadata());
 		int type = state.getValue(LAMP_TYPE).ordinal();
 		int newmeta=0;
@@ -336,9 +332,8 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 			newmeta = this.getMetaFromState(this.getDefaultState().withProperty(LAMP_TYPE, clazz.getEnumConstants()[2]));
 		}
 		item.setItemDamage(newmeta);
-		
-		return newmeta;
-	}
+
+    }
 
 	@Override
 	public int getCurrentCamoIndex(ItemStack item) {
@@ -353,7 +348,7 @@ public class BlockTGLamp<T extends Enum<T> & IStringSerializable> extends Generi
 
 	@Override
 	public String getCurrentCamoName(ItemStack item) {
-		return Techguns.MODID+"."+this.getRegistryName().getResourcePath()+".camoname."+this.getCurrentCamoIndex(item);
+		return Tags.MOD_ID+"."+this.getRegistryName().getPath()+".camoname."+this.getCurrentCamoIndex(item);
 	}
 
 	@Override

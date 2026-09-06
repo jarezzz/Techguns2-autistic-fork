@@ -1,8 +1,5 @@
 package techguns.items.guns;
 
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,9 +10,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGPackets;
 import techguns.TGSounds;
-import techguns.Techguns;
 import techguns.api.damagesystem.DamageType;
 import techguns.damagesystem.TGDamageSource;
 import techguns.deatheffects.EntityDeathUtils.DeathType;
@@ -24,83 +21,82 @@ import techguns.packets.PacketSpawnParticle;
 
 public class Shishkebap extends GenericGunMeleeCharge {
 
-	public Shishkebap(String name, ChargedProjectileSelector projectile_selector, boolean semiAuto, int minFiretime,
-			int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int TTL,
-			float accuracy, float fullChargeTime, int ammoConsumedOnFullCharge) {
-		super(name, projectile_selector, semiAuto, minFiretime, clipsize, reloadtime, damage, firesound, reloadsound, TTL,
-				accuracy, fullChargeTime, ammoConsumedOnFullCharge);
-		this.setHasCustomAnim(false);
-		this.setNoBowAnim();
-	}
-	
-	@Override
-	public DamageType getDamageType(ItemStack stack) {
-		return DamageType.FIRE;
-	}
-	
-	@Override
-	protected TGDamageSource getMeleeDamageSource(EntityPlayer player,ItemStack stack) {
-		TGDamageSource src = new TGDamageSource("player", player, player, DamageType.FIRE, DeathType.GORE);
-		if(this.getCurrentAmmo(stack)>0){
-			src.goreChance=0.25f;
-			src.armorPenetration=this.penetration;
-			src.knockbackMultiplier=1f;
-		} else{
-			src.deathType = DeathType.DEFAULT;
-		}
-		return src;
-	}
+    public Shishkebap(String name, ChargedProjectileSelector projectile_selector, boolean semiAuto, int minFiretime,
+                      int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int TTL,
+                      float accuracy, float fullChargeTime, int ammoConsumedOnFullCharge) {
+        super(name, projectile_selector, semiAuto, minFiretime, clipsize, reloadtime, damage, firesound, reloadsound, TTL,
+                accuracy, fullChargeTime, ammoConsumedOnFullCharge);
+        this.setHasCustomAnim(false);
+        this.setNoBowAnim();
+    }
 
-	@Override
-	protected void spawnSweepParticle(World w, double x, double y, double z, double motionX, double motionY,
-			double motionZ) {
-		TGPackets.network.sendToAllAround(new PacketSpawnParticle("PowerhammerImpact",x,y,z), new TargetPoint(w.provider.getDimension(), x, y, z, 32.0f));
-	}
-	
-	
-	
-	@Override
-	protected void consumeAmmoOnMeleeHit(EntityLivingBase elb, ItemStack stack) {
-		boolean empty = this.getAmmoLeft(stack)<=0;
-		super.consumeAmmoOnMeleeHit(elb,stack);
-		if(!elb.world.isRemote && !empty && this.getAmmoLeft(stack)<=0) {
-			TGPackets.network.sendToDimension(new PacketNotifyAmbientEffectChange(elb, EnumHand.MAIN_HAND), elb.world.provider.getDimension());
-		}
-	}
+    @Override
+    public DamageType getDamageType(ItemStack stack) {
+        return DamageType.FIRE;
+    }
 
-	@Override
-	protected void onMeleeHitTarget(ItemStack stack, Entity target) {
-		if (this.getAmmoLeft(stack)>0) {
-			target.setFire(3);
-		}
-	}
+    @Override
+    protected TGDamageSource getMeleeDamageSource(EntityPlayer player, ItemStack stack) {
+        TGDamageSource src = new TGDamageSource("player", player, player, DamageType.FIRE, DeathType.GORE);
+        if (this.getCurrentAmmo(stack) > 0) {
+            src.goreChance = 0.25f;
+            src.armorPenetration = this.penetration;
+            src.knockbackMultiplier = 1f;
+        } else {
+            src.deathType = DeathType.DEFAULT;
+        }
+        return src;
+    }
 
-	@Override
-	protected SoundEvent getSwingSound() {
-		return TGSounds.SHISHKEBAP_SWING;
-	}
+    @Override
+    protected void spawnSweepParticle(World w, double x, double y, double z, double motionX,
+                                      double motionZ) {
+        TGPackets.wrapper.sendToAllAround(new PacketSpawnParticle("PowerhammerImpact", x, y, z), new TargetPoint(w.provider.getDimension(), x, y, z, 32.0f));
+    }
 
-	@Override
-	protected SoundEvent getBlockBreakSound() {
-		return null;
-	}
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(handIn));
-	}
+    @Override
+    protected void consumeAmmoOnMeleeHit(EntityLivingBase elb, ItemStack stack) {
+        boolean empty = this.getAmmoLeft(stack) <= 0;
+        super.consumeAmmoOnMeleeHit(elb, stack);
+        if (!elb.world.isRemote && !empty && this.getAmmoLeft(stack) <= 0) {
+            TGPackets.wrapper.sendToDimension(new PacketNotifyAmbientEffectChange(elb, EnumHand.MAIN_HAND), elb.world.provider.getDimension());
+        }
+    }
 
-	@Override
-	public boolean canCharge() {
-		return false;
-	}
+    @Override
+    protected void onMeleeHitTarget(ItemStack stack, Entity target) {
+        if (this.getAmmoLeft(stack) > 0) {
+            target.setFire(3);
+        }
+    }
 
-	@Override
-	public void onPlayerStoppedUsing(ItemStack item, World world, EntityLivingBase entityLiving, int timeLeft) {
-	}
+    @Override
+    protected SoundEvent getSwingSound() {
+        return TGSounds.SHISHKEBAP_SWING;
+    }
 
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 0;
-	}
+    @Override
+    protected SoundEvent getBlockBreakSound() {
+        return null;
+    }
+
+    @Override
+    public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World worldIn, @NotNull EntityPlayer player, @NotNull EnumHand handIn) {
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(handIn));
+    }
+
+    @Override
+    public boolean canCharge() {
+        return false;
+    }
+
+    @Override
+    public void onPlayerStoppedUsing(@NotNull ItemStack item, @NotNull World world, @NotNull EntityLivingBase entityLiving, int timeLeft) {
+    }
+
+    @Override
+    public int getMaxItemUseDuration(@NotNull ItemStack stack) {
+        return 0;
+    }
 }

@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumCamoNetType implements IStringSerializable {
 	WOOD,
@@ -8,7 +9,7 @@ public enum EnumCamoNetType implements IStringSerializable {
 	SNOW;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 }

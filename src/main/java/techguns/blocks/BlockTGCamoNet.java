@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoNetType> {
 
@@ -30,11 +31,11 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
 		this.setDefaultState(this.getBlockState().getBaseState());
 	}
 
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(@NotNull IBlockState state) {
 		return false;
 	}
 
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(@NotNull IBlockState state) {
 		return false;
 	}
 	
@@ -43,7 +44,7 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
      * metadata, such as fence connections.
      */
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+    public @NotNull IBlockState getActualState(IBlockState state, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos)
     {
     	boolean n = canConnectTo(worldIn, pos, EnumFacing.NORTH);
     	boolean e = canConnectTo(worldIn, pos, EnumFacing.EAST);
@@ -61,13 +62,13 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
     protected static final AxisAlignedBB COLLIDE_WEST = new AxisAlignedBB(0,0,7/16d,7/16d,1d,9/16d);
     
     @Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(@NotNull IBlockState blockState, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 		return COLLIDE_CENTER;
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
-			List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean p_185477_7_) {
+	public void addCollisionBoxToList(@NotNull IBlockState state, @NotNull World worldIn, @NotNull BlockPos pos, @NotNull AxisAlignedBB entityBox,
+									  @NotNull List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean p_185477_7_) {
 
     	super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
     	
@@ -84,7 +85,7 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 
 		float f = 0.4375F;
 		float f1 = 0.5625F;
@@ -99,10 +100,10 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
 			return new AxisAlignedBB(f, 0.0F, f2, f1, 1.0F, f3);
 		}
 
-		if ((!west || !east) && (west || east || north || south)) {
-			if (west && !east) {
+		if (!west || !east) {
+			if (west) {
 				f = 0.0F;
-			} else if (!west && east) {
+			} else if (east) {
 				f1 = 1.0F;
 			}
 		} else {
@@ -110,10 +111,10 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
 			f1 = 1.0F;
 		}
 
-		if ((!north || !south) && (west || east || north || south)) {
-			if (north && !south) {
+		if (!north || !south) {
+			if (north) {
 				f2 = 0.0F;
-			} else if (!north && south) {
+			} else if (south) {
 				f3 = 1.0F;
 			}
 		} else {
@@ -131,15 +132,15 @@ public class BlockTGCamoNet extends GenericBlockMetaEnumCamoChangeable<EnumCamoN
     }
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public @NotNull BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
 	
 	
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-			EnumFacing p_193383_4_) {
+	public @NotNull BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess p_193383_1_, @NotNull IBlockState p_193383_2_, @NotNull BlockPos p_193383_3_,
+													 @NotNull EnumFacing p_193383_4_) {
 		return BlockFaceShape.MIDDLE_POLE_THIN;
 	}
 

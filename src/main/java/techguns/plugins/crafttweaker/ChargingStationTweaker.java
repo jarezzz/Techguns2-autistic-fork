@@ -1,8 +1,5 @@
 package techguns.plugins.crafttweaker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IItemStack;
@@ -13,11 +10,13 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import techguns.tileentities.operation.ChargingStationRecipe;
 import techguns.util.ItemStackOreDict;
 
+import java.util.ArrayList;
+
 @ZenClass("mods.techguns.ChargingStation")
 public class ChargingStationTweaker {
 	
-	private ChargingStationTweaker(){};
-	
+	private ChargingStationTweaker(){}
+
 	@ZenMethod
 	public static void addRecipe(IItemStack input, IItemStack output, int RFAmount){
 		CraftTweakerAPI.apply(new addInputAction(new ItemStackOreDict(CraftTweakerMC.getItemStack(input)), CraftTweakerMC.getItemStack(output), RFAmount));
@@ -78,18 +77,7 @@ public class ChargingStationTweaker {
 		@Override
 		public void apply() {
 			ArrayList<ChargingStationRecipe> recipes = ChargingStationRecipe.getRecipes();
-			
-			Iterator<ChargingStationRecipe> iter = recipes.iterator();
-			
-			while (iter.hasNext()){
-				
-				ChargingStationRecipe rec = iter.next();
-				
-				if (rec.input.matches(this.input)){
-					iter.remove();					
-				}
-			}
-			
+			recipes.removeIf(rec -> rec.input.matches(this.input));
 		}
 
 		@Override

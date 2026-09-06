@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import techguns.TGItems;
 import techguns.TGPackets;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.tginventory.TGSlotType;
 import techguns.capabilities.TGExtendedPlayer;
 import techguns.keybind.TGKeybindsID;
@@ -38,10 +38,10 @@ public class ItemJetpack extends ItemTGSpecialSlotAmmo {
 
 					if (jump_pressed && !last_state) {
 						extendedPlayer.setJumpkeyPressed(true);
-						TGPackets.network.sendToServer(new PacketTGKeybindPress(TGKeybindsID.JETPACK_BOOST_START));
+						TGPackets.wrapper.sendToServer(new PacketTGKeybindPress(TGKeybindsID.JETPACK_BOOST_START));
 					} else if (!jump_pressed && last_state) {
 						extendedPlayer.setJumpkeyPressed(false);
-						TGPackets.network.sendToServer(new PacketTGKeybindPress(TGKeybindsID.JETPACK_BOOST_STOP));
+						TGPackets.wrapper.sendToServer(new PacketTGKeybindPress(TGKeybindsID.JETPACK_BOOST_STOP));
 					}
 				}
 
@@ -56,7 +56,7 @@ public class ItemJetpack extends ItemTGSpecialSlotAmmo {
 				} else {
 					if (extendedPlayer.isJumpkeyPressed()) {
 						extendedPlayer.setJumpkeyPressed(false);
-						TGPackets.network.sendToServer(new PacketTGKeybindPress(TGKeybindsID.JETPACK_BOOST_STOP));
+						TGPackets.wrapper.sendToServer(new PacketTGKeybindPress(TGKeybindsID.JETPACK_BOOST_STOP));
 					}
 				}
 
@@ -82,24 +82,6 @@ public class ItemJetpack extends ItemTGSpecialSlotAmmo {
 		ply.fallDistance = 0;
 		item.setItemDamage(item.getItemDamage() + 1);
 
-	}
-
-	protected void descendPlayer(EntityPlayer ply, ItemStack item) {
-		ply.motionY = Math.max(ply.motionY - 0.15f, -0.4f);
-		ply.fallDistance = 0;
-		item.setItemDamage(item.getItemDamage() + 1);
-
-	}
-
-	protected void hoverPlayer(EntityPlayer ply, ItemStack item, boolean forwardPressed) {
-		if (ply.motionY > 0) {
-			ply.motionY = Math.max(0, ply.motionY - 0.2f);
-		} else {
-			ply.motionY = Math.min(0, ply.motionY + 0.2f);
-		}
-		ply.fallDistance = 0;
-
-		item.setItemDamage(item.getItemDamage() + 1);
 	}
 
 }

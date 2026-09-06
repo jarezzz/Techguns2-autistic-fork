@@ -4,11 +4,12 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ModelMultipart extends ModelBase {
 
 	@Override
-	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void render(@NotNull Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, 100, -1.0f, ItemCameraTransforms.TransformType.GROUND, 0, 0.0f, 0f);
 	}
 

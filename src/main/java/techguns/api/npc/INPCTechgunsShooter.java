@@ -4,20 +4,20 @@ package techguns.api.npc;
  *	Must only be implemented by subclasses of EntityLivingBase
  */
 public interface INPCTechgunsShooter {
-	public float getWeaponPosX();
-	public float getWeaponPosY();
-	public float getWeaponPosZ();
-	public default boolean hasWeaponArmPose() {
+	float getWeaponPosX();
+	float getWeaponPosY();
+	float getWeaponPosZ();
+	default boolean hasWeaponArmPose() {
 		return true;
 	}
-	public default float getGunScale() {
+	default float getGunScale() {
 		return 1.0f;
 	}
 	
-	public default float getBulletOffsetSide() {
+	default float getBulletOffsetSide() {
 		return 0f;
 	}
-	public default float getBulletOffsetHeight() {
+	default float getBulletOffsetHeight() {
 		return 0f;
 	}
 }

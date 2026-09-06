@@ -1,0 +1,126 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_83",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 83},
+            { "function": "set_count", "count": { "min": 4, "max": 12 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_81",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 81},
+            { "function": "set_count", "count": { "min": 4, "max": 12 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_82",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 82},
+            { "function": "set_count", "count": { "min": 4, "max": 12 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_57",
+          "weight": 25,
+          "functions": [
+            { "function": "set_data", "data": 57},
+            { "function": "set_count", "count": { "min": 1, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_125",
+          "weight": 25,
+          "functions": [
+            { "function": "set_data", "data": 56},
+            { "function": "set_count", "count": { "min": 4, "max": 8 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_60",
+          "weight": 25,
+          "functions": [
+            { "function": "set_data", "data": 60},
+            { "function": "set_count", "count": { "min": 5, "max": 9 } }
+          ]
+        }
+      ]
+    },
+    {
+          "name": "ammo",
+          "rolls": {
+              "min":1,
+              "max":3
+          },
+          "entries": [
+              {
+                  "type": "item",
+                  "weight": 2,
+                  "name": "techguns:itemshared",
+                  "entryName": "itemshared_1",
+                  "weight": 25,
+                  "functions": [
+                    { "function": "set_data", "data": 1},
+                    { "function": "set_count", "count": { "min": 4, "max": 10 } }
+                  ]
+              },
+              {
+                  "type": "item",
+                  "weight": 2,
+                  "name": "techguns:itemshared",
+                  "entryName": "itemshared_2",
+                  "weight": 25,
+                  "functions": [
+                    { "function": "set_data", "data": 2},
+                    { "function": "set_count", "count": { "min": 4, "max": 8 } }
+                  ]
+              },
+              {
+                  "type": "item",
+                  "weight": 2,
+                  "name": "techguns:itemshared",
+                  "entryName": "itemshared_3",
+                  "weight": 25,
+                  "functions": [
+                    { "function": "set_data", "data": 3},
+                    { "function": "set_count", "count": { "min": 5, "max": 7 } }
+                  ]
+              },
+              {
+                  "type": "item",
+                  "weight": 2,
+                  "name": "techguns:itemshared",
+                  "entryName": "itemshared_4",
+                  "weight": 18,
+                  "functions": [
+                    { "function": "set_data", "data": 4},
+                    { "function": "set_count", "count": { "min": 5, "max": 6 } }
+                  ]
+              }
+          ]
+      }
+  ]
+}

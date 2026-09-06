@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumMilitaryCrateType implements IStringSerializable {
 	AMMO,
@@ -14,7 +15,7 @@ public enum EnumMilitaryCrateType implements IStringSerializable {
 	GENERIC_SPRUCE;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

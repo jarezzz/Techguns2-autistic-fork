@@ -1,5 +1,5 @@
 package techguns.tileentities.operation;
 
 public interface IMachineInput<T> {
-	public boolean matches(T other);
+    boolean matches(T other);
 }

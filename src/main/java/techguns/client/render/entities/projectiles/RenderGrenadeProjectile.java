@@ -5,14 +5,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.models.guns.ModelStielgranate;
 import techguns.client.render.item.RenderItemBase;
 import techguns.entities.projectiles.GrenadeProjectile;
 
 public class RenderGrenadeProjectile extends Render<GrenadeProjectile> {
 
-	private ResourceLocation textureLoc = new ResourceLocation(Techguns.MODID,"textures/guns/stielgranate.png");
+	private ResourceLocation textureLoc = new ResourceLocation(Tags.MOD_ID,"textures/guns/stielgranate.png");
 	private ModelBase model = new ModelStielgranate();
 	
 	public RenderGrenadeProjectile(RenderManager renderManager) {

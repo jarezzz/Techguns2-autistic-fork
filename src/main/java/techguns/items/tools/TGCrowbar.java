@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -16,8 +17,8 @@ import techguns.util.ItemUtil;
 
 public class TGCrowbar extends TGPickaxe {
 
-	protected HashMap<String, Integer> harvestLevels = new HashMap<String,Integer>();
-	
+	protected HashMap<String, Integer> harvestLevels = new HashMap<>();
+
 	public TGCrowbar(ToolMaterial mat, String name) {
 		super(mat, name);
 		harvestLevels.put("default", mat.getHarvestLevel());
@@ -26,26 +27,25 @@ public class TGCrowbar extends TGPickaxe {
 	}
 
 	@Override
-	public Set<String> getToolClasses(ItemStack stack) {
+	public @NotNull Set<String> getToolClasses(@NotNull ItemStack stack) {
 		return harvestLevels.keySet();
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation(@NotNull ItemStack stack, World worldIn, @NotNull List<String> tooltip, @NotNull ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		
+
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
 			ItemUtil.addToolClassesTooltip(harvestLevels, tooltip);
-			//tooltip.add(TextUtil.trans("techguns.tooltip.crowbar.destroycluster"));
 		} else {
 			ItemUtil.addShiftExpandedTooltip(tooltip);
 		}
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
+	public boolean doesSneakBypassUse(@NotNull ItemStack stack, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
 		return true;
 	}
 
-	
+
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent.Register;
+import org.jetbrains.annotations.NotNull;
 import techguns.util.BlockUtils;
 
 public class BlockTGSlimyLadder extends BlockLadder implements IGenericBlock {
@@ -29,12 +30,12 @@ public class BlockTGSlimyLadder extends BlockLadder implements IGenericBlock {
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs tab, NonNullList<ItemStack> items) {
 		items.add(new ItemStack(this,1,this.getMetaFromState(getDefaultState())));
 	}
 	
 	@Override
-	public int damageDropped(IBlockState state) {
+	public int damageDropped(@NotNull IBlockState state) {
 		return this.getMetaFromState(getDefaultState());
 	}
 
@@ -65,7 +66,7 @@ public class BlockTGSlimyLadder extends BlockLadder implements IGenericBlock {
     }
 	
 	@Override
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+	public boolean canPlaceBlockAt(@NotNull World worldIn, @NotNull BlockPos pos) {
 		if (!super.canPlaceBlockAt(worldIn, pos))
 			return false;
 		for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {

@@ -10,7 +10,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import techguns.TGSounds;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.damagesystem.DamageType;
 import techguns.client.ClientProxy;
 import techguns.damagesystem.TGDamageSource;

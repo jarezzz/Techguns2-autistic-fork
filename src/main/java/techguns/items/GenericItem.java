@@ -7,7 +7,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import techguns.TGItems;
-import techguns.Techguns;
+import techguns.*;
 
 public class GenericItem extends Item {
 	
@@ -15,7 +15,7 @@ public class GenericItem extends Item {
 		setMaxStackSize(64);
 		setCreativeTab(Techguns.tabTechgun);
 		setRegistryName(name);
-		setUnlocalizedName(Techguns.MODID+"."+name);
+		setTranslationKey(Tags.MOD_ID+"."+name);
 		if (addToItemList){
 			TGItems.ITEMLIST.add(this);
 		}

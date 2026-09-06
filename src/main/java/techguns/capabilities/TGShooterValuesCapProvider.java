@@ -6,7 +6,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 import techguns.api.capabilities.ITGShooterValues;
 
 public class TGShooterValuesCapProvider implements ICapabilitySerializable<NBTBase> {
@@ -17,7 +18,7 @@ public class TGShooterValuesCapProvider implements ICapabilitySerializable<NBTBa
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(Techguns.MODID, "shooterValues");
+	public static final ResourceLocation ID = new ResourceLocation(Tags.MOD_ID, "shooterValues");
 	
 	public static final EnumFacing DEFAULT_FACING = null;
 	
@@ -29,13 +30,13 @@ public class TGShooterValuesCapProvider implements ICapabilitySerializable<NBTBa
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == TG_SHOOTER_VALUES;
+	public boolean hasCapability(@NotNull Capability<?> capability, EnumFacing facing) {
+		return false;
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == TG_SHOOTER_VALUES ? TG_SHOOTER_VALUES.<T> cast(this.instance) : null;
+	public <T> T getCapability(@NotNull Capability<T> capability, EnumFacing facing) {
+		return capability == TG_SHOOTER_VALUES ? TG_SHOOTER_VALUES.cast(this.instance) : null;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package techguns.entities.npcs;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -14,14 +15,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import techguns.TGArmors;
 import techguns.TGuns;
-import techguns.Techguns;
+import techguns.*;
+import techguns.api.npc.factions.ITGNpcTeam;
 import techguns.items.armors.GenericArmorMultiCamo;
 
 public class ZombieFarmer extends GenericNPCUndead {
 
-	public static final ResourceLocation LOOT = new ResourceLocation(Techguns.MODID, "entities/zombiefarmer");
+	public static final ResourceLocation LOOT = new ResourceLocation(Tags.MOD_ID, "entities/zombiefarmer");
 	
 	public ZombieFarmer(World world) {
 		super(world);
@@ -45,7 +49,7 @@ public class ZombieFarmer extends GenericNPCUndead {
 		
 		int camo = GenericArmorMultiCamo.getRandomCamoIndexFor((GenericArmorMultiCamo) TGArmors.t1_miner_Chestplate);
 		
-			this.setItemStackToSlot(EntityEquipmentSlot.CHEST, GenericArmorMultiCamo.getNewWithCamo(
+		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, GenericArmorMultiCamo.getNewWithCamo(
 					TGArmors.t1_miner_Chestplate,camo));
 		if (Math.random() <= chance)
 			this.setItemStackToSlot(EntityEquipmentSlot.LEGS, GenericArmorMultiCamo.getNewWithCamo(
@@ -53,6 +57,13 @@ public class ZombieFarmer extends GenericNPCUndead {
 		if (Math.random() <= chance)
 			this.setItemStackToSlot(EntityEquipmentSlot.FEET, GenericArmorMultiCamo.getNewWithCamo(
 					TGArmors.t1_miner_Boots,camo));
+
+		if (TGConfig.misc.disableArmorDrops) {
+			this.setDropChance(EntityEquipmentSlot.HEAD,  0f);
+			this.setDropChance(EntityEquipmentSlot.LEGS,  0f);
+			this.setDropChance(EntityEquipmentSlot.CHEST, 0f);
+			this.setDropChance(EntityEquipmentSlot.FEET,  0f);
+		}
 
 		// Weapons
 		Random r = new Random();
@@ -72,7 +83,11 @@ public class ZombieFarmer extends GenericNPCUndead {
 			weapon = TGuns.handcannon;
 			break;
 		}
-		if (weapon != null) this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+		if (weapon != null) {
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+			if (TGConfig.misc.disableGunDrops)
+				this.setDropChance(EntityEquipmentSlot.MAINHAND, 0f);
+		}
 	}
 	
 	@Override
@@ -81,12 +96,12 @@ public class ZombieFarmer extends GenericNPCUndead {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	public @NotNull SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ZOMBIE_HURT;
 	}
 
 	@Override
-	public SoundEvent getDeathSound() {
+	public @NotNull SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ZOMBIE_DEATH;
 	}
 
@@ -104,4 +119,39 @@ public class ZombieFarmer extends GenericNPCUndead {
 	protected ResourceLocation getLootTable() {
 		return LOOT;
 	}
+
+    @Override
+    public boolean attackEntityFrom(@NotNull DamageSource source, float amount) {
+        if (this.isFriendlyDamage(source)) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    private boolean isFriendlyDamage(DamageSource source) {
+        return this.isFriendlyEntity(source.getTrueSource()) || this.isFriendlyEntity(source.getImmediateSource());
+    }
+
+    private boolean isFriendlyEntity(@Nullable Entity entity) {
+        if (entity == null) {
+            return false;
+        }
+        if (entity == this) {
+            return true;
+        }
+        if (entity instanceof ITGNpcTeam) {
+            return ((ITGNpcTeam) entity).getTGFaction() == this.getTGFaction();
+        }
+        return false;
+    }
+
+    @Override
+    public int getMaxFallHeight() {
+        return 1;
+    }
+
+    @Override
+    protected boolean useTargetOffsetPathing() {
+        return true;
+    }
 }

@@ -5,13 +5,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.machines.IMachineType;
 import techguns.tileentities.FabricatorTileEntMaster;
 import techguns.tileentities.FabricatorTileEntSlave;
 import techguns.tileentities.ReactionChamberTileEntMaster;
 import techguns.tileentities.ReactionChamberTileEntSlave;
 
-public enum EnumMultiBlockMachineType implements IStringSerializable, IMachineType<EnumMultiBlockMachineType> {
+public enum EnumMultiBlockMachineType implements IStringSerializable, IMachineType {
 		FABRICATOR_HOUSING(0,FabricatorTileEntSlave.class,true,EnumBlockRenderType.MODEL),
 		FABRICATOR_GLASS(1,FabricatorTileEntSlave.class,false,EnumBlockRenderType.MODEL,BlockRenderLayer.CUTOUT,SoundType.GLASS),
 		FABRICATOR_CONTROLLER(2,FabricatorTileEntMaster.class,true,EnumBlockRenderType.MODEL),
@@ -20,13 +21,13 @@ public enum EnumMultiBlockMachineType implements IStringSerializable, IMachineTy
 		REACTIONCHAMBER_GLASS(4,ReactionChamberTileEntSlave.class,false,EnumBlockRenderType.MODEL,BlockRenderLayer.CUTOUT,SoundType.GLASS),
 		REACTIONCHAMBER_CONTROLLER(5,ReactionChamberTileEntMaster.class,true,EnumBlockRenderType.MODEL,BlockRenderLayer.CUTOUT,SoundType.METAL);
 	
-		private int id;
-		private String name;
-		private Class<? extends TileEntity> tile;
-		private boolean isFullCube;
-		private EnumBlockRenderType renderType;
-		private BlockRenderLayer renderLayer;
-		private SoundType soundType;
+		private final int id;
+		private final String name;
+		private final Class<? extends TileEntity> tile;
+		private final boolean isFullCube;
+		private final EnumBlockRenderType renderType;
+		private final BlockRenderLayer renderLayer;
+		private final SoundType soundType;
 		
 		EnumMultiBlockMachineType(int id, Class<? extends TileEntity> tile, boolean isFullCube, EnumBlockRenderType renderType) {
 			this(id,tile,isFullCube,renderType,BlockRenderLayer.SOLID,SoundType.METAL);
@@ -48,22 +49,20 @@ public enum EnumMultiBlockMachineType implements IStringSerializable, IMachineTy
 		}
 		
 		@Override
-		public String getName() {
+		public @NotNull String getName() {
 			return this.name;
 		}
 
 		@Override
 		public int getMaxMachineIndex() {
-			return this.values().length;
+			return EnumMultiBlockMachineType.values().length;
 		}
 
 		@Override
 		public TileEntity getTile() {
 			try {
 				return this.tile.newInstance();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
 			return null;

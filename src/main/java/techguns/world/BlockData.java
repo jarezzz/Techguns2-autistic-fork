@@ -15,8 +15,8 @@ public class BlockData {
 	public final static int MIN_LAYER = 0; //Expand when needed
 	public final static int MAX_LAYER = 5;
 	
-	private static HashMap<MBlock, Integer> blockLayers_meta = new HashMap<>();
-	private static HashMap<Block, Integer> blockLayers = new HashMap<>();
+	private static final HashMap<MBlock, Integer> blockLayers_meta = new HashMap<>();
+	private static final HashMap<Block, Integer> blockLayers = new HashMap<>();
 	
 	static {
 		blockLayers.put(Blocks.TORCH, 2);

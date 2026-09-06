@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import org.jetbrains.annotations.NotNull;
 import techguns.damagesystem.TGDamageSource;
 import techguns.deatheffects.EntityDeathUtils.DeathType;
 import techguns.entities.projectiles.GenericProjectile;
@@ -19,8 +20,8 @@ public class BlockFluidAcid extends BlockFluidClassic {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World w, BlockPos pos, IBlockState state, Entity ent) {
-		if (ent instanceof EntityLivingBase && GenericProjectile.BULLET_TARGETS.apply(ent)){
+	public void onEntityCollision(@NotNull World w, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity ent) {
+		if (ent instanceof EntityLivingBase && GenericProjectile.BULLET_TARGETS.test(ent)){
 			TGDamageSource acidDamage = TGDamageSource.causePoisonDamage(null, null, DeathType.BIO);
 			acidDamage.goreChance=1.0f;
 			acidDamage.ignoreHurtresistTime=false;

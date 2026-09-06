@@ -8,16 +8,16 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.render.TGRenderHelper;
 import techguns.client.render.TGRenderHelper.RenderType;
 import techguns.entities.projectiles.SonicShotgunProjectile;
 
 public class RenderSonicShotgunProjectile extends RenderGenericProjectile<SonicShotgunProjectile> {
 
-	private static final ResourceLocation bulletTexture = new ResourceLocation(Techguns.MODID,"textures/entity/bullet.png");
-	private static final ResourceLocation waveTexture_A = new ResourceLocation(Techguns.MODID,"textures/fx/sonicwave4x4.png");
-	private static final ResourceLocation waveTexture = new ResourceLocation(Techguns.MODID,"textures/fx/shockwave.png");
+	private static final ResourceLocation bulletTexture = new ResourceLocation(Tags.MOD_ID,"textures/entity/bullet.png");
+	private static final ResourceLocation waveTexture_A = new ResourceLocation(Tags.MOD_ID,"textures/fx/sonicwave4x4.png");
+	private static final ResourceLocation waveTexture = new ResourceLocation(Tags.MOD_ID,"textures/fx/shockwave.png");
 
 	
 	public RenderSonicShotgunProjectile(RenderManager renderManager) {

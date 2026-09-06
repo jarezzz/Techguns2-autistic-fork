@@ -1,7 +1,5 @@
 package techguns.plugins.crafttweaker;
 
-import java.util.Iterator;
-
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IItemStack;
@@ -11,12 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import techguns.Techguns;
+import techguns.*;
 import techguns.blocks.EnumOreClusterType;
-import techguns.tileentities.operation.MetalPressRecipes;
-import techguns.tileentities.operation.MetalPressRecipes.MetalPressRecipe;
-import techguns.util.ItemStackOreDict;
-import techguns.util.ItemUtil;
 
 @ZenClass("mods.techguns.OreCluster")
 public class OreClusterTweaker {

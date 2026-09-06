@@ -8,8 +8,6 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import techguns.tileentities.operation.BlastFurnaceRecipes;
-import techguns.tileentities.operation.MetalPressRecipes;
-import techguns.tileentities.operation.MetalPressRecipes.MetalPressRecipe;
 import techguns.util.ItemStackOreDict;
 
 @ZenClass("mods.techguns.BlastFurnace")

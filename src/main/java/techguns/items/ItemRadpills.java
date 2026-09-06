@@ -13,40 +13,37 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGRadiationSystem;
 import techguns.util.TextUtil;
 
 public class ItemRadpills extends GenericItemConsumable {
-	public ItemRadpills(String name) {
-		super(name, 32);
-	}
-	
-	public ItemRadpills(String name, boolean addToItemList) {
-		super(name, 32, addToItemList);
-	}
+    public ItemRadpills(String name) {
+        super(name, 32);
+    }
 
-	@Override
-	protected void onConsumed(ItemStack stack, World worldIn, EntityPlayer player) {
-		player.addPotionEffect(new PotionEffect(TGRadiationSystem.radregen_effect, 500, 1, false, false));
-		player.addPotionEffect(new PotionEffect(TGRadiationSystem.radresistance_effect, 3600, 2, false, false));
-		
-		if(!worldIn.isRemote) {
-			ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
-			if(!player.addItemStackToInventory(bottle)) {
-				 worldIn.spawnEntity(new EntityItem(worldIn, player.posX, player.posY, player.posZ, bottle));
-			}
-		}
-	}
+    @Override
+    protected void onConsumed(ItemStack stack, World worldIn, EntityPlayer player) {
+        player.addPotionEffect(new PotionEffect(TGRadiationSystem.radregen_effect, 500, 1, false, false));
+        player.addPotionEffect(new PotionEffect(TGRadiationSystem.radresistance_effect, 3600, 2, false, false));
 
-	@Override
-	protected SoundEvent getConsumedSound() {
-		return SoundEvents.ENTITY_PLAYER_BREATH;
-	}
+        if (!worldIn.isRemote) {
+            ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+            if (!player.addItemStackToInventory(bottle)) {
+                worldIn.spawnEntity(new EntityItem(worldIn, player.posX, player.posY, player.posZ, bottle));
+            }
+        }
+    }
 
-	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(ChatFormatting.BLUE+TextUtil.trans("techguns.radresistance")+" "+TextUtil.trans("potion.potency.2") +" (180s)");
-		tooltip.add(ChatFormatting.BLUE+TextUtil.trans("techguns.radregeneration")+" "+TextUtil.trans("potion.potency.1") +" (-50)");
-	}
+    @Override
+    protected SoundEvent getConsumedSound() {
+        return SoundEvents.ENTITY_PLAYER_BREATH;
+    }
+
+    @Override
+    public void addInformation(@NotNull ItemStack stack, World worldIn, @NotNull List<String> tooltip, @NotNull ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(ChatFormatting.BLUE + TextUtil.trans("techguns.radresistance") + " " + TextUtil.trans("potion.potency.2") + " (180s)");
+        tooltip.add(ChatFormatting.BLUE + TextUtil.trans("techguns.radregeneration") + " " + TextUtil.trans("potion.potency.1") + " (-50)");
+    }
 }

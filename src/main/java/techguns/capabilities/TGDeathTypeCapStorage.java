@@ -10,8 +10,7 @@ public class TGDeathTypeCapStorage implements IStorage<TGDeathTypeCap> {
 
 	@Override
 	public NBTBase writeNBT(Capability<TGDeathTypeCap> capability, TGDeathTypeCap instance, EnumFacing side) {
-		final NBTTagCompound tags = new NBTTagCompound();
-		return tags;
+		return new NBTTagCompound();
 	}
 
 	@Override

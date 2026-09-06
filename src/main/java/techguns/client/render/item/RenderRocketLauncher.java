@@ -5,7 +5,7 @@ import java.util.HashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.models.ModelMultipart;
 import techguns.items.guns.GenericGun;
 import techguns.items.guns.ammo.AmmoTypes;
@@ -14,9 +14,9 @@ public class RenderRocketLauncher extends RenderGunBase90 {
 
 	protected static final HashMap<String,ResourceLocation> textures = new HashMap<>();
 	static {
-		textures.put(AmmoTypes.TYPE_DEFAULT, new ResourceLocation(Techguns.MODID,"textures/guns/rocket.png"));
-		textures.put(AmmoTypes.TYPE_NUKE, new ResourceLocation(Techguns.MODID,"textures/guns/rocket_nuke.png"));
-		textures.put(AmmoTypes.TYPE_HV, new ResourceLocation(Techguns.MODID,"textures/guns/rocket_hv.png"));
+		textures.put(AmmoTypes.TYPE_DEFAULT, new ResourceLocation(Tags.MOD_ID,"textures/guns/rocket.png"));
+		textures.put(AmmoTypes.TYPE_NUKE, new ResourceLocation(Tags.MOD_ID,"textures/guns/rocket_nuke.png"));
+		textures.put(AmmoTypes.TYPE_HV, new ResourceLocation(Tags.MOD_ID,"textures/guns/rocket_hv.png"));
 	}
 	
 	public RenderRocketLauncher(ModelMultipart model, int parts) {

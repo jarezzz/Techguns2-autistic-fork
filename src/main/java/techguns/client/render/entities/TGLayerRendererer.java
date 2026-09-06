@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import techguns.capabilities.TGExtendedPlayer;
 import techguns.client.render.AdditionalSlotRenderRegistry;
 import techguns.client.render.RenderAdditionalSlotItem;
@@ -11,17 +12,15 @@ import techguns.gui.player.TGPlayerInventory;
 import techguns.items.armors.GenericArmor;
 
 public class TGLayerRendererer implements LayerRenderer<EntityPlayer>{
-	private boolean slimModel;
 	RenderPlayer renderplayer;
-	public TGLayerRendererer(RenderPlayer renderplayer, boolean slimModel) {
+	public TGLayerRendererer(RenderPlayer renderplayer) {
 		super();
 		this.renderplayer=renderplayer;
-		this.slimModel = slimModel;
 	}
 
 	@Override
-	public void doRenderLayer(EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
-			float scale) {
+	public void doRenderLayer(@NotNull EntityPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
+                              float scale) {
 		TGExtendedPlayer props = TGExtendedPlayer.get(player);
 		
 		if(isSlotVisible(TGPlayerInventory.SLOT_FACE,player)) {

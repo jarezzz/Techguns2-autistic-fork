@@ -6,21 +6,21 @@ import techguns.tileentities.operation.ItemStackHandlerPlus;
 
 public class SlotMachineUpgrade extends SlotMachineInput {
 
-	protected final int index;
-	
-	public SlotMachineUpgrade(ItemStackHandlerPlus itemHandler, int index, int xPosition, int yPosition) {
-		super(itemHandler, index, xPosition, yPosition);
-		this.index=index;
-	}
-	
-	@Override
-	public boolean isItemValid(ItemStack item) {
-		return (!item.isEmpty() && item.getItem()==TGItems.SHARED_ITEM && item.getItemDamage()==TGItems.MACHINE_UPGRADE_STACK.getItemDamage());
-	}
+    protected final int index;
 
-	@Override
-	public int getSlotStackLimit() {
-		return 7;
-	}	
+    public SlotMachineUpgrade(ItemStackHandlerPlus itemHandler, int index, int xPosition, int yPosition) {
+        super(itemHandler, index, xPosition, yPosition);
+        this.index = index;
+    }
+
+    @Override
+    public boolean isItemValid(ItemStack item) {
+        return TGItems.isMachineUpgrade(item) || TGItems.isSteamUpgrade(item);
+    }
+
+    @Override
+    public int getSlotStackLimit() {
+        return 7;
+    }
 
 }

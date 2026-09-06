@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemBlockLamp extends GenericItemBlockMeta {
 
@@ -16,8 +17,8 @@ public class ItemBlockLamp extends GenericItemBlockMeta {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player,
-			ItemStack stack) {
+	public boolean canPlaceBlockOnSide(World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing side, @NotNull EntityPlayer player,
+									   ItemStack stack) {
 		IBlockState state = worldIn.getBlockState(pos);
 		BlockFaceShape shape = state.getBlockFaceShape(worldIn, pos, side);
 		

@@ -15,6 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockTGCamoNetTop extends GenericBlockMetaEnumCamoChangeable<EnumCamoNetType> {
 
@@ -29,8 +30,6 @@ public class BlockTGCamoNetTop extends GenericBlockMetaEnumCamoChangeable<EnumCa
 	
 	
 	private static final float height = 1/16f;
-    //private static final float width = 0.5625F;
-    //private static final float width2 = 0.75F;	
 	
 	protected static final AxisAlignedBB[] bounding_boxes = {
 		//no connections
@@ -69,7 +68,7 @@ public class BlockTGCamoNetTop extends GenericBlockMetaEnumCamoChangeable<EnumCa
 	};
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 		boolean north = canConnectTo(worldIn, pos, EnumFacing.NORTH);
 		boolean east = canConnectTo(worldIn, pos, EnumFacing.EAST);
 		boolean south = canConnectTo(worldIn, pos, EnumFacing.SOUTH);
@@ -86,7 +85,7 @@ public class BlockTGCamoNetTop extends GenericBlockMetaEnumCamoChangeable<EnumCa
      * metadata, such as fence connections.
      */
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+    public @NotNull IBlockState getActualState(IBlockState state, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos)
     {
     	boolean n = canConnectTo(worldIn, pos, EnumFacing.NORTH);
     	boolean e = canConnectTo(worldIn, pos, EnumFacing.EAST);
@@ -96,11 +95,11 @@ public class BlockTGCamoNetTop extends GenericBlockMetaEnumCamoChangeable<EnumCa
         return state.withProperty(CONNECTION, EnumConnectionType.get(n, e, s, w));
     }
 	
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(@NotNull IBlockState state) {
 		return false;
 	}
 
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(@NotNull IBlockState state) {
 		return false;
 	}
 	
@@ -112,14 +111,14 @@ public class BlockTGCamoNetTop extends GenericBlockMetaEnumCamoChangeable<EnumCa
     }
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public @NotNull BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_,
-			EnumFacing p_193383_4_) {
+	public @NotNull BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess p_193383_1_, @NotNull IBlockState p_193383_2_, @NotNull BlockPos p_193383_3_,
+													 @NotNull EnumFacing p_193383_4_) {
 		return BlockFaceShape.UNDEFINED;
 	}
 

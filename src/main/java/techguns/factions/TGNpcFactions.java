@@ -3,7 +3,7 @@ package techguns.factions;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.npc.factions.TGNpcFaction;
 
 public class TGNpcFactions {

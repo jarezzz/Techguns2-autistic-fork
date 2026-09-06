@@ -11,14 +11,14 @@ public interface ITGSpecialSlot {
 	 * @param item
 	 * @return
 	 */
-	public TGSlotType getSlot(ItemStack item);
+	TGSlotType getSlot(ItemStack item);
 
 	/**
 	 * Called each player tick, when worn on back/face/hand slot
 	 * @param item
 	 * @param player
 	 */
-	public default void onPlayerTick(ItemStack item, PlayerTickEvent player) {};
+	default void onPlayerTick(ItemStack item, PlayerTickEvent player) {}
 
 	/**
 	 * @param type The bonus type
@@ -27,7 +27,7 @@ public interface ITGSpecialSlot {
 	 * @param player
 	 * @return
 	 */
-	public default float getBonus(TGArmorBonus type, ItemStack stack, boolean consume, EntityPlayer player) {
+	default float getBonus(TGArmorBonus type, ItemStack stack, boolean consume, EntityPlayer player) {
 		return 0f;
 	}
 }

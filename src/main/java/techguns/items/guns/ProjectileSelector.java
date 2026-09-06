@@ -16,7 +16,8 @@ public class ProjectileSelector<T extends GenericProjectile> {
 	 * @param type
 	 * @param factories
 	 */
-	public ProjectileSelector(AmmoType type, IProjectileFactory<T>... factories) {
+	@SafeVarargs
+    public ProjectileSelector(AmmoType type, IProjectileFactory<T>... factories) {
 		this.ammoType=type;
 		for(int i=0;i<type.getVariants().size();i++) {
 			AmmoVariant v = type.getVariants().get(i);

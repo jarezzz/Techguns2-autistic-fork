@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.tginventory.TGSlotType;
 import techguns.capabilities.TGExtendedPlayer;
 import techguns.util.MathUtil;
@@ -21,12 +21,10 @@ public class ItemGlider extends ItemTGSpecialSlot {
 	}
 
 	public static void glide(EntityPlayer player) {
-		EntityPlayer ply = player;
+        if (!player.onGround && player.isSneaking()) {
+			if (player.motionY < -0.1f) {
 
-		if (!ply.onGround && ply.isSneaking()) {
-			if (ply.motionY < -0.1f) {
-
-				TGExtendedPlayer extendedPlayer = TGExtendedPlayer.get(ply);
+				TGExtendedPlayer extendedPlayer = TGExtendedPlayer.get(player);
 				extendedPlayer.isGliding = true;
 
 				/**

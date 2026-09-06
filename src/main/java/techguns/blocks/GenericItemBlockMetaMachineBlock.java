@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import techguns.blocks.machines.BasicMachine;
 
 public class GenericItemBlockMetaMachineBlock extends GenericItemBlockMeta {
@@ -18,8 +19,8 @@ public class GenericItemBlockMetaMachineBlock extends GenericItemBlockMeta {
 	}
 
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side,
-			float hitX, float hitY, float hitZ, IBlockState newState) {
+	public boolean placeBlockAt(@NotNull ItemStack stack, @NotNull EntityPlayer player, World world, @NotNull BlockPos pos, @NotNull EnumFacing side,
+                                float hitX, float hitY, float hitZ, @NotNull IBlockState newState) {
 		if (!world.setBlockState(pos, newState, 11)) return false;
 
         IBlockState state = world.getBlockState(pos);
@@ -27,7 +28,7 @@ public class GenericItemBlockMetaMachineBlock extends GenericItemBlockMeta {
         {
             setTileEntityNBT(world, player, pos, stack);
             if(this.block instanceof BasicMachine) {
-            	((BasicMachine)this.block).onBlockPlacedByExtended(world, pos, state, player, stack, side);
+            	((BasicMachine)this.block).onBlockPlacedByExtended(world, pos, player, stack, side);
             } else {
             	this.block.onBlockPlacedBy(world, pos, state, player, stack);
             }

@@ -4,12 +4,11 @@ import net.minecraft.client.model.ModelRenderer;
 
 public class ModelSkeletonSoldier extends ModelGenericNPC {
 
-	public ModelSkeletonSoldier() {
-		this(0.0625f);
-	}
+    public ModelSkeletonSoldier() {
+        this(0.0625f);
+    }
 
-	public ModelSkeletonSoldier(float f)
-    {
+    public ModelSkeletonSoldier(float f) {
         super(f, true);
         this.bipedRightArm = new ModelRenderer(this, 40, 16);
         this.bipedRightArm.addBox(-1.0F, -2.0F, -1.0F, 2, 12, 2, f);
@@ -26,5 +25,5 @@ public class ModelSkeletonSoldier extends ModelGenericNPC {
         this.bipedLeftLeg.addBox(-1.0F, 0.0F, -1.0F, 2, 12, 2, f);
         this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
     }
-	
+
 }

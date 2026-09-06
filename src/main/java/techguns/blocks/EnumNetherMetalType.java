@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumNetherMetalType implements IStringSerializable, IEnumLightlevel {
 	PANEL,
@@ -16,14 +17,14 @@ public enum EnumNetherMetalType implements IStringSerializable, IEnumLightlevel 
 
 	private int lightlevel = 0;
 	
-	private EnumNetherMetalType() {};
-	
-	private EnumNetherMetalType(int lightlevel) {
+	EnumNetherMetalType() {}
+
+	EnumNetherMetalType(int lightlevel) {
 		this.lightlevel = lightlevel;
 	}
 	
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

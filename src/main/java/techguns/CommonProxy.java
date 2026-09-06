@@ -48,7 +48,7 @@ public abstract class CommonProxy implements ITGInitializer {
 	@Override
 	public void init(FMLInitializationEvent event) {
 		this.registerItemRenderers();
-		NetworkRegistry.INSTANCE.registerGuiHandler(Techguns.MODID, new TechgunsGuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(Tags.MOD_ID, new TechgunsGuiHandler());
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public abstract class CommonProxy implements ITGInitializer {
 
 	@SubscribeEvent
 	public static void RecipeRegistryEvent(RegistryEvent.Register<IRecipe> event) {
-		TGFluids.RecipeInit();
+		TGFluids.recipeInit();
 		TGMachineRecipes.addRecipes();
 		Techguns.orecluster.RecipeInit();
 	}
@@ -73,9 +73,9 @@ public abstract class CommonProxy implements ITGInitializer {
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		Techguns.instance.blocks.registerItems(event);
 		Techguns.instance.fluids.registerItems(event);
-		Techguns.instance.items.registerItems(event);
-		Techguns.instance.armors.registerItems(event);
-		Techguns.instance.guns.registerItems(event);
+		TGItems.registerItems(event);
+		TGArmors.registerItems(event);
+		TGuns.registerItems(event);
 	}
 	
 	@SubscribeEvent
@@ -88,16 +88,16 @@ public abstract class CommonProxy implements ITGInitializer {
     {
 
 		TGRadiationSystem.RAD_POTION = new PotionType(new PotionEffect(TGRadiationSystem.radiation_effect, 300, 4))
-                .setRegistryName(Techguns.MODID, "radpotion");
+                .setRegistryName(Tags.MOD_ID, "radpotion");
 		
 		TGRadiationSystem.RAD_POTION_SEVERE = new PotionType(new PotionEffect(TGRadiationSystem.radiation_effect, 300, 24))
-                .setRegistryName(Techguns.MODID, "radpotion_severe");
+                .setRegistryName(Tags.MOD_ID, "radpotion_severe");
 
 		TGRadiationSystem.RAD_REGENERATION_POTION = new PotionType(new PotionEffect(TGRadiationSystem.radregen_effect, 400, 9))
-                .setRegistryName(Techguns.MODID, "radregenerationpotion");
+                .setRegistryName(Tags.MOD_ID, "radregenerationpotion");
 		
 		TGRadiationSystem.RAD_RESISTANCE_POTION = new PotionType(new PotionEffect(TGRadiationSystem.radresistance_effect, 900, 1))
-                .setRegistryName(Techguns.MODID, "radresistancepotion");
+                .setRegistryName(Tags.MOD_ID, "radresistancepotion");
 		
 
 		
@@ -117,11 +117,11 @@ public abstract class CommonProxy implements ITGInitializer {
 		TGSounds.registerSounds(event);
 	}
 
-	protected void registerItemRenderers(){};
-	
-	protected void registerEntityRenderers(){};
-	
-	public void registerCapabilities(){
+	protected void registerItemRenderers(){}
+
+    protected void registerEntityRenderers(){}
+
+    public void registerCapabilities(){
 		CapabilityManager.INSTANCE.register(ITGExtendedPlayer.class, new TGExtendedPlayerStorage(), () -> new TGExtendedPlayer(null));
 		CapabilityManager.INSTANCE.register(ITGShooterValues.class, new TGShooterValuesStorage(), TGShooterValues::new);
 		CapabilityManager.INSTANCE.register(TGSpawnerNPCData.class, new TGSpawnerNPCDataStorage(), TGSpawnerNPCData::new);
@@ -134,7 +134,9 @@ public abstract class CommonProxy implements ITGInitializer {
 	public EntityPlayer getPlayerClient() {
 		return null;
 	}
-	
+
+	public void openWorldGenTestToolGui() {}
+
 	public void setGunTextures(GenericGun gun, String path, int variations){
 		
 	}
@@ -180,36 +182,32 @@ public abstract class CommonProxy implements ITGInitializer {
 
 	}
 	
-	public void createFXOnEntityWithOffset(String name, Entity ent, float offsetX, float offsetY, float offsetZ, boolean attachToHead, EntityCondition condition) {};
-	
-	public void createLightPulse(double x, double y, double z, int lifetime, float rad_start, float rad_end, float r, float g, float b) {};
-	
-	public void createLightPulse(double x, double y, double z, int fadeIn, int fadeOut, float rad_large, float rad_small, float r, float g, float b) {};
-	
-    public void setHasStepassist(boolean value){};
-    
-    public void setHasNightvision(boolean value){};
-    
-    public void setFlySpeed(float value){};
-    
+	public void createFXOnEntityWithOffset(String name, Entity ent, float offsetX, float offsetY, float offsetZ, boolean attachToHead, EntityCondition condition) {}
+
+    public void createLightPulse(double x, double y, double z, int lifetime, float rad_start, float rad_end, float r, float g, float b) {}
+
+    public void createLightPulse(double x, double y, double z, int fadeIn, int fadeOut, float rad_large, float rad_small, float r, float g, float b) {}
+
+    public void setHasStepassist(boolean value){}
+
+    public void setHasNightvision(boolean value){}
+
+    public void setFlySpeed(float value){}
+
     public boolean getHasStepassist(){
     	return false;
-    };
-    
+    }
+
     public boolean getHasNightvision(){
     	return false;
-    };
-    
+    }
+
     public boolean isClientPlayerAndIn1stPerson(EntityLivingBase ent) {
 		return false;
 	}
-    
-    public boolean clientInRangeSquared(double posX, double posZ, double distSq) {
-		return false;
-	}
-    
-    public void registerFluidModelsForFluidBlock(Block b) {};
-    
+
+    public void registerFluidModelsForFluidBlock(Block b) {}
+
     public abstract GuiHandlerRegister getGuihandlers();
     
     public void clearItemParticleSystemsHand(EntityLivingBase entity, EnumHand hand) {

@@ -11,42 +11,42 @@ import techguns.TGPackets;
 
 public class PacketRequestTileEntitySync implements IMessage {
 
-	protected BlockPos pos;
-	
-	public PacketRequestTileEntitySync(BlockPos pos) {
-		super();
-		this.pos = pos;
-	}
-	public PacketRequestTileEntitySync() {
-		super();
-	}
+    protected BlockPos pos;
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		int x = buf.readInt();
-		int y = buf.readInt();
-		int z = buf.readInt();
-		this.pos=new BlockPos(x, y, z);
-	}
+    public PacketRequestTileEntitySync(BlockPos pos) {
+        super();
+        this.pos = pos;
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(pos.getX());
-		buf.writeInt(pos.getY());
-		buf.writeInt(pos.getZ());
-	}
-	
-	public static class Handler extends HandlerTemplate<PacketRequestTileEntitySync>{
+    public PacketRequestTileEntitySync() {
+        super();
+    }
 
-		@Override
-		protected void handle(PacketRequestTileEntitySync message, MessageContext ctx) {
-			EntityPlayer ply = TGPackets.getPlayerFromContext(ctx);
-			TileEntity tile = ply.world.getTileEntity(message.pos);
-			
-			if(tile!=null && ply instanceof EntityPlayerMP) {
-				EntityPlayerMP player = (EntityPlayerMP) ply;
-				player.connection.sendPacket(tile.getUpdatePacket());
-			}			
-		}
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        int x = buf.readInt();
+        int y = buf.readInt();
+        int z = buf.readInt();
+        this.pos = new BlockPos(x, y, z);
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(pos.getX());
+        buf.writeInt(pos.getY());
+        buf.writeInt(pos.getZ());
+    }
+
+    public static class Handler extends HandlerTemplate<PacketRequestTileEntitySync> {
+
+        @Override
+        protected void handle(PacketRequestTileEntitySync message, MessageContext ctx) {
+            EntityPlayer ply = TGPackets.getPlayerFromContext(ctx);
+            TileEntity tile = ply.world.getTileEntity(message.pos);
+
+            if (tile != null && ply instanceof EntityPlayerMP player) {
+                player.connection.sendPacket(tile.getUpdatePacket());
+            }
+        }
+    }
 }

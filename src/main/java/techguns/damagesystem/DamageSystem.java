@@ -1,27 +1,18 @@
 package techguns.damagesystem;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -33,27 +24,31 @@ import techguns.entities.npcs.NPCTurret;
 import techguns.items.armors.GenericArmor;
 import techguns.util.MathUtil;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class DamageSystem {
 
 	public static float getDamageFactor(EntityLivingBase attacker, EntityLivingBase target) {
 		if (attacker instanceof EntityPlayer && target instanceof EntityPlayer){
 			if (FMLCommonHandler.instance().getMinecraftServerInstance().isPVPEnabled()){
-				return TGConfig.damagePvP;
+				return TGConfig.damageFactors.damagePvP;
 			} else {
 				return 0.0f;
 			}
 		} else if (target instanceof EntityPlayer){
 			if ( attacker instanceof NPCTurret){
-				return TGConfig.damageTurretToPlayer;
+				return TGConfig.damageFactors.damageTurretToPlayer;
 			} else {
-				return TGConfig.damageFactorNPC;
+				return TGConfig.damageFactors.damageFactorNPC;
 			}
 
 		} else if (attacker instanceof EntityPlayer){
 			return 1.0f;
 		}
 		
-		return TGConfig.damageFactorNPC;
+		return TGConfig.damageFactors.damageFactorNPC;
 	}
 	
 	
@@ -94,20 +89,20 @@ public class DamageSystem {
 		float value=0.0f;
 		
 		for(int i=0;i<4; i++){
-			ItemStack armor = ply.inventory.armorInventory.get(i);//ply.inventory.armorInventory[i];
-			if(armor!=null){
+			ItemStack armor = ply.inventory.armorInventory.get(i);
+			if(!armor.isEmpty()){
 				Item item = armor.getItem();
-				
+
 				if(item instanceof GenericArmor){
-					value+=((GenericArmor)item).getArmorValue(armor, type);				
+					value+=((GenericArmor)item).getArmorValue(type);
 				} else if (item instanceof ItemArmor){
 					if(type==DamageType.PHYSICAL){
 						value += ((ItemArmor) item).getArmorMaterial().getDamageReductionAmount(((ItemArmor)item).armorType);
 					}
 				}
-				
+
 			}
-			
+
 		}
 		
 		return value;
@@ -134,12 +129,8 @@ public class DamageSystem {
 				} else {
 					return armor*0.5f;
 				}
-				
-			case POISON:
-				return 0;
-			case RADIATION:
-				return 0;
-			case UNRESISTABLE:
+
+            case UNRESISTABLE:
 			default:
 				return 0;
 		}
@@ -201,18 +192,16 @@ public class DamageSystem {
                     //amount = 0.0F;
                 	/**SHIELD DAMAGE HOOK**/
                 	amount = calculateShieldDamage(ent, amount, dmgsrc);
-                	ShieldStats.playBlockSound(ent, dmgsrc);
+                	ShieldStats.playBlockSound(ent);
                 	/**END**/
 
-                    //if (!source.isProjectile())
                 	if(dmgsrc.knockbackOnShieldBlock())
                     {
                         Entity entity = source.getImmediateSource();
 
                         if (entity instanceof EntityLivingBase)
                         {
-                            //ent.blockUsingShield((EntityLivingBase)entity);
-                            ELB_blockUsingShield.invoke(ent, (EntityLivingBase)entity);
+                            ELB_blockUsingShield.invoke(ent, entity);
                         }
                     }
 
@@ -229,20 +218,16 @@ public class DamageSystem {
                         return false;
                     }
 
-                    //ent.damageEntity(source, amount - ELB_lastDamage.getFloat(ent));//ent.lastDamage);
                     ELB_damageEntity.invoke(ent, source, amount - ELB_lastDamage.getFloat(ent));
-                    //ent.lastDamage = amount;
                     ELB_lastDamage.setFloat(ent, amount);
                     flag1 = false;
                 }
                 else
                 {
-                    //ent.lastDamage = amount;
                 	if (!dmgsrc.ignoreHurtresistTime) {
 	                    ELB_lastDamage.setFloat(ent, amount);
 	                    ent.hurtResistantTime = ent.maxHurtResistantTime;
                 	}
-                    //ent.damageEntity(source, amount);
                     ELB_damageEntity.invoke(ent, source, amount);
                     if(!dmgsrc.ignoreHurtresistTime) {
 	                    ent.maxHurtTime = 10;
@@ -265,7 +250,7 @@ public class DamageSystem {
                         //ent.recentlyHit = 100;
                         ELB_recentlyHit.setInt(ent, 100);
                         //ent.attackingPlayer = (EntityPlayer)entity1;
-                        ELB_attackingPlayer.set(ent, (EntityPlayer)entity1);
+                        ELB_attackingPlayer.set(ent, entity1);
                     }
                     else if (entity1 instanceof net.minecraft.entity.passive.EntityTameable)
                     {
@@ -391,19 +376,9 @@ public class DamageSystem {
 
     public static float calculateShieldDamage(EntityLivingBase ent, float amount, TGDamageSource source) {
     	
-    	//ItemStack offHand = ent.getHeldItem(EnumHand.OFF_HAND);
-    	
     	ItemStack active = ent.getActiveItemStack();
     	
 		ShieldStats s = ShieldStats.getStats(active, ent);
-    	
-    	/*if(offHand.getItem()==Items.SHIELD) {
-    		float amountNew = ShieldStats.VANILLA_SHIELD.getAmount(amount, source);
-    		//System.out.println("HIT_SHIELD: "+amount +"->"+amountNew );
-    		return amountNew;
-    	} else if (offHand.getItem() instanceof ItemShield) {
-    		return ShieldStats.DEFAULT_STATS.getAmount(amount, source);
-    	}*/
     	if(s!=null) {
     		return s.getAmount(amount, source);
     	}
@@ -412,7 +387,6 @@ public class DamageSystem {
     
     public static void livingHurt(EntityLivingBase elb, DamageSource damageSrc, float damageAmount) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
     	damageAmount = ELB_applyArmorCalculations(elb,damageSrc, damageAmount);
-        //damageAmount = elb.applyPotionDamageCalculations(damageSrc, damageAmount);
         damageAmount = (Float)ELB_applyPotionDamageCalculations.invoke(elb, damageSrc, damageAmount);
         float f = damageAmount;
         damageAmount = Math.max(damageAmount - elb.getAbsorptionAmount(), 0.0F);
@@ -440,20 +414,9 @@ public class DamageSystem {
             TGDamageSource dmgsrc = TGDamageSource.getFromGenericDamageSource(source);
             INpcTGDamageSystem tg = (INpcTGDamageSystem) elb;
             
-            //float toughness = tg.getToughnessAfterPentration(elb, dmgsrc);
-            
             float toughness = (float)elb.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue();
-            
-           // System.out.println("DamageBefore:"+damage);
-           // System.out.println("Armor:"+tg.getTotalArmorAgainstType(dmgsrc));
-           // System.out.println("Pen(x4):"+dmgsrc.armorPenetration*4);
-           // System.out.println("Toughness:"+toughness);
-            
-            //damage = CombatRules.getDamageAfterAbsorb(damage, tg.getTotalArmorAgainstType(dmgsrc), toughness);
             damage = (float) getDamageAfterAbsorb_TGFormula(damage, tg.getTotalArmorAgainstType(dmgsrc), toughness, dmgsrc.armorPenetration*4);
         }
-
-        //System.out.println("DamageAfter:"+damage);
         return damage;
     }
     
@@ -471,18 +434,7 @@ public class DamageSystem {
     	//use toughness to reduce penetration
 
     	float pen = Math.max((penetration)-toughnessAttribute, 0);
-    	
     	double armor = MathUtil.clamp(totalArmor-pen, 0.0,24.0);
-    	
-    	/*System.out.println("***********************************");
-    	System.out.println("DAMAGE:"+damage);
-    	System.out.println("Penetration:"+penetration);
-    	System.out.println("Toughness:"+toughnessAttribute);
-    	System.out.println("PEN:"+pen);
-    	System.out.println("TotalArmor"+totalArmor);
-    	System.out.println("ArmorFinal:"+armor);
-    	System.out.println("DamageFinal:"+(damage * (1.0-armor/25.0)));*/
-    	
     	return damage * (1.0-armor/25.0);
     }
 }

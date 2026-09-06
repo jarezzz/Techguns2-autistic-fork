@@ -7,7 +7,7 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.gui.AmmoPressGui;
 import techguns.util.TextUtil;
 
@@ -28,10 +28,10 @@ public abstract class BasicRecipeCategory<T extends IRecipeWrapper> implements I
 	
 	public BasicRecipeCategory(IGuiHelper guiHelper, ResourceLocation guiTexture, String name, String UID) {
 		background = guiHelper.createDrawable(guiTexture, 7, 15, 162, 63);
-		localizedName = TextUtil.trans(Techguns.MODID+".container."+name);
+		localizedName = TextUtil.trans(Tags.MOD_ID+".container."+name);
 		this.guiHelper=guiHelper;
 		this.uid = UID;
-		this.powerbar_static = guiHelper.createDrawable(AmmoPressGui.texture, 250, 0, 6, 50);
+		this.powerbar_static = guiHelper.createDrawable(AmmoPressGui.texture, 251, 1, 4, 59);
 		this.powerbar = guiHelper.createAnimatedDrawable(powerbar_static, 100, IDrawableAnimated.StartDirection.TOP, true);
 	}
 	
@@ -47,7 +47,7 @@ public abstract class BasicRecipeCategory<T extends IRecipeWrapper> implements I
 
 	@Override
 	public String getModName() {
-		return Techguns.MODID;
+		return Tags.MOD_ID;
 	}
 
 	@Override

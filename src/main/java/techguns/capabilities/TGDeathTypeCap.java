@@ -25,7 +25,7 @@ public class TGDeathTypeCap {
 	}
 
 	public static TGDeathTypeCap get(EntityLivingBase elb){
-		return (TGDeathTypeCap) elb.getCapability(TGDeathTypeCapProvider.TG_DEATHTYPE_CAP, null);
+		return elb.getCapability(TGDeathTypeCapProvider.TG_DEATHTYPE_CAP, null);
 	}
 	
 }

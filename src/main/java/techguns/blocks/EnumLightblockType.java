@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumLightblockType implements IStringSerializable {
 	NEONTUBES2,
@@ -10,7 +11,7 @@ public enum EnumLightblockType implements IStringSerializable {
 	NEONSQUARE_WHITE,;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 }

@@ -1,12 +1,9 @@
 package techguns.client.particle;
 
+import net.minecraft.util.EnumHand;
+
 import java.util.Iterator;
 import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Implemented by capabilities that store entityAttachedParticle systems
@@ -14,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public interface ITGParticleAttachments {
 	
-	public default void tickParticles() {
+	default void tickParticles() {
 		if(this.getEntityParticles()!=null) {
 			Iterator<ITGParticle> it = getEntityParticles().iterator();
 			while(it.hasNext()) {
@@ -75,7 +72,7 @@ public interface ITGParticleAttachments {
 		}
 	}
 	
-	public default void clearAttachedSystemsHand(EnumHand hand) {
+	default void clearAttachedSystemsHand(EnumHand hand) {
 		if(hand==EnumHand.MAIN_HAND) {
 			if (this.getParticleSysMainhand()!=null) {
 				this.getParticleSysMainhand().clear();
@@ -87,7 +84,7 @@ public interface ITGParticleAttachments {
 		}
 	}
 	
-	public default void addSystemsHand(EnumHand hand, List<TGParticleSystem> systems) {
+	default void addSystemsHand(EnumHand hand, List<TGParticleSystem> systems) {
 		
 		if(hand==EnumHand.MAIN_HAND) {
 			this.getOrInitParticleSysMainhand().clear();
@@ -98,7 +95,7 @@ public interface ITGParticleAttachments {
 		}
 	}
 	
-	public default void addEffectHand(EnumHand hand, List<ITGParticle> effects) {
+	default void addEffectHand(EnumHand hand, List<ITGParticle> effects) {
 		
 		if(hand==EnumHand.MAIN_HAND) {
 			this.getOrInitEntityParticlesMH().addAll(effects);
@@ -107,24 +104,22 @@ public interface ITGParticleAttachments {
 		}
 	}
 	
-	public List<ITGParticle> getEntityParticles();
+	List<ITGParticle> getEntityParticles();
 	
-	public List<ITGParticle> getEntityParticlesMH();
+	List<ITGParticle> getEntityParticlesMH();
 	
-	public List<ITGParticle> getEntityParticlesOH();
+	List<ITGParticle> getEntityParticlesOH();
 	
-	public List<TGParticleSystem> getParticleSysMainhand();
+	List<TGParticleSystem> getParticleSysMainhand();
 	
-	public List<TGParticleSystem> getParticleSysOffhand();
-	
-	public List<ITGParticle> getOrInitEntityParticles();
+	List<TGParticleSystem> getParticleSysOffhand();
 
-	public List<ITGParticle> getOrInitEntityParticlesOH();
+	List<ITGParticle> getOrInitEntityParticlesOH();
 
-	public List<ITGParticle> getOrInitEntityParticlesMH();
+	List<ITGParticle> getOrInitEntityParticlesMH();
 	
-	public List<TGParticleSystem> getOrInitParticleSysMainhand();
+	List<TGParticleSystem> getOrInitParticleSysMainhand();
 	
-	public List<TGParticleSystem> getOrInitParticleSysOffhand();
+	List<TGParticleSystem> getOrInitParticleSysOffhand();
 
 }

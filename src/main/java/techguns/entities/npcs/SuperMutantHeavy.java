@@ -49,6 +49,7 @@ public class SuperMutantHeavy extends SuperMutantBasic {
 		case ICE:
 			return 16.0f;
 		case PHYSICAL:
+			return 10.0f;
 		case PROJECTILE:
 			return 12.0f;
 		case POISON:
@@ -72,7 +73,7 @@ public class SuperMutantHeavy extends SuperMutantBasic {
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(45);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(9);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(2D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(2.5D);
 	}
 }

@@ -1,0 +1,84 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:cooked_beef",
+          "entryName": "cooked_beef",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 3, "max": 6 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:beef",
+          "entryName": "beef",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 4, "max": 8 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:cooked_porkchop",
+          "entryName": "cooked_porkchop",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 3, "max": 6 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:porkchop",
+          "entryName": "porkchop",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 4, "max": 8 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_apple",
+          "entryName": "golden_apple",
+          "weight": 15,
+          "functions": [
+            { "function": "set_count", "count": { "min": 1, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:radpills",
+          "entryName": "radpills",
+          "weight":20,
+          "functions": [
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        }
+      ]
+    },
+    {
+          "name": "gun",
+          "rolls": {
+              "min":0,
+              "max":1
+          },
+          "entries": [
+              {
+                  "type": "item",
+                  "weight": 2,
+                  "name": "minecraft:golden_apple",
+                  "functions": [
+                      { "function": "set_data", "data": 1}
+                  ]
+              }
+          ]
+      }
+  ]
+}

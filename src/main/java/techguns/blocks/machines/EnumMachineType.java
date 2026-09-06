@@ -4,6 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.machines.IMachineType;
 import techguns.tileentities.AmmoPressTileEnt;
 import techguns.tileentities.ChemLabTileEnt;
@@ -12,7 +13,7 @@ import techguns.tileentities.DungeonScannerTileEnt;
 import techguns.tileentities.MetalPressTileEnt;
 import techguns.tileentities.TurretTileEnt;
 
-public enum EnumMachineType implements IStringSerializable, IMachineType<EnumMachineType> {
+public enum EnumMachineType implements IStringSerializable, IMachineType {
 	AMMO_PRESS(0,AmmoPressTileEnt.class,false,false,EnumBlockRenderType.ENTITYBLOCK_ANIMATED),
 	METAL_PRESS(1,MetalPressTileEnt.class,false,false,EnumBlockRenderType.ENTITYBLOCK_ANIMATED),
 	CHEM_LAB(2,ChemLabTileEnt.class,false,false,EnumBlockRenderType.ENTITYBLOCK_ANIMATED),
@@ -20,19 +21,13 @@ public enum EnumMachineType implements IStringSerializable, IMachineType<EnumMac
 	DUNGEON_SCANNER(4,DungeonScannerTileEnt.class,true,true,EnumBlockRenderType.MODEL),
 	DUNGEON_GENERATOR(5,DungeonGeneratorTileEnt.class,true,true,EnumBlockRenderType.MODEL);
 
-	/*
-	EXPLOSIVE_CHARGE(6,"explosivecharge"),
-	CAMP_FLAG(7,"campflag"),
-	EXPLOSIVE_CHARGE_ADVANCED(8,"explosivechargeadvanced"),
-	CHARGING_STATION(9,"chargingstation");*/
-
-	private int id;
-	private String name;
-	private Class<? extends TileEntity> tile;
-	private boolean isFullCube;
-	private EnumBlockRenderType renderType;
-	private BlockRenderLayer renderLayer;
-	private boolean debugonly;
+	private final int id;
+	private final String name;
+	private final Class<? extends TileEntity> tile;
+	private final boolean isFullCube;
+	private final EnumBlockRenderType renderType;
+	private final BlockRenderLayer renderLayer;
+	private final boolean debugonly;
 	
 	EnumMachineType(int id, Class<? extends TileEntity> tile, boolean isFullCube, boolean debugonly, EnumBlockRenderType renderType) {
 		this(id,tile,isFullCube,debugonly,renderType,BlockRenderLayer.SOLID);
@@ -53,22 +48,20 @@ public enum EnumMachineType implements IStringSerializable, IMachineType<EnumMac
 	}
 	
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return this.name;
 	}
 
 	@Override
 	public int getMaxMachineIndex() {
-		return this.values().length;
+		return EnumMachineType.values().length;
 	}
 
 	@Override
 	public TileEntity getTile() {
 		try {
 			return this.tile.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		return null;

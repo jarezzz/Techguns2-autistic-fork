@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -26,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGPackets;
 import techguns.TGSounds;
 import techguns.api.npc.INpcTGDamageSystem;
@@ -38,220 +38,194 @@ import techguns.packets.PacketPlaySound;
 
 public class AlienBug extends EntitySpider implements ITGNpcTeam, INpcTGDamageSystem, ITGSpawnerNPC {
 
-	 protected int attackTimer;
-	
-	 protected static final ResourceLocation LOOT = null; //TODO //new ResourceLocation(Techguns.MODID, "entities/alienbug");
-	 
-	 protected boolean tryLink=true;
-	
-	@Override
+    protected int attackTimer;
+
+    protected static final ResourceLocation LOOT = null;
+
+    protected boolean tryLink = true;
+
+    @Override
     @Nullable
-    protected ResourceLocation getLootTable()
-    {
+    protected ResourceLocation getLootTable() {
         return LOOT;
     }
-	
-	@Override
-   protected void applyEntityAttributes()
-   {
-       super.applyEntityAttributes();
-       this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-       this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-       this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.0D);
-   }
-	
-	public AlienBug(World w) {
-		super(w);
-		this.setSize(1.1F, 1.2F);
-	}
-	
-	
-	 /**
-     * Get this Entity's EnumCreatureAttribute
-     */
-	@Override
-    public EnumCreatureAttribute getCreatureAttribute()
-    {
-        return EnumCreatureAttribute.ARTHROPOD;
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.0D);
     }
-	
-	 @Override
-	protected SoundEvent getAmbientSound() {
-		return TGSounds.ALIENBUG_IDLE;
-	}
+
+    public AlienBug(World w) {
+        super(w);
+        this.setSize(1.1F, 1.2F);
+    }
 
 
-	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return TGSounds.ALIENBUG_HURT;
-	}
+    @Override
+    protected @NotNull SoundEvent getAmbientSound() {
+        return TGSounds.ALIENBUG_IDLE;
+    }
 
 
-	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.playSound(TGSounds.ALIENBUG_STEP, 0.15F, 1.0F);
-	}
-
-	@Override
-	protected SoundEvent getDeathSound() {
-		return TGSounds.ALIENBUG_DEATH;
-	}
+    @Override
+    protected @NotNull SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
+        return TGSounds.ALIENBUG_HURT;
+    }
 
 
-	@Override
-	protected boolean isValidLightLevel() {
-		return true;
-	}
+    @Override
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull Block blockIn) {
+        this.playSound(TGSounds.ALIENBUG_STEP, 0.15F, 1.0F);
+    }
+
+    @Override
+    protected @NotNull SoundEvent getDeathSound() {
+        return TGSounds.ALIENBUG_DEATH;
+    }
 
 
-	@SideOnly(Side.CLIENT)
-   public int getAttackTimer()
-   {
-       return this.attackTimer;
-   }
-	
-	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		if (this.attackTimer > 0)
-       {
-           --this.attackTimer;
-       }
-	}
+    @Override
+    protected boolean isValidLightLevel() {
+        return true;
+    }
 
-	@Override
-	protected void initEntityAI() {
-		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
-		this.tasks.addTask(4, new AlienBug.AISpiderAttack(this));
-		this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 0.8D));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
-		this.targetTasks.addTask(2, new AlienBug.AIAlienBugTarget(this, EntityPlayer.class));
-		this.targetTasks.addTask(3, new AlienBug.AIAlienBugTarget(this, EntityIronGolem.class));
-	}
-	
-	static class AIAlienBugTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
-		public AIAlienBugTarget(AlienBug bug, Class<T> classTarget) {
-			super(bug, classTarget, true);
-		}
 
-		@Override
-		public void startExecuting() {
-			super.startExecuting();
-			if(!this.taskOwner.world.isRemote) {
-				TGPackets.network.sendToAllAround(new PacketPlaySound(TGSounds.ALIENBUG_AGGRO, this.taskOwner, 1.0f, 1.0f,
-						false, false, TGSoundCategory.HOSTILE), TGPackets.targetPointAroundEnt(taskOwner, 24.0f));
-			}
-		}
+    @SideOnly(Side.CLIENT)
+    public int getAttackTimer() {
+        return this.attackTimer;
+    }
 
-	}
+    @Override
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        if (this.attackTimer > 0) {
+            --this.attackTimer;
+        }
+    }
 
-	static class AISpiderAttack extends EntityAIAttackMelee {
-		public AISpiderAttack(EntitySpider spider) {
-			super(spider, 1.0D, true);
-		}
+    @Override
+    protected void initEntityAI() {
+        this.tasks.addTask(1, new EntityAISwimming(this));
+        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
+        this.tasks.addTask(4, new AlienBug.AISpiderAttack(this));
+        this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 0.8D));
+        this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+        this.tasks.addTask(6, new EntityAILookIdle(this));
+        this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
+        this.targetTasks.addTask(2, new AlienBug.AIAlienBugTarget(this, EntityPlayer.class));
+        this.targetTasks.addTask(3, new AlienBug.AIAlienBugTarget(this, EntityIronGolem.class));
+    }
 
-		/**
-		 * Returns whether an in-progress EntityAIBase should continue executing
-		 */
-		public boolean shouldContinueExecuting() {
-			float f = this.attacker.getBrightness();
+    static class AIAlienBugTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
+        public AIAlienBugTarget(AlienBug bug, Class<T> classTarget) {
+            super(bug, classTarget, true);
+        }
 
-			if (f >= 0.5F && this.attacker.getRNG().nextInt(100) == 0) {
-				this.attacker.setAttackTarget((EntityLivingBase) null);
-				return false;
-			} else {
-				return super.shouldContinueExecuting();
-			}
-		}
+        @Override
+        public void startExecuting() {
+            super.startExecuting();
+            if (!this.taskOwner.world.isRemote) {
+                TGPackets.wrapper.sendToAllAround(new PacketPlaySound(TGSounds.ALIENBUG_AGGRO, this.taskOwner, 1.0f, 1.0f,
+                        false, false, TGSoundCategory.HOSTILE), TGPackets.targetPointAroundEnt(taskOwner, 24.0f));
+            }
+        }
 
-		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-			return (double) (4.0F + attackTarget.width);
-		}
-	}
-	 
-	@Override
-	public boolean attackEntityAsMob(Entity ent) {
-	   boolean b =super.attackEntityAsMob(ent);
-       this.attackTimer = 10;
+    }
 
-       if(!this.world.isRemote) {
-    	   TGPackets.network.sendToAllAround(new PacketPlaySound(TGSounds.ALIENBUG_BITE, this, 2.0f, 1.0f,false,false, TGSoundCategory.HOSTILE), TGPackets.targetPointAroundEnt(this, 24.0f));
-       }
+    static class AISpiderAttack extends EntityAIAttackMelee {
+        public AISpiderAttack(EntitySpider spider) {
+            super(spider, 1.0D, true);
+        }
 
-       this.world.setEntityState(this, (byte)4);
-          
-       return b;
-	}
+        /**
+         * Returns whether an in-progress EntityAIBase should continue executing
+         */
+        public boolean shouldContinueExecuting() {
+            float f = this.attacker.getBrightness();
 
-	@Override
-	public TGNpcFaction getTGFaction() {
-		return TGNpcFaction.HOSTILE;
-	}
+            if (f >= 0.5F && this.attacker.getRNG().nextInt(100) == 0) {
+                this.attacker.setAttackTarget(null);
+                return false;
+            } else {
+                return super.shouldContinueExecuting();
+            }
+        }
 
-	@Override
-	public void handleStatusUpdate(byte id) {
-		if (id == 4) {
-			this.attackTimer = 10;
-		} else {
-			super.handleStatusUpdate(id);
-		}
-	}
+        protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+            return 4.0F + attackTarget.width;
+        }
+    }
 
-	@Override
-	public float getTotalArmorAgainstType(TGDamageSource dmgsrc) {
-		switch( dmgsrc.damageType){
-			case ENERGY:
-			case EXPLOSION:
-			case ICE:
-			case LIGHTNING:
-				return 5.0f;
-			case PHYSICAL:
-				return 10.0f;
-			case POISON:
-				return 20.0f;
-			case PROJECTILE:
-				return 10.0f;
-			case RADIATION:
-				return 20.0f;
-			case FIRE:
-			case UNRESISTABLE:
-			default:
-				return 0;
-		}
-	}
+    @Override
+    public boolean attackEntityAsMob(@NotNull Entity ent) {
+        boolean b = super.attackEntityAsMob(ent);
+        this.attackTimer = 10;
 
-	@Override
-	public float getPenetrationResistance(TGDamageSource dmgsrc) {
-		return 0.0f;
-	}
+        if (!this.world.isRemote) {
+            TGPackets.wrapper.sendToAllAround(new PacketPlaySound(TGSounds.ALIENBUG_BITE, this, 2.0f, 1.0f, false, false, TGSoundCategory.HOSTILE), TGPackets.targetPointAroundEnt(this, 24.0f));
+        }
 
-	@Override
-	public boolean getTryLink() {
-		return this.tryLink;
-	}
+        this.world.setEntityState(this, (byte) 4);
 
-	@Override
-	public void setTryLink(boolean value) {
-		this.tryLink=value;
-	}
+        return b;
+    }
 
-	@Override
-	public TGSpawnerNPCData getCapability(Capability<TGSpawnerNPCData> tgGenericnpcData) {
-		return this.getCapability(tgGenericnpcData, null);
-	}
-	
-	@Override
-	protected void despawnEntity() {
-		super.despawnEntity();
-		this.despawnEntitySpawner(world, dead);
-	}
+    @Override
+    public TGNpcFaction getTGFaction() {
+        return TGNpcFaction.HOSTILE;
+    }
 
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		this.onDeathSpawner(world, dead);
-	}
+    @Override
+    public void handleStatusUpdate(byte id) {
+        if (id == 4) {
+            this.attackTimer = 10;
+        } else {
+            super.handleStatusUpdate(id);
+        }
+    }
+
+    @Override
+    public float getTotalArmorAgainstType(TGDamageSource dmgsrc) {
+        return switch (dmgsrc.damageType) {
+            case ENERGY, EXPLOSION, ICE, LIGHTNING -> 5.0f;
+            case PHYSICAL, PROJECTILE -> 10.0f;
+            case POISON, RADIATION -> 20.0f;
+            default -> 0;
+        };
+    }
+
+    @Override
+    public float getPenetrationResistance(TGDamageSource dmgsrc) {
+        return 0.0f;
+    }
+
+    @Override
+    public boolean getTryLink() {
+        return this.tryLink;
+    }
+
+    @Override
+    public void setTryLink(boolean value) {
+        this.tryLink = value;
+    }
+
+    @Override
+    public TGSpawnerNPCData getCapability(Capability<TGSpawnerNPCData> tgGenericnpcData) {
+        return this.getCapability(tgGenericnpcData, null);
+    }
+
+    @Override
+    protected void despawnEntity() {
+        super.despawnEntity();
+        this.despawnEntitySpawner(world, dead);
+    }
+
+    @Override
+    public void onDeath(@NotNull DamageSource cause) {
+        super.onDeath(cause);
+        this.onDeathSpawner(world, dead);
+    }
 }

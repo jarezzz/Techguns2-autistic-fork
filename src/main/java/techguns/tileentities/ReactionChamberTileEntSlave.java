@@ -7,53 +7,55 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGBlocks;
+import techguns.blocks.machines.EnumMultiBlockMachineType;
 import techguns.blocks.machines.MultiBlockMachine;
 
 public class ReactionChamberTileEntSlave extends MultiBlockMachineTileEntSlave {
-	
-	
-	public ReactionChamberTileEntSlave() {
-		super();
-	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(getMaster()!=null) {
-			if (type==2 && (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
-				return getMaster().hasCapability(capability, facing);
-			} else if (type==3 && capability == CapabilityEnergy.ENERGY) {
-				return getMaster().hasCapability(capability, facing);
-			}
-		}
-		return super.hasCapability(capability, facing);
-	}
 
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(getMaster()!=null) {
-			if (type==2 && (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
-				return getMaster().getCapability(capability, facing);
-			} else if (type==3 && capability == CapabilityEnergy.ENERGY) {
-				return getMaster().getCapability(capability, facing);
-			}
-		}
-		return super.getCapability(capability, facing);
-	}
+    public ReactionChamberTileEntSlave() {
+        super();
+    }
 
-	@Override
-	public MultiBlockMachine getMachineBlockType() {
-		return TGBlocks.MULTIBLOCK_MACHINE;
-	}
-	
-	@Override
-	public AxisAlignedBB getFormedCollisionBoundingBox() {
-		if(this.hasMaster) {
-			MultiBlockMachineTileEntMaster master = this.getMaster();
-			if(master!=null) {
-				return master.getBBforSlave(this.getPos());
-			}
-		}
-		return Block.FULL_BLOCK_AABB;
-	}
+    @Override
+    public boolean hasCapability(@NotNull Capability<?> capability, EnumFacing facing) {
+        if (getMaster() != null) {
+            if (type == 2 && (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+                return getMaster().hasCapability(capability, facing);
+            } else if (type == 3 && capability == CapabilityEnergy.ENERGY) {
+                return getMaster().hasCapability(capability, facing);
+            }
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(@NotNull Capability<T> capability, EnumFacing facing) {
+        if (getMaster() != null) {
+            if (type == 2 && (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+                return getMaster().getCapability(capability, facing);
+            } else if (type == 3 && capability == CapabilityEnergy.ENERGY) {
+                return getMaster().getCapability(capability, facing);
+            }
+        }
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public MultiBlockMachine<EnumMultiBlockMachineType> getMachineBlockType() {
+        return TGBlocks.MULTIBLOCK_MACHINE;
+    }
+
+    @Override
+    public AxisAlignedBB getFormedCollisionBoundingBox() {
+        if (this.hasMaster) {
+            MultiBlockMachineTileEntMaster master = this.getMaster();
+            if (master != null) {
+                return master.getBBforSlave(this.getPos());
+            }
+        }
+        return Block.FULL_BLOCK_AABB;
+    }
 }

@@ -3,6 +3,7 @@ package techguns.entities.npcs;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -13,14 +14,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import techguns.TGArmors;
 import techguns.TGuns;
-import techguns.Techguns;
+import techguns.*;
+import techguns.api.npc.factions.ITGNpcTeam;
 import techguns.items.armors.GenericArmorMultiCamo;
 
 public class ZombiePigmanSoldier extends GenericNPCUndead {
 
-	public static final ResourceLocation LOOT = new ResourceLocation(Techguns.MODID, "entities/zombiepigmansoldier");
+	public static final ResourceLocation LOOT = new ResourceLocation(Tags.MOD_ID, "entities/zombiepigmansoldier");
 	
 	public ZombiePigmanSoldier(World world) {
 		super(world);
@@ -43,10 +47,11 @@ public class ZombiePigmanSoldier extends GenericNPCUndead {
 		// Armors
 		double chance = 0.5;
 		int camo=3;
-		if (Math.random() <= chance)
-			GenericArmorMultiCamo.getNewWithCamo(TGArmors.t2_combat_Helmet, camo);
-			this.setItemStackToSlot(EntityEquipmentSlot.HEAD,
-					GenericArmorMultiCamo.getNewWithCamo(TGArmors.t2_combat_Helmet, camo));
+		if (Math.random() <= chance) {
+            GenericArmorMultiCamo.getNewWithCamo(TGArmors.t2_combat_Helmet, camo);
+            this.setItemStackToSlot(EntityEquipmentSlot.HEAD,
+                    GenericArmorMultiCamo.getNewWithCamo(TGArmors.t2_combat_Helmet, camo));
+        }
 		if (Math.random() <= chance)
 			this.setItemStackToSlot(EntityEquipmentSlot.CHEST, 
 					GenericArmorMultiCamo.getNewWithCamo(TGArmors.t2_combat_Chestplate, camo));
@@ -55,9 +60,16 @@ public class ZombiePigmanSoldier extends GenericNPCUndead {
 		if (Math.random() <= chance)
 			this.setItemStackToSlot(EntityEquipmentSlot.FEET, GenericArmorMultiCamo.getNewWithCamo(TGArmors.t2_combat_Boots, camo));
 
+		if (TGConfig.misc.disableArmorDrops) {
+			this.setDropChance(EntityEquipmentSlot.HEAD,  0f);
+			this.setDropChance(EntityEquipmentSlot.LEGS,  0f);
+			this.setDropChance(EntityEquipmentSlot.CHEST, 0f);
+			this.setDropChance(EntityEquipmentSlot.FEET,  0f);
+		}
+
 		// Weapons
 		Random r = new Random();
-		Item weapon = null;
+		Item weapon;
 		int bound = 9;
 		
 		switch (r.nextInt(bound)) {
@@ -78,23 +90,15 @@ public class ZombiePigmanSoldier extends GenericNPCUndead {
 		case 8:
 			weapon = TGuns.pistol;
 			break;
-		case 9:
-		case 10:
-			weapon = TGuns.flamethrower;
-			break;
-		case 11:
-		case 12:
-			weapon = TGuns.combatshotgun;
-			break;
-		case 13:
-			weapon = TGuns.lmg;
-			break;
-		case 14:
 		default:
 			weapon = TGuns.rocketlauncher;
 			break;
 		}
-		if (weapon != null) this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+		if (weapon != null) {
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+			if (TGConfig.misc.disableGunDrops)
+				this.setDropChance(EntityEquipmentSlot.MAINHAND, 0f);
+		}
 	}
 
 	@Override
@@ -108,12 +112,12 @@ public class ZombiePigmanSoldier extends GenericNPCUndead {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	public @NotNull SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ZOMBIE_PIG_HURT;
 	}
 
 	@Override
-	public SoundEvent getDeathSound() {
+	public @NotNull SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ZOMBIE_PIG_DEATH;
 	}
 
@@ -122,7 +126,7 @@ public class ZombiePigmanSoldier extends GenericNPCUndead {
 	}
 	
 	@Override
-    protected void playStepSound(BlockPos pos, Block blockIn)
+    protected void playStepSound(@NotNull BlockPos pos, @NotNull Block blockIn)
     {
         this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
@@ -131,4 +135,39 @@ public class ZombiePigmanSoldier extends GenericNPCUndead {
 	protected ResourceLocation getLootTable() {
 		return LOOT;
 	}
+
+    @Override
+    public boolean attackEntityFrom(@NotNull DamageSource source, float amount) {
+        if (this.isFriendlyDamage(source)) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    private boolean isFriendlyDamage(DamageSource source) {
+        return this.isFriendlyEntity(source.getTrueSource()) || this.isFriendlyEntity(source.getImmediateSource());
+    }
+
+    private boolean isFriendlyEntity(@Nullable Entity entity) {
+        if (entity == null) {
+            return false;
+        }
+        if (entity == this) {
+            return true;
+        }
+        if (entity instanceof ITGNpcTeam) {
+            return ((ITGNpcTeam) entity).getTGFaction() == this.getTGFaction();
+        }
+        return false;
+    }
+
+    @Override
+    public int getMaxFallHeight() {
+        return 1;
+    }
+
+    @Override
+    protected boolean useTargetOffsetPathing() {
+        return true;
+    }
 }

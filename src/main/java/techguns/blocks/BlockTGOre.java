@@ -1,7 +1,6 @@
 package techguns.blocks;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -15,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import techguns.util.BlockUtils;
 
 public class BlockTGOre extends GenericBlock {
@@ -44,7 +44,7 @@ public class BlockTGOre extends GenericBlock {
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public @NotNull IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState()
 	    .withProperty(ORE_TYPE, EnumOreType.class.getEnumConstants()[meta]);
     }
@@ -61,13 +61,13 @@ public class BlockTGOre extends GenericBlock {
 	}
 
 	@Override
-	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
+	public float getBlockHardness(IBlockState blockState, @NotNull World worldIn, @NotNull BlockPos pos) {
 		EnumOreType type = blockState.getValue(ORE_TYPE);
 		return type.getHardness();
 	}
 
 	@Override
-	public String getHarvestTool(IBlockState state) {
+	public String getHarvestTool(@NotNull IBlockState state) {
 		return "pickaxe";
 	}
 
@@ -87,7 +87,7 @@ public class BlockTGOre extends GenericBlock {
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs tab, @NotNull NonNullList<ItemStack> items) {
 		for (EnumOreType t : EnumOreType.class.getEnumConstants()) {
 			if (t.isEnabled()) {
 				items.add(new ItemStack(this,1,this.getMetaFromState(getDefaultState().withProperty(ORE_TYPE, t))));
@@ -96,7 +96,7 @@ public class BlockTGOre extends GenericBlock {
 	}
 	
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { ORE_TYPE });
+	protected @NotNull BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, ORE_TYPE);
 	}
 }

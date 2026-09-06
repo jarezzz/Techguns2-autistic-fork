@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumConnectionType implements IStringSerializable {
 	NONE,
@@ -21,7 +22,7 @@ public enum EnumConnectionType implements IStringSerializable {
 	NESW;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumDoorType implements IStringSerializable {
 	METAL,
@@ -9,7 +10,7 @@ public enum EnumDoorType implements IStringSerializable {
 	NETHER;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

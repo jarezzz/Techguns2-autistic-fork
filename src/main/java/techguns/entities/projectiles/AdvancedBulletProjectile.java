@@ -1,15 +1,18 @@
 package techguns.entities.projectiles;
 
+import com.google.common.collect.Sets;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import techguns.TGSounds;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.damagesystem.DamageType;
 import techguns.items.guns.GenericGun;
 import techguns.items.guns.IProjectileFactory;
@@ -64,8 +67,14 @@ public class AdvancedBulletProjectile extends GenericProjectile{
     		pitch = -this.rotationPitch;
     		yaw = -this.rotationYaw;
     	}
-    	
-    	if(sound==SoundType.STONE) {
+		if (rayTraceResult.typeOfHit == Type.BLOCK) {
+			Block block = world.getBlockState(rayTraceResult.getBlockPos()).getBlock();
+			if (Sets.newHashSet(Blocks.BRICK_BLOCK, Blocks.STONEBRICK, Blocks.MONSTER_EGG, Blocks.END_BRICKS, Blocks.NETHER_BRICK).contains(block)) {
+				world.playSound(x, y, z, TGSounds.BULLET_IMPACT_BRICKS, SoundCategory.AMBIENT, 1.0f, 1.0f, true);
+				Techguns.proxy.createFX("Impact_BulletRock_Blue", world, x, y, z, 0.0D, 0.0D, 0.0D, pitch, yaw);
+			}
+		}
+    	else if(sound==SoundType.STONE) {
 			this.world.playSound(x, y, z, TGSounds.BULLET_IMPACT_STONE, SoundCategory.AMBIENT, 1.0f, 1.0f, distdelay);
 			Techguns.proxy.createFX("Impact_BulletRock_Blue", world, x, y, z, 0.0D, 0.0D, 0.0D, pitch, yaw);
 			

@@ -5,7 +5,6 @@ import crafttweaker.CraftTweakerAPI;
 public class TGCraftTweakerIntegration {
 
 	public static void init() {
-		
 		CraftTweakerAPI.registerClass(AmmoPressTweaker.class);
 		CraftTweakerAPI.registerClass(ChargingStationTweaker.class);
 		CraftTweakerAPI.registerClass(MetalPressTweaker.class);
@@ -17,7 +16,6 @@ public class TGCraftTweakerIntegration {
 		CraftTweakerAPI.registerClass(OreClusterTweaker.class);
 		CraftTweakerAPI.registerClass(BlastFurnaceTweaker.class);
 		CraftTweakerAPI.registerClass(GrinderTweaker.class);
-		//CraftTweakerAPI.registerClass(DeathEffectTweaker.class);
 	}
 
 }

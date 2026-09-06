@@ -2,10 +2,9 @@ package techguns.radiation;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 import techguns.gui.player.TGPlayerInventoryGui;
 
 public class RadResistancePotion extends Potion {
@@ -15,7 +14,7 @@ public class RadResistancePotion extends Potion {
 	}
 
 	@Override
-	public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
+	public void renderInventoryEffect(int x, int y, @NotNull PotionEffect effect, @NotNull Minecraft mc) {
 		super.renderInventoryEffect(x, y, effect, mc);
 
 		if(mc.currentScreen!=null) {
@@ -26,7 +25,7 @@ public class RadResistancePotion extends Potion {
 	}
 
 	@Override
-	public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
+	public void renderHUDEffect(int x, int y, @NotNull PotionEffect effect, @NotNull Minecraft mc, float alpha) {
 		super.renderHUDEffect(x, y, effect, mc, alpha);
 		
 		mc.getTextureManager().bindTexture(TGPlayerInventoryGui.texture);

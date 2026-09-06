@@ -13,40 +13,44 @@ import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import techguns.gui.AmmoPressGui;
 import techguns.gui.BlastFurnaceGui;
 import techguns.tileentities.BlastFurnaceTileEnt;
 
 public class BlastFurnaceJeiRecipeCategory extends BasicRecipeCategory<BlastFurnaceJeiRecipe> {
 
-	IDrawableStatic progress_static;
-	IDrawableAnimated progress;
-	
-	public BlastFurnaceJeiRecipeCategory(IGuiHelper guiHelper) {
-		super(guiHelper, BlastFurnaceGui.texture, "blast_furnace", TGJeiPlugin.BLAST_FURNACE);
+    IDrawableStatic progress_static;
+    IDrawableAnimated progress;
 
-		this.progress_static = guiHelper.createDrawable(BlastFurnaceGui.texture, 0, 167, 90, 10);
-		this.progress = guiHelper.createAnimatedDrawable(progress_static, 100, IDrawableAnimated.StartDirection.LEFT, false);
-	}
+    public BlastFurnaceJeiRecipeCategory(IGuiHelper guiHelper) {
+        super(guiHelper, BlastFurnaceGui.texture, "blast_furnace", TGJeiPlugin.BLAST_FURNACE);
 
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, BlastFurnaceJeiRecipe recipeWrapper, IIngredients ingredients) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-		
-		guiItemStacks.init(BlastFurnaceTileEnt.SLOT_INPUT1,true,SLOT_INPUT1_X+JEI_OFFSET_X,SLOTS_ROW1_Y+JEI_OFFSET_Y);
-		guiItemStacks.init(BlastFurnaceTileEnt.SLOT_INPUT2,true,SLOT_INPUT2_X+JEI_OFFSET_X,SLOTS_ROW1_Y+JEI_OFFSET_Y);
+        this.progress_static = guiHelper.createDrawable(BlastFurnaceGui.texture, 0, 167, 90, 10);
+        this.progress = guiHelper.createAnimatedDrawable(progress_static, 100, IDrawableAnimated.StartDirection.LEFT, false);
 
-		guiItemStacks.init(BlastFurnaceTileEnt.SLOT_OUTPUT, false, SLOT_OUTPUT_X+JEI_OFFSET_X, SLOT_OUTPUT_Y+JEI_OFFSET_Y);
-		
-		
-		guiItemStacks.set(ingredients);
-	}
+        this.powerbar_static = guiHelper.createDrawable(AmmoPressGui.texture, 251, 1, 4, 48);
+        this.powerbar = guiHelper.createAnimatedDrawable(powerbar_static, 48, IDrawableAnimated.StartDirection.TOP, true);
+    }
 
-	@Override
-	public void drawExtras(Minecraft minecraft) {
-		super.drawExtras(minecraft);
-		this.powerbar.draw(minecraft, 8+JEI_OFFSET_X, 17+JEI_OFFSET_Y);
-		this.progress.draw(minecraft, 20+JEI_OFFSET_X, 54+JEI_OFFSET_Y);
-	}
+    @Override
+    public void setRecipe(IRecipeLayout recipeLayout, @NotNull BlastFurnaceJeiRecipe recipeWrapper, @NotNull IIngredients ingredients) {
+        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+
+        guiItemStacks.init(BlastFurnaceTileEnt.SLOT_INPUT1, true, SLOT_INPUT1_X + JEI_OFFSET_X, SLOTS_ROW1_Y + JEI_OFFSET_Y);
+        guiItemStacks.init(BlastFurnaceTileEnt.SLOT_INPUT2, true, SLOT_INPUT2_X + JEI_OFFSET_X, SLOTS_ROW1_Y + JEI_OFFSET_Y);
+
+        guiItemStacks.init(BlastFurnaceTileEnt.SLOT_OUTPUT, false, SLOT_OUTPUT_X + JEI_OFFSET_X, SLOT_OUTPUT_Y + JEI_OFFSET_Y);
+
+
+        guiItemStacks.set(ingredients);
+    }
+
+    @Override
+    public void drawExtras(@NotNull Minecraft minecraft) {
+        super.drawExtras(minecraft);
+        this.powerbar.draw(minecraft, 8 - 7, 17 - 15);
+        this.progress.draw(minecraft, 20 + JEI_OFFSET_X, 54 + JEI_OFFSET_Y);
+    }
 
 }

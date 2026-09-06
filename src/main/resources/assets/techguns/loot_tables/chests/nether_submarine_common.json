@@ -1,0 +1,102 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:iron_ingot",
+          "entryName": "iron_ingot",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 2, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_79",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 79 },
+            { "function": "set_count", "count": { "min": 2, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_57",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 57 },
+            { "function": "set_count", "count": { "min": 1, "max": 1 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_13",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 13 },
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_19",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 19 },
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_83",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 83 },
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_84",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 84 },
+            { "function": "set_count", "count": { "min": 1, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_64",
+          "weight": 8,
+          "functions": [
+            { "function": "set_data", "data": 64 },
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_59",
+          "weight": 8,
+          "functions": [
+            { "function": "set_data", "data": 59 },
+            { "function": "set_count", "count": { "min": 1, "max": 1 } }
+          ]
+        }
+      ]
+    }
+  ]
+}

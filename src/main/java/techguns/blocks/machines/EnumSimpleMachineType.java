@@ -4,31 +4,32 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.machines.IMachineType;
 import techguns.tileentities.CamoBenchTileEnt;
 import techguns.tileentities.ChargingStationTileEnt;
 import techguns.tileentities.RepairBenchTileEnt;
 import techguns.tileentities.BlastFurnaceTileEnt;
 
-public enum EnumSimpleMachineType implements IStringSerializable, IMachineType<EnumSimpleMachineType> {
+public enum EnumSimpleMachineType implements IStringSerializable, IMachineType {
 	CAMO_BENCH(0, CamoBenchTileEnt.class,true,EnumBlockRenderType.MODEL),
 	REPAIR_BENCH(1, RepairBenchTileEnt.class,true,EnumBlockRenderType.MODEL),
 	CHARGING_STATION(2, ChargingStationTileEnt.class, false, EnumBlockRenderType.MODEL),
 	BLAST_FURNACE(3, BlastFurnaceTileEnt.class, true, EnumBlockRenderType.MODEL);
 	
-	private int id;
-	private String name;
-	private Class<? extends TileEntity> tile;
-	private boolean isFullCube;
-	private EnumBlockRenderType renderType;
-	private BlockRenderLayer renderLayer;
+	private final int id;
+	private final String name;
+	private final Class<? extends TileEntity> tile;
+	private final boolean isFullCube;
+	private final EnumBlockRenderType renderType;
+	private final BlockRenderLayer renderLayer;
 	
-	private EnumSimpleMachineType(int id, Class<? extends TileEntity> tile, boolean isFullCube, EnumBlockRenderType renderType) {
+	EnumSimpleMachineType(int id, Class<? extends TileEntity> tile, boolean isFullCube, EnumBlockRenderType renderType) {
 		this(id,tile,isFullCube,renderType, BlockRenderLayer.SOLID);
 	}
 	
 	
-	private EnumSimpleMachineType(int id, Class<? extends TileEntity> tile, boolean isFullCube, EnumBlockRenderType renderType, BlockRenderLayer layer) {
+	EnumSimpleMachineType(int id, Class<? extends TileEntity> tile, boolean isFullCube, EnumBlockRenderType renderType, BlockRenderLayer layer) {
 		this.id=id;
 		this.name=this.name().toLowerCase();
 		this.tile = tile;
@@ -42,22 +43,20 @@ public enum EnumSimpleMachineType implements IStringSerializable, IMachineType<E
 	}
 	
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return this.name;
 	}
 
 	@Override
 	public int getMaxMachineIndex() {
-		return this.values().length;
+		return EnumSimpleMachineType.values().length;
 	}
 
 	@Override
 	public TileEntity getTile() {
 		try {
 			return this.tile.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		return null;

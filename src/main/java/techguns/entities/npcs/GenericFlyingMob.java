@@ -185,7 +185,7 @@ public abstract class GenericFlyingMob extends EntityFlying implements IMob, INp
             double d0 = this.parentEntity.posX + (double)((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
             //double d1 = this.parentEntity.posY + (double)((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
             double d2 = this.parentEntity.posZ + (double)((random.nextFloat() * 2.0F - 1.0F) * 16.0F);
-            this.parentEntity.getMoveHelper().setMoveTo(d0, getGroundLevel(this.parentEntity)+this.parentEntity.getTargetFlyHeight(), d2, 1.0D);
+            this.parentEntity.getMoveHelper().setMoveTo(d0, getGroundLevel(this.parentEntity)+this.parentEntity.getTargetFlyHeight(), d2, 1.15D);
         }
         
 		private int getGroundLevel(GenericFlyingMob entity) {	

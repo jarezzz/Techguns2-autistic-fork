@@ -1,22 +1,28 @@
 package techguns.entities.npcs;
 
+import java.util.List;
 import java.util.Random;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import techguns.TGArmors;
 import techguns.TGuns;
-import techguns.Techguns;
+import techguns.*;
 import techguns.items.armors.GenericArmorMultiCamo;
 
-public class Outcast extends GenericNPCGearSpecificStats {
+public class Outcast extends GenericNPCGearSpecificStats implements ILivingSoldier {
 
-	public static final ResourceLocation LOOT = new ResourceLocation(Techguns.MODID, "entities/outcast");
-	
+	public static final ResourceLocation LOOT = new ResourceLocation(Tags.MOD_ID, "entities/outcast");
+
+    private int soundAggroCooldown = 0;
+
 	public Outcast(World world) {
 		super(world);
 	}
@@ -44,7 +50,13 @@ public class Outcast extends GenericNPCGearSpecificStats {
 		this.setItemStackToSlot(EntityEquipmentSlot.LEGS, GenericArmorMultiCamo.getNewWithCamo(TGArmors.t3_power_Leggings,camo+1));
 		camo=r.nextInt(2);
 		this.setItemStackToSlot(EntityEquipmentSlot.FEET, GenericArmorMultiCamo.getNewWithCamo(TGArmors.t3_power_Boots,camo+1));
-		
+
+        if (TGConfig.misc.disableArmorDrops) {
+            this.setDropChance(EntityEquipmentSlot.HEAD,  0f);
+            this.setDropChance(EntityEquipmentSlot.LEGS,  0f);
+            this.setDropChance(EntityEquipmentSlot.CHEST, 0f);
+            this.setDropChance(EntityEquipmentSlot.FEET,  0f);
+        }
 
 		// Weapons
 
@@ -75,10 +87,72 @@ public class Outcast extends GenericNPCGearSpecificStats {
 			weapon = TGuns.lasergun;
 			break;
 		}
-		if (weapon != null) this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+		if (weapon != null) {
+            this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+            if (TGConfig.misc.disableGunDrops)
+                this.setDropChance(EntityEquipmentSlot.MAINHAND, 0f);
+        }
 	}
-	
-	
+
+    @Override
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        if (!this.world.isRemote) {
+            this.tickHearingAI();
+        }
+    }
+    @Override
+    public void tickHearingAI() {
+        if ((this.ticksExisted & 3) != 0) {
+            return;
+        }
+        if (this.soundAggroCooldown > 0) {
+            this.soundAggroCooldown--;
+        }
+        EntityLivingBase currentTarget = this.getAttackTarget();
+        if (currentTarget != null) {
+            if (!this.isValidAttackTarget(currentTarget)) {
+                this.setAttackTarget(null);
+            } else {
+                return;
+            }
+        }
+        if (this.soundAggroCooldown > 0) {
+            return;
+        }
+        this.tryAggroBySound();
+    }
+
+    private void tryAggroBySound() {
+        EntityPlayer loudest = null;
+        double loudestWeight = 0.0D;
+        AxisAlignedBB scanBox = this.getEntityBoundingBox().grow(SOUND_SCAN_RANGE, 10.0D, SOUND_SCAN_RANGE);
+        List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, scanBox);
+        for (EntityPlayer player : players) {
+            if (!this.canHearPlayer(player)) {
+                continue;
+            }
+            float loudness = this.getPlayerLoudness(player);
+            if (loudness <= 0.0f) {
+                continue;
+            }
+            double hearingRange = BASE_HEARING_RANGE + loudness * 16.0D;
+            double distSq = this.getDistanceSq(player);
+            if (distSq <= hearingRange * hearingRange && loudness > loudestWeight) {
+                loudestWeight = loudness;
+                loudest = player;
+            }
+        }
+        if (loudest != null) {
+            this.setAttackTarget(loudest);
+            this.soundAggroCooldown = SOUND_REACTION_COOLDOWN;
+        }
+    }
+
+    private boolean canHearPlayer(EntityPlayer player) {
+        return this.isValidPlayerTarget(player);
+    }
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LOOT;

@@ -1,23 +1,19 @@
 package techguns.blocks;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import techguns.TGOreClusters;
-import techguns.TGPackets;
+import org.jetbrains.annotations.NotNull;
 import techguns.blocks.machines.BlockOreDrill;
 import techguns.blocks.machines.EnumOreDrillType;
 import techguns.blocks.machines.multiblocks.OreDrillDefinition;
-import techguns.packets.PacketMultiBlockFormInvalidBlockMessage;
 import techguns.util.TextUtil;
+
+import java.util.ArrayList;
 
 public class ItemBlockOreDrill extends GenericItemBlockMetaMachineBlock {
 	protected final BlockOreDrill block;
@@ -28,8 +24,8 @@ public class ItemBlockOreDrill extends GenericItemBlockMetaMachineBlock {
 	}
 
 	@Override
-	public boolean canPlaceBlockOnSide(World world, BlockPos posIn, EnumFacing side, EntityPlayer player,
-			ItemStack stack) {
+	public boolean canPlaceBlockOnSide(@NotNull World world, BlockPos posIn, @NotNull EnumFacing side, @NotNull EntityPlayer player,
+									   ItemStack stack) {
 		IBlockState state = block.getStateFromMeta(stack.getItemDamage());
 		
 		BlockPos pos = posIn.offset(side);
@@ -44,7 +40,7 @@ public class ItemBlockOreDrill extends GenericItemBlockMetaMachineBlock {
 				IBlockState bs = world.getBlockState(clusterPos);
 
 				//Check if cluster has a connected rod already	
-				if (getHasConnectedDrillRod(world, clusterPos, new ArrayList<BlockPos>(), bs, this.block.getDefaultState().withProperty(block.MACHINE_TYPE, EnumOreDrillType.ROD))){
+				if (getHasConnectedDrillRod(world, clusterPos, new ArrayList<>(), bs, this.block.getDefaultState().withProperty(block.MACHINE_TYPE, EnumOreDrillType.ROD))){
 
 					if(world.isRemote){
 						//player.addChatMessage(new ChatComponentText(TextUtil.trans("techguns.msg.error.alreadyrod")));
@@ -124,13 +120,10 @@ public class ItemBlockOreDrill extends GenericItemBlockMetaMachineBlock {
 	}
 	
 	public boolean getHasConnectedDrillRod(World world,BlockPos p, ArrayList<BlockPos> visited, IBlockState clusterblock, IBlockState drillRodBlock){
-
-		//Block target = world.getBlock(x,y,z);
-		//int targetMeta = world.getBlockMetadata(x, y, z);
-		//BlockCoords block=new BlockCoords(x,y,z);
 		
 		IBlockState target = world.getBlockState(p);
 		if (!visited.contains(p)){
+			//stop recursion, no cluster
 			if (target == clusterblock) {
 				visited.add(p);
 
@@ -142,14 +135,7 @@ public class ItemBlockOreDrill extends GenericItemBlockMetaMachineBlock {
 				boolean b6 = getHasConnectedDrillRod(world, p.offset(EnumFacing.EAST), visited, clusterblock, drillRodBlock);
 				
 				return b1||b2||b3||b4||b5||b6;
-			} else if(target == drillRodBlock) {
-				
-				return true;
-				
-			} else {
-				//stop recursion, no cluster
-				return false;
-			}
+			} else return target == drillRodBlock;
 		} else {
 			return false;
 		}

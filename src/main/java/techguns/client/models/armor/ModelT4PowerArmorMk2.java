@@ -60,8 +60,8 @@ public class ModelT4PowerArmorMk2 extends ModelBiped {
 		this(type, 0.0f);
 	}
 
-	public ModelT4PowerArmorMk2(int type, float modelSize) {
-		super(modelSize);
+	public ModelT4PowerArmorMk2(int type, float scale) {
+		super(scale);
 
 		this.textureWidth = 128;
 		this.textureHeight = 64;
@@ -90,41 +90,41 @@ public class ModelT4PowerArmorMk2 extends ModelBiped {
 		
 	    this.H01 = new ModelRenderer(this, 0, 0);
         this.H01.setRotationPoint(-4.5F, -8.5F, -4.5F);
-        this.H01.addBox(0.0F, 0.0F, 0.0F, 9, 9, 9, 0.0F);
+        this.H01.addBox(0.0F, 0.0F, 0.0F, 9, 9, 9, scale);
         this.H02 = new ModelRenderer(this, 0, 19);
         this.H02.setRotationPoint(-2.0F, -2.2F, -6.0F);
-        this.H02.addBox(0.0F, 0.0F, 0.0F, 4, 3, 3, 0.0F);
+        this.H02.addBox(0.0F, 0.0F, 0.0F, 4, 3, 3, scale);
         this.H03 = new ModelRenderer(this, 0, 28);
         this.H03.setRotationPoint(2.0F, -2.0F, -5.5F);
-        this.H03.addBox(0.0F, 0.0F, 0.0F, 3, 2, 2, 0.0F);
+        this.H03.addBox(0.0F, 0.0F, 0.0F, 3, 2, 2, scale);
         this.H04 = new ModelRenderer(this, 0, 28);
         this.H04.setRotationPoint(-2.0F, -2.0F, -5.5F);
-        this.H04.addBox(-3.0F, 0.0F, 0.0F, 3, 2, 2, 0.0F);    
+        this.H04.addBox(-3.0F, 0.0F, 0.0F, 3, 2, 2, scale);
         this.H05 = new ModelRenderer(this, 13, 27);
         this.H05.setRotationPoint(4.0F, -2.0F, -3.5F);
-        this.H05.addBox(0.0F, 0.0F, 0.0F, 1, 2, 8, 0.0F);
+        this.H05.addBox(0.0F, 0.0F, 0.0F, 1, 2, 8, scale);
 	    this.H06 = new ModelRenderer(this, 13, 27);
         this.H06.setRotationPoint(-5.0F, -2.0F, -3.5F);
-        this.H06.addBox(0.0F, 0.0F, 0.0F, 1, 2, 8, 0.0F);
+        this.H06.addBox(0.0F, 0.0F, 0.0F, 1, 2, 8, scale);
         this.H08 = new ModelRenderer(this, 19, 19);
         this.H08.setRotationPoint(-4.5F, -2.0F, 4.0F);
-        this.H08.addBox(0.0F, 0.0F, 0.0F, 9, 2, 1, 0.0F);
+        this.H08.addBox(0.0F, 0.0F, 0.0F, 9, 2, 1, scale);
         this.H07 = new ModelRenderer(this, 0, 33);
         this.H07.setRotationPoint(-1.5F, -4.2F, -6.0F);
-        this.H07.addBox(0.0F, 0.0F, 0.0F, 3, 2, 2, 0.0F);
+        this.H07.addBox(0.0F, 0.0F, 0.0F, 3, 2, 2, scale);
         this.H10 = new ModelRenderer(this, 38, 0);
         this.H10.setRotationPoint(4.5F, -5.6F, -1.5F);
-        this.H10.addBox(0.0F, 0.0F, 0.0F, 1, 6, 3, 0.0F);
+        this.H10.addBox(0.0F, 0.0F, 0.0F, 1, 6, 3, scale);
         this.H11 = new ModelRenderer(this, 38, 0);
         this.H11.mirror = true;
         this.H11.setRotationPoint(-5.5F, -5.6F, -1.5F);
-        this.H11.addBox(0.0F, 0.0F, 0.0F, 1, 6, 3, 0.0F);
+        this.H11.addBox(0.0F, 0.0F, 0.0F, 1, 6, 3, scale);
         this.H12 = new ModelRenderer(this, 97, 15);
         this.H12.setRotationPoint(-2.0F, -9.5F, -2.0F);
-        this.H12.addBox(0.0F, 0.0F, 0.0F, 4, 1, 7, 0.0F);
+        this.H12.addBox(0.0F, 0.0F, 0.0F, 4, 1, 7, scale);
         this.H09 = new ModelRenderer(this, 24, 23);
         this.H09.setRotationPoint(-2.0F, -8.5F, 4.2F);
-        this.H09.addBox(0.0F, 0.0F, 0.0F, 4, 9, 1, 0.0F);
+        this.H09.addBox(0.0F, 0.0F, 0.0F, 4, 9, 1, scale);
 
         
 	    this.RA01 = new ModelRenderer(this, 69, 38);

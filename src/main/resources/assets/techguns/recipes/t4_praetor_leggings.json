@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "techguns:t4_praetor_leggings"
+  },
+  "pattern": [
+    "sss",
+    "ifi",
+	"s s"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "item": "techguns:itemshared",
+      "data": 158
+    },
+    "s": {
+      "item": "techguns:itemshared",
+      "data": 156
+    },
+	"f": {
+	  "item": "techguns:t3_miner_leggings",
+      "data": 32767
+	}
+  }
+}

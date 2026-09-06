@@ -7,7 +7,6 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import techguns.tileentities.operation.BlastFurnaceRecipes;
 import techguns.tileentities.operation.GrinderRecipes;
 
 @ZenClass("mods.techguns.Grinder")

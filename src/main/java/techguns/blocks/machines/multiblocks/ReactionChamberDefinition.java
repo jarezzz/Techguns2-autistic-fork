@@ -89,7 +89,7 @@ public class ReactionChamberDefinition extends MultiBlockMachineSchematic {
 		
 		BlockPos pos2 = pos.offset(left.getOpposite()).offset(direction,2).up(2);
 		
-		BlockPos.getAllInBox(pos1, pos2).forEach(p -> positions.add(p));
+		BlockPos.getAllInBox(pos1, pos2).forEach(positions::add);
 		return positions;
 	}
 	
@@ -112,7 +112,7 @@ public class ReactionChamberDefinition extends MultiBlockMachineSchematic {
 	}
 	
 	protected ArrayList<BlockPos>getNoConnectorHousings(BlockPos masterPos, EnumFacing direction){
-		ArrayList<BlockPos> positions = new ArrayList<BlockPos>();
+		ArrayList<BlockPos> positions = new ArrayList<>();
 		BlockPos pos = masterPos.toImmutable();
 		
 		EnumFacing left = direction.rotateY();
@@ -170,7 +170,7 @@ public class ReactionChamberDefinition extends MultiBlockMachineSchematic {
 	public boolean form(World w, EntityPlayer player, BlockPos masterPos, EnumFacing direction) {
 		EnumFacing dir = direction.getOpposite();
 		TileEntity tile = w.getTileEntity(masterPos);
-		if(tile!=null && tile instanceof MultiBlockMachineTileEntMaster) {
+		if(tile instanceof MultiBlockMachineTileEntMaster) {
 		
 			MultiBlockMachineTileEntMaster master = (MultiBlockMachineTileEntMaster) tile;
 			master.form(dir);
@@ -181,11 +181,11 @@ public class ReactionChamberDefinition extends MultiBlockMachineSchematic {
 			
 			ArrayList<BlockPos> glassBlocks = this.getGlassBlocks(masterPos, dir);
 			
-			glassBlocks.forEach(b -> linkSlave(w,player,b,1,masterPos));
-			housings_noConnection.forEach(b -> linkSlave(w,player,b,1,masterPos));
+			glassBlocks.forEach(b -> linkSlave(w, b,1,masterPos));
+			housings_noConnection.forEach(b -> linkSlave(w, b,1,masterPos));
 			
-			housings_SideConnectors.forEach(b -> linkSlave(w,player,b,2,masterPos));
-			housings_EnergyConnector.forEach(b -> linkSlave(w,player,b,3,masterPos));
+			housings_SideConnectors.forEach(b -> linkSlave(w, b,2,masterPos));
+			housings_EnergyConnector.forEach(b -> linkSlave(w, b,3,masterPos));
 			
 		}
 		return false;

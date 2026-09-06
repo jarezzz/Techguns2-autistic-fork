@@ -11,7 +11,7 @@
   "type": "forge:ore_shaped",
   "key": {
     "f": {
-      "item": "#ELECTRUMORGOLD"
+      "item": "#INGOTGOLD"
     },
     "g": {
       "item": "#HARDENEDGLASSORGLASS"

@@ -9,13 +9,9 @@ public enum ArmorPowerType {
 
 	@Override
 	public String toString() {
-		switch(this){
-			case STEAM:
-				return TextUtil.transTG("tooltip.powertype.Steam");
-			case RF:
-				return TextUtil.transTG("tooltip.powertype.RF");
-			default:
-				return "INVALID";
-		}
+        return switch (this) {
+            case STEAM -> TextUtil.transTG("tooltip.powertype.Steam");
+            case RF -> TextUtil.transTG("tooltip.powertype.RF");
+        };
 	}
 }

@@ -3,7 +3,7 @@ package techguns.client.render.entities.npcs;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.models.npcs.ModelSuperMutant;
 import techguns.client.render.entities.LayerHeldItemTranslateGun;
 import techguns.entities.npcs.SuperMutantBasic;
@@ -11,9 +11,9 @@ import techguns.entities.npcs.SuperMutantBasic;
 public class RenderSuperMutant extends RenderGenericNPC<SuperMutantBasic> {
 	
 	private static final ResourceLocation[] textures = {
-			new ResourceLocation(Techguns.MODID, "textures/entity/supermutant_texture_1.png"),
-			new ResourceLocation(Techguns.MODID, "textures/entity/supermutant_texture_2.png"),
-			new ResourceLocation(Techguns.MODID, "textures/entity/supermutant_texture_3.png")
+			new ResourceLocation(Tags.MOD_ID, "textures/entity/supermutant_texture_1.png"),
+			new ResourceLocation(Tags.MOD_ID, "textures/entity/supermutant_texture_2.png"),
+			new ResourceLocation(Tags.MOD_ID, "textures/entity/supermutant_texture_3.png")
 	};
 
 	

@@ -6,34 +6,35 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 
 public class TGDeathTypeCapProvider implements ICapabilitySerializable<NBTBase> {
 
 	@CapabilityInject(TGDeathTypeCap.class)
 	public static final Capability<TGDeathTypeCap> TG_DEATHTYPE_CAP = null;
 	
-	private TGDeathTypeCap instance; // = TG_DEATHTYPE_CAP.getDefaultInstance();
+	private final TGDeathTypeCap instance; // = TG_DEATHTYPE_CAP.getDefaultInstance();
 	
 	public static final EnumFacing DEFAULT_FACING = null;
 	
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(Techguns.MODID, "deathType");
+	public static final ResourceLocation ID = new ResourceLocation(Tags.MOD_ID, "deathType");
 	
 	public TGDeathTypeCapProvider(TGDeathTypeCap cap) {
 		this.instance = cap;
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == TG_DEATHTYPE_CAP;
+	public boolean hasCapability(@NotNull Capability<?> capability, EnumFacing facing) {
+		return false;
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == TG_DEATHTYPE_CAP ? TG_DEATHTYPE_CAP.<T> cast(this.instance) : null;
+	public <T> T getCapability(@NotNull Capability<T> capability, EnumFacing facing) {
+		return capability == TG_DEATHTYPE_CAP ? TG_DEATHTYPE_CAP.cast(this.instance) : null;
 	}
 
 	@Override

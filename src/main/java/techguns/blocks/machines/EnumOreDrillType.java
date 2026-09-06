@@ -5,11 +5,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.machines.IMachineType;
 import techguns.tileentities.OreDrillTileEntSlave;
 import techguns.tileentities.OreDrillTileEntMaster;
 
-public enum EnumOreDrillType implements IStringSerializable, IMachineType<EnumOreDrillType> {
+public enum EnumOreDrillType implements IStringSerializable, IMachineType {
 	FRAME(0,OreDrillTileEntSlave.class,true,EnumBlockRenderType.MODEL),
 	SCAFFOLD(1,OreDrillTileEntSlave.class,false,EnumBlockRenderType.MODEL,BlockRenderLayer.CUTOUT,SoundType.METAL, false),
 	ROD(2,OreDrillTileEntSlave.class,true,EnumBlockRenderType.MODEL),
@@ -18,14 +19,14 @@ public enum EnumOreDrillType implements IStringSerializable, IMachineType<EnumOr
 	SCAFFOLD_HIDDEN(5,OreDrillTileEntSlave.class,false,EnumBlockRenderType.INVISIBLE,BlockRenderLayer.CUTOUT,SoundType.METAL, true)
 	;
 
-	private int id;
-	private String name;
-	private Class<? extends TileEntity> tile;
-	private boolean isFullCube;
-	private EnumBlockRenderType renderType;
-	private BlockRenderLayer renderLayer;
-	private SoundType soundType;
-	private boolean hideInCreative;
+	private final int id;
+	private final String name;
+	private final Class<? extends TileEntity> tile;
+	private final boolean isFullCube;
+	private final EnumBlockRenderType renderType;
+	private final BlockRenderLayer renderLayer;
+	private final SoundType soundType;
+	private final boolean hideInCreative;
 	
 	EnumOreDrillType(int id, Class<? extends TileEntity> tile, boolean isFullCube, EnumBlockRenderType renderType) {
 		this(id,tile,isFullCube,renderType,BlockRenderLayer.SOLID,SoundType.METAL, false);
@@ -48,22 +49,20 @@ public enum EnumOreDrillType implements IStringSerializable, IMachineType<EnumOr
 	}
 	
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return this.name;
 	}
 
 	@Override
 	public int getMaxMachineIndex() {
-		return this.values().length;
+		return EnumOreDrillType.values().length;
 	}
 
 	@Override
 	public TileEntity getTile() {
 		try {
 			return this.tile.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 		return null;

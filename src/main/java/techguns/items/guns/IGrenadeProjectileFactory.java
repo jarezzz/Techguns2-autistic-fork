@@ -8,11 +8,11 @@ import techguns.entities.projectiles.GrenadeProjectile;
 
 public interface IGrenadeProjectileFactory<T extends GrenadeProjectile> {
 
-	 public T createProjectile(World world, EntityLivingBase p, float damage, float speed, int TTL, float spread, float dmgDropStart, float dmgDropEnd, float dmgMin, float penetration, boolean blockdamage, EnumBulletFirePos leftGun, float radius, double gravity,
-			 float charge, int bounces);
+	 T createProjectile(World world, EntityLivingBase p, float damage, float speed, int TTL, float spread, float dmgDropStart, float dmgDropEnd, float dmgMin, float penetration, boolean blockdamage, EnumBulletFirePos leftGun, float radius, double gravity,
+                        float charge, int bounces);
 	
-	 public T createBounceProjectile(T proj, double bounceX, double bounceY, double bounceZ);
+	 T createBounceProjectile(T proj, double bounceX, double bounceY, double bounceZ);
 	 
-	 public DamageType getDamageType();
+	 DamageType getDamageType();
 	
 }

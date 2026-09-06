@@ -1,0 +1,87 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_84",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 84 },
+            { "function": "set_count", "count": { "min": 2, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_58",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 58 },
+            { "function": "set_count", "count": { "min": 1, "max": 1 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_59",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 59 },
+            { "function": "set_count", "count": { "min": 1, "max": 1 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_45",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 45 },
+            { "function": "set_count", "count": { "min": 1, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_145",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 145 },
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        }
+      ]
+    },
+    {
+			"name": "gun",
+            "rolls": {
+				"min":0,
+				"max":1
+			},
+            "entries": [
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "techguns:guidedmissilelauncher"
+                },
+				{
+                    "type": "item",
+                    "weight": 2,
+                    "name": "techguns:scar"
+                },
+				{
+                    "type": "item",
+                    "weight": 2,
+                    "name": "techguns:vector"
+                }
+            ]
+        }
+  ]
+}

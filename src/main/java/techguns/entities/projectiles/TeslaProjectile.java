@@ -1,7 +1,5 @@
 package techguns.entities.projectiles;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -14,6 +12,8 @@ import techguns.deatheffects.EntityDeathUtils.DeathType;
 import techguns.items.guns.GenericGun;
 import techguns.items.guns.IProjectileFactory;
 import techguns.util.MathUtil;
+
+import java.util.List;
 
 public class TeslaProjectile extends AbstractBeamProjectile{
 
@@ -111,7 +111,7 @@ public class TeslaProjectile extends AbstractBeamProjectile{
 						- CHAIN_RANGE, lastTarget.posX
 						+ CHAIN_RANGE, lastTarget.posY
 						+ CHAIN_RANGE, lastTarget.posZ
-						+ CHAIN_RANGE), BULLET_TARGETS);
+						+ CHAIN_RANGE), BULLET_TARGETS::test);
 		
 		for (int i1 = 0; i1 < list.size(); ++i1)
         {

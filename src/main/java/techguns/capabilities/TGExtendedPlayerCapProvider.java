@@ -6,7 +6,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 import techguns.api.capabilities.ITGExtendedPlayer;
 
 public class TGExtendedPlayerCapProvider implements ICapabilitySerializable<NBTBase> {
@@ -17,24 +18,24 @@ public class TGExtendedPlayerCapProvider implements ICapabilitySerializable<NBTB
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(Techguns.MODID, "extendedPlayer");
+	public static final ResourceLocation ID = new ResourceLocation(Tags.MOD_ID, "extendedPlayer");
 	
 	public static final EnumFacing DEFAULT_FACING = null;
 	
-	private ITGExtendedPlayer instance; // = TG_EXTENDED_PLAYER.getDefaultInstance();
+	private final ITGExtendedPlayer instance; // = TG_EXTENDED_PLAYER.getDefaultInstance();
 		
 	public TGExtendedPlayerCapProvider(ITGExtendedPlayer caps) {
 		this.instance = caps;
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == TG_EXTENDED_PLAYER;
+	public boolean hasCapability(@NotNull Capability<?> capability, EnumFacing facing) {
+		return capability == TG_EXTENDED_PLAYER; // actually TG_EXTENDED_PLAYER becomes non-null in runtime..
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == TG_EXTENDED_PLAYER ? TG_EXTENDED_PLAYER.<T> cast(this.instance) : null;
+	public <T> T getCapability(@NotNull Capability<T> capability, EnumFacing facing) {
+		return capability == TG_EXTENDED_PLAYER ? TG_EXTENDED_PLAYER.cast(this.instance) : null;
 	}
 
 	@Override

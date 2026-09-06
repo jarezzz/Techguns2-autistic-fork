@@ -53,8 +53,7 @@ public class ShooterValues {
 			} else if ( attack.getRecoilTime()<=0){
 				return false;
 			} else {
-				boolean b = (System.currentTimeMillis()-attack.getRecoilTime()) < 0; 
-				return b;
+				return (System.currentTimeMillis()-attack.getRecoilTime()) < 0;
 			}				
 		}
 		
@@ -74,19 +73,7 @@ public class ShooterValues {
 			attack.setRecoilChargeProgress(chargeProgress);
 		}
 	}
-	
-	
-	/**
-	 * TOTAL
-	 */
-	public static long getRecoiltimeTotal(EntityLivingBase ent, boolean offHand){
-		AttackTime attack = getAttackTimes(ent,offHand);
-		if (attack!=null){
-			return attack.getRecoilTimeTotal();
-		}
-		return 0L;
-	}
-	
+
 
 	public static long getReloadtime(EntityLivingBase ent,boolean offHand){
 		AttackTime attack = getAttackTimes(ent,offHand);
@@ -95,15 +82,7 @@ public class ShooterValues {
 		}
 		return 0L;
 	}
-	
-	public static byte getAttackType(EntityLivingBase ent,boolean offHand){
-		AttackTime attack = getAttackTimes(ent,offHand);
-		if (attack!=null){
-			return attack.getAttackType();
-		}
-		return (byte)0;
-	}
-	
+
 	public static void setReloadtime(EntityLivingBase ent, boolean offHand,long time, int total,byte attackType){
 		AttackTime attack = getAttackTimes(ent,offHand);
 		if (attack!=null){
@@ -113,14 +92,6 @@ public class ShooterValues {
 		}
 	}
 
-	public static int getReloadtimeTotal(EntityLivingBase ent, boolean offHand){
-		AttackTime attack = getAttackTimes(ent,offHand);
-		if (attack!=null){
-			return attack.getReloadTimeTotal();
-		}
-		return 0;
-	}
-	
 	public static  boolean getIsCurrentlyUsingGun(EntityLivingBase ent, boolean offHand) {
 		AttackTime attack = getAttackTimes(ent,offHand);
 		
@@ -131,10 +102,7 @@ public class ShooterValues {
 	public static  boolean getPlayerIsReloading(EntityLivingBase ent, boolean offHand) {
 		AttackTime attack = getAttackTimes(ent,offHand);
 		return attack.isReloading();
-	}	
-	/*public long getplayerReloadtimeTotal(){
-		return getplayerReloadtimeTotal(Minecraft.getMinecraft().thePlayer);
-	}*/
+	}
 
 	public static void setMuzzleFlashTime(EntityLivingBase ent, boolean offHand,long time, int total){
 		AttackTime attack = getAttackTimes(ent,offHand);
@@ -151,13 +119,5 @@ public class ShooterValues {
 		}
 		return 0L;
 	}
-	
-	public static int getMuzzleFlashTimeTotal(EntityLivingBase ent, boolean offHand){
-		AttackTime attack = getAttackTimes(ent,offHand);
-		if (attack!=null){
-			return attack.getMuzzleFlashTimeTotal();
-		}
-		return 0;
-	}
-	
+
 }

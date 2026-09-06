@@ -7,5 +7,5 @@ public enum EnumCrosshairDynamicType {
 	BOTH,
 	X,
 	TRI,
-	TRI_INV;
+	TRI_INV
 }

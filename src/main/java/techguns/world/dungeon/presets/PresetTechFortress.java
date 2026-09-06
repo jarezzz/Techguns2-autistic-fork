@@ -18,8 +18,7 @@ public class PresetTechFortress implements IDungeonPreset{
 	
 	ArrayList<DungeonTemplate> mainTemplates = new ArrayList<>();
 	ArrayList<DungeonTemplate> topTemplates = new ArrayList<>();
-	//ArrayList<DungeonTemplate> bottomTemplates = new ArrayList<>();
-	
+
 	public PresetTechFortress() {
 		mainTemplates.add(DungeonTemplate.dungeonTemplates.get("tfmain"));
 		

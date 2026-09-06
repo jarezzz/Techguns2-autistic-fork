@@ -6,41 +6,38 @@ import techguns.tileentities.BasicRedstoneTileEnt;
 
 public abstract class RedstoneTileContainer extends OwnedTileContainer {
 
-	BasicRedstoneTileEnt tile;
-	
-	protected byte lastRedstoneMode=0;
-	
-	public static final int FIELD_SYNC_ID_REDSTONE=FIELD_SYNC_ID_SECURITY+1;
-	
-	public RedstoneTileContainer(InventoryPlayer player, BasicRedstoneTileEnt ent) {
-		super(player, ent);
-		this.tile=ent;
-	}
+    public static final int FIELD_SYNC_ID_REDSTONE = FIELD_SYNC_ID_SECURITY + 1;
+    protected byte lastRedstoneMode = 0;
+    BasicRedstoneTileEnt tile;
 
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-        for (int j = 0; j < this.listeners.size(); ++j)
-        {
+    public RedstoneTileContainer(InventoryPlayer player, BasicRedstoneTileEnt ent) {
+        super(player, ent);
+        this.tile = ent;
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+
+        for (int j = 0; j < this.listeners.size(); ++j) {
             IContainerListener listener = this.listeners.get(j);
-            
-            if (this.lastRedstoneMode!=this.tile.getRedstoneBehaviour()) {
-            	listener.sendWindowProperty(this, FIELD_SYNC_ID_REDSTONE, this.tile.getRedstoneBehaviour());
+
+            if (this.lastRedstoneMode != this.tile.getRedstoneBehaviour()) {
+                listener.sendWindowProperty(this, FIELD_SYNC_ID_REDSTONE, this.tile.getRedstoneBehaviour());
             }
 
-            
-        }
-        this.lastRedstoneMode=this.tile.getRedstoneBehaviour();
-	}
 
-	@Override
-	public void updateProgressBar(int id, int data) {
-		if (id == FIELD_SYNC_ID_REDSTONE) {
-			this.tile.setRedstoneBehaviour((byte) data);
-		} else {
-			super.updateProgressBar(id, data);
-		}
-	}
-	
+        }
+        this.lastRedstoneMode = this.tile.getRedstoneBehaviour();
+    }
+
+    @Override
+    public void updateProgressBar(int id, int data) {
+        if (id == FIELD_SYNC_ID_REDSTONE) {
+            this.tile.setRedstoneBehaviour((byte) data);
+        } else {
+            super.updateProgressBar(id, data);
+        }
+    }
+
 }

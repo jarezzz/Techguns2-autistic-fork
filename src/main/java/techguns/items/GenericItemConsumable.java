@@ -7,49 +7,44 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class GenericItemConsumable extends GenericItem {
 
-	 /** Number of ticks to run while 'EnumAction'ing until result. */
+    /**
+     * Number of ticks to run while 'EnumAction'ing until result.
+     */
     public final int itemUseDuration;
-    protected boolean ignoreHunger=true;
-    
-	public GenericItemConsumable(String name, int useDuration) {
-		super(name);
-		this.itemUseDuration = useDuration;
-	}
+    protected boolean ignoreHunger = true;
 
-	public GenericItemConsumable(String name, int useDuaration, boolean addToItemList) {
-		super(name, addToItemList);
-		 this.itemUseDuration = useDuaration;
-	}
+    public GenericItemConsumable(String name, int useDuration) {
+        super(name);
+        this.itemUseDuration = useDuration;
+    }
+
+    public GenericItemConsumable(String name, int useDuaration, boolean addToItemList) {
+        super(name, addToItemList);
+        this.itemUseDuration = useDuaration;
+    }
 
 
     /**
      * Called when the player finishes using this Item (E.g. finishes eating.). Not called when the player stops using
      * the Item before the action is complete.
      */
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
-    {
-        if (entityLiving instanceof EntityPlayer)
-        {
-            EntityPlayer entityplayer = (EntityPlayer)entityLiving;
+    public @NotNull ItemStack onItemUseFinish(@NotNull ItemStack stack, @NotNull World worldIn, @NotNull EntityLivingBase entityLiving) {
+        if (entityLiving instanceof EntityPlayer) {
+            EntityPlayer entityplayer = (EntityPlayer) entityLiving;
             //entityplayer.getFoodStats().addStats(this, stack);
-            worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, this.getConsumedSound(), SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+            worldIn.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, this.getConsumedSound(), SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
             this.onConsumed(stack, worldIn, entityplayer);
             entityplayer.addStat(StatList.getObjectUseStats(this));
 
-            if (entityplayer instanceof EntityPlayerMP)
-            {
-                CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)entityplayer, stack);
+            if (entityplayer instanceof EntityPlayerMP) {
+                CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP) entityplayer, stack);
             }
         }
 
@@ -57,13 +52,11 @@ public class GenericItemConsumable extends GenericItem {
         return stack;
     }
 
-    protected SoundEvent getConsumedSound()
-    {
-    	return SoundEvents.ENTITY_PLAYER_BURP;
-    }    
-    
-    protected void onConsumed(ItemStack stack, World worldIn, EntityPlayer player)
-    {
+    protected SoundEvent getConsumedSound() {
+        return SoundEvents.ENTITY_PLAYER_BURP;
+    }
+
+    protected void onConsumed(ItemStack stack, World worldIn, EntityPlayer player) {
 
     }
 
@@ -71,35 +64,29 @@ public class GenericItemConsumable extends GenericItem {
     /**
      * How long it takes to use or consume an item
      */
-    public int getMaxItemUseDuration(ItemStack stack)
-    {
+    public int getMaxItemUseDuration(@NotNull ItemStack stack) {
         return this.itemUseDuration;
     }
 
     /**
      * returns the action that specifies what animation to play when the items is being used
      */
-    public EnumAction getItemUseAction(ItemStack stack)
-    {
+    public @NotNull EnumAction getItemUseAction(@NotNull ItemStack stack) {
         return EnumAction.EAT;
     }
 
     /**
      * Called when the equipped item is right clicked.
      */
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
-    {
+    public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World worldIn, EntityPlayer playerIn, @NotNull EnumHand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
 
-        if (playerIn.canEat(this.ignoreHunger))
-        {
+        if (playerIn.canEat(this.ignoreHunger)) {
             playerIn.setActiveHand(handIn);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
-        }
-        else
-        {
-            return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        } else {
+            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
     }
-	
+
 }

@@ -11,146 +11,128 @@ import techguns.tileentities.operation.MachineOperation;
 
 public abstract class BasicMachineTileEnt extends BasicPoweredTileEnt implements ITickable {
 
-	public MachineOperation currentOperation = null;
-	public int totaltime=0;
-	public int progress = 0;
-	
-	public BasicMachineTileEnt(int inventorySize, boolean hasRotation, int maximumPower) {
-		super(inventorySize, hasRotation, maximumPower);
-	}
-	
-	 @Override
-	public void readClientDataFromNBT(NBTTagCompound tags) {
-		super.readClientDataFromNBT(tags);
-		this.totaltime=tags.getInteger("totaltime");
-		this.progress=tags.getInteger("progress");
-		
-		this.readOperationFromNBT(tags);
-	}
+    public MachineOperation currentOperation = null;
+    public int totaltime = 0;
+    public int progress = 0;
 
-	@Override
-	public void writeClientDataToNBT(NBTTagCompound tags) {
-		super.writeClientDataToNBT(tags);
-		tags.setInteger("totaltime", this.totaltime);
-		tags.setInteger("progress", this.progress);
-		
-		if(this.currentOperation!=null) {
-			this.currentOperation.writeToNBT(tags);
-		}
-	}
-
-	public void readOperationFromNBT(NBTTagCompound tags) {
-		if(tags.hasKey("operation")) {
-			this.currentOperation=new MachineOperation(null, null, null,null, 0);
-			this.currentOperation.readFromNBT(tags);
-		} else {
-			this.currentOperation=null;
-		}
-	}
-	
-	/**
-     * Returns an integer between 0 and the passed value representing how close the current item is to being completely
-     * cooked
-     */
-    @SideOnly(Side.CLIENT)
-    public int getProgressScaled(int limit)
-    {
-    	if (totaltime!=0){
-    		return this.progress * limit / this.totaltime;
-    	} else {
-    		return 0;
-    	}
+    public BasicMachineTileEnt(int inventorySize, boolean hasRotation, int maximumPower) {
+        super(inventorySize, hasRotation, maximumPower);
     }
-    
+
+    @Override
+    public void readClientDataFromNBT(NBTTagCompound tags) {
+        super.readClientDataFromNBT(tags);
+        this.totaltime = tags.getInteger("totaltime");
+        this.progress = tags.getInteger("progress");
+
+        this.readOperationFromNBT(tags);
+    }
+
+    @Override
+    public void writeClientDataToNBT(NBTTagCompound tags) {
+        super.writeClientDataToNBT(tags);
+        tags.setInteger("totaltime", this.totaltime);
+        tags.setInteger("progress", this.progress);
+
+        if (this.currentOperation != null) {
+            this.currentOperation.writeToNBT(tags);
+        }
+    }
+
+    public void readOperationFromNBT(NBTTagCompound tags) {
+        if (tags.hasKey("operation")) {
+            this.currentOperation = new MachineOperation(null, null, null, null, 0);
+            this.currentOperation.readFromNBT(tags);
+        } else {
+            this.currentOperation = null;
+        }
+    }
+
     /**
      * Returns an integer between 0 and the passed value representing how close the current item is to being completely
      * cooked
      */
     @SideOnly(Side.CLIENT)
-    public int getPowerScaled(int limit)
-    {
-    	if (totaltime!=0){
-    		return this.energy.getMaxEnergyStored() * limit / this.energy.getMaxEnergyStored();
-    	} else {
-    		return 0;
-    	}
+    public int getProgressScaled(int limit) {
+        if (totaltime != 0) {
+            return this.progress * limit / this.totaltime;
+        } else {
+            return 0;
+        }
     }
-    
+
     @SideOnly(Side.CLIENT)
     public float getProgress() {
-    	if(this.totaltime>0){
-    		return (float)this.progress / (float)this.totaltime;
-    	}
-    	return 0.0f;
+        if (this.totaltime > 0) {
+            return (float) this.progress / (float) this.totaltime;
+        }
+        return 0.0f;
     }
-    
-    public boolean isWorking(){
-    	return this.currentOperation!=null;
-    }
-    
-    public ItemStack onFluidContainerInteract(ItemStack fluidContainer){
-    	return fluidContainer;
+
+    public boolean isWorking() {
+        return this.currentOperation != null;
     }
 
     protected abstract int getNeededPower();
-    
+
     public int getMaxMachineUpgradeMultiplier(int slot) {
-    	ItemStack upg = this.inventory.getStackInSlot(slot);
-    	if (!upg.isEmpty() && upg.getItem() == TGItems.SHARED_ITEM && upg.getItemDamage() == TGItems.MACHINE_UPGRADE_STACK.getItemDamage()) {
-    		return 1+upg.getCount();
-    	}
-    	return 1;
+        ItemStack upg = this.inventory.getStackInSlot(slot);
+        if (!upg.isEmpty() && upg.getItem() == TGItems.SHARED_ITEM && upg.getItemDamage() == TGItems.MACHINE_UPGRADE_STACK.getItemDamage()) {
+            return 1 + upg.getCount();
+        }
+        return 1;
     }
-    
+
     /**
      * used by multiblocks to disable machine when broken
+     *
      * @return
      */
-    protected boolean enabled(){
-    	return true;
+    protected boolean enabled() {
+        return true;
     }
-        
-	@Override
-	public void update() {
-		if (this.isRedstoneEnabled()&&this.enabled()){
-			if (this.currentOperation != null) {
 
-				if (this.consumePower(this.getNeededPower()*this.currentOperation.getStackMultiplier())) {
-					this.progress++;
+    @Override
+    public void update() {
+        if (this.isRedstoneEnabled() && this.enabled()) {
+            if (this.currentOperation != null) {
 
-					playAmbientSound();
+                if (this.consumePower(this.getNeededPower() * this.currentOperation.getStackMultiplier())) {
+                    this.progress++;
 
-					if (progress >= totaltime) {
+                    playAmbientSound();
 
-						if (!this.world.isRemote) {
-							this.finishedOperation();
-						}
-						this.progress = 0;
-						this.totaltime = 0;
-						this.currentOperation = null;
+                    if (progress >= totaltime) {
 
-						if (!this.world.isRemote){
-							checkAndStartOperation();
-							this.needUpdate();
-						}
-					}
-				}
+                        if (!this.world.isRemote) {
+                            this.finishedOperation();
+                        }
+                        this.progress = 0;
+                        this.totaltime = 0;
+                        this.currentOperation = null;
 
-			}  else {
+                        if (!this.world.isRemote) {
+                            checkAndStartOperation();
+                            this.needUpdate();
+                        }
+                    }
+                }
 
-				if(!this.world.isRemote && this.contentsChanged) {
-					//System.out.println("CHECK AND START OPERATION");
-					checkAndStartOperation();
-				}
+            } else {
 
-			}
-		}
-		
-	}
-	protected abstract void checkAndStartOperation();
+                if (!this.world.isRemote) {
+                    checkAndStartOperation();
+                }
 
-	protected abstract void finishedOperation();
+            }
+        }
 
-	protected abstract void playAmbientSound();
+    }
+
+    protected abstract void checkAndStartOperation();
+
+    protected abstract void finishedOperation();
+
+    protected abstract void playAmbientSound();
 
 }

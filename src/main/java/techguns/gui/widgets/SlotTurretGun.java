@@ -6,22 +6,22 @@ import techguns.tileentities.operation.ItemStackHandlerPlus;
 
 public class SlotTurretGun extends SlotMachineInput {
 
-	public SlotTurretGun(ItemStackHandlerPlus itemHandler, int index, int xPosition, int yPosition) {
-		super(itemHandler, index, xPosition, yPosition);
-	}
+    public SlotTurretGun(ItemStackHandlerPlus itemHandler, int index, int xPosition, int yPosition) {
+        super(itemHandler, index, xPosition, yPosition);
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack stack) {
-		return stack.getItem() instanceof IGenericGun;
-	}
+    @Override
+    public boolean isItemValid(ItemStack stack) {
+        return stack.getItem() instanceof IGenericGun;
+    }
 
-	@Override
-	public int getSlotStackLimit() {
-		return 1;
-	}
-	
-	@Override
-	public String getSlotTexture() {
-		return SlotTG.TURRETGUNSLOT_TEX.toString();
-	}
+    @Override
+    public int getSlotStackLimit() {
+        return 1;
+    }
+
+    @Override
+    public String getSlotTexture() {
+        return SlotTG.TURRETGUNSLOT_TEX.toString();
+    }
 }

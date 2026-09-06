@@ -7,12 +7,12 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.entities.projectiles.GenericProjectile;
 
 public class RenderGenericProjectile<T extends GenericProjectile> extends Render<T> {
 
-	private static final ResourceLocation bulletTextures = new ResourceLocation(Techguns.MODID,"textures/entity/bullet1.png"); //previously was bullet.png
+	private static final ResourceLocation bulletTextures = new ResourceLocation(Tags.MOD_ID,"textures/entity/bullet1.png"); //previously was bullet.png
 
 	public RenderGenericProjectile(RenderManager renderManager) {
 		super(renderManager);

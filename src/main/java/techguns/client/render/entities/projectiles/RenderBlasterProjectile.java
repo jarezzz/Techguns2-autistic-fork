@@ -3,13 +3,13 @@ package techguns.client.render.entities.projectiles;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.render.TGRenderHelper;
 import techguns.client.render.TGRenderHelper.RenderType;
 import techguns.entities.projectiles.BlasterProjectile;
 
 public class RenderBlasterProjectile<T extends BlasterProjectile> extends RenderGenericProjectile<T> {
-	private static ResourceLocation textureLoc = new ResourceLocation(Techguns.MODID,"textures/fx/laser3.png");
+	private static ResourceLocation textureLoc = new ResourceLocation(Tags.MOD_ID,"textures/fx/laser3.png");
 	
 	public RenderBlasterProjectile(RenderManager renderManager) {
 		super(renderManager);

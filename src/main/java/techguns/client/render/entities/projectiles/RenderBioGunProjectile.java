@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import techguns.Techguns;
+import techguns.*;
 import techguns.client.render.TGRenderHelper;
 import techguns.client.render.TGRenderHelper.RenderType;
 import techguns.entities.projectiles.BioGunProjectile;
@@ -13,7 +13,7 @@ public class RenderBioGunProjectile extends RenderTextureProjectile<BioGunProjec
 
 	public RenderBioGunProjectile(RenderManager renderManager) {
 		super(renderManager);
-		textureLoc = new ResourceLocation(Techguns.MODID,"textures/entity/bioblob.png");
+		textureLoc = new ResourceLocation(Tags.MOD_ID,"textures/entity/bioblob.png");
 		baseSize=0.15f;
 		scale=1.0f;
 	}

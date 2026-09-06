@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGSounds;
 import techguns.items.ItemTGDoor2x1;
 
@@ -43,7 +44,7 @@ public class BlockTGDoor2x1 extends BlockDoor implements IGenericBlock {
      * Called when the block is right clicked by a player.
      */
 	@Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(@NotNull World worldIn, BlockPos pos, IBlockState state, @NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ)
     {
        
         BlockPos blockpos = state.getValue(HALF) == BlockDoor.EnumDoorHalf.LOWER ? pos : pos.down();
@@ -86,19 +87,19 @@ public class BlockTGDoor2x1 extends BlockDoor implements IGenericBlock {
     }
 	
     @Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs itemIn, @NotNull NonNullList<ItemStack> items) {
 	}
 
 	/**
      * Gets the localized name of this block. Used for the statistics page.
      */
 	@Override
-    public String getLocalizedName()
+    public @NotNull String getLocalizedName()
     {
-        return I18n.translateToLocal(this.getUnlocalizedName() + ".name");
+        return I18n.translateToLocal(this.getTranslationKey() + ".name");
     }
 
-    public EnumPushReaction getMobilityFlag(IBlockState state)
+    public @NotNull EnumPushReaction getPushReaction(@NotNull IBlockState state)
     {
         return EnumPushReaction.BLOCK;
     }
@@ -107,13 +108,13 @@ public class BlockTGDoor2x1 extends BlockDoor implements IGenericBlock {
      * Get the Item that this Block should drop when harvested.
      */
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    public @NotNull Item getItemDropped(IBlockState state, @NotNull Random rand, int fortune)
     {
         return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER ? Items.AIR : this.getItem();
     }
 
     @Override
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    public @NotNull ItemStack getItem(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state)
     {
         return new ItemStack(this.getItem());
     }

@@ -11,6 +11,7 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.damagesystem.DamageType;
 import techguns.deatheffects.EntityDeathUtils.DeathType;
 
@@ -18,7 +19,7 @@ public class TGDamageSource extends EntityDamageSource {
 
 		protected boolean attackSuccessful=false;
 	
-		public Entity attacker=null;
+		public Entity attacker;
 		public DamageType damageType;
 		public DeathType deathType;
 		public float goreChance=0.5f;
@@ -37,7 +38,7 @@ public class TGDamageSource extends EntityDamageSource {
 		 */
 		public boolean wasConverted=false;
 		
-		protected static ArrayList<String> unresistableTypes = new ArrayList<String>();
+		protected static ArrayList<String> unresistableTypes = new ArrayList<>();
 		static {
 			unresistableTypes.add("inWall");
 			unresistableTypes.add("drown");
@@ -127,24 +128,18 @@ public class TGDamageSource extends EntityDamageSource {
 			return new TGDamageSource(src);
 		}
 		
-		public  TGDamageSource setNoKnockback(){
+		public void setNoKnockback(){
 			this.knockbackMultiplier=0.0f;
-			return this;
 		}
-		public TGDamageSource setKnockback(float mult){
+		public void setKnockback(float mult){
 			this.knockbackMultiplier=mult;
-			return this;
 		}
-		
-		public boolean hasKnockback(){
-			return this.knockbackMultiplier>0.0f;
-		}
-		
-	    /**
+
+		/**
 	     * Gets the death message that is displayed when the player dies
 	     */
 		@Override
-	    public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
+	    public @NotNull ITextComponent getDeathMessage(@NotNull EntityLivingBase entityLivingBaseIn)
 	    {
 			ITextComponent itextcomponent;
 			ItemStack itemstack = ItemStack.EMPTY;
@@ -156,7 +151,7 @@ public class TGDamageSource extends EntityDamageSource {
 			}
 	        String s = "death.attack." + this.getDamageType();
 	        String s1 = s + ".item";
-	        return !itemstack.isEmpty() && itemstack.hasDisplayName() && I18n.canTranslate(s1) ? new TextComponentTranslation(s1, new Object[] {entityLivingBaseIn.getDisplayName(), itextcomponent, itemstack.getTextComponent()}) : new TextComponentTranslation(s, new Object[] {entityLivingBaseIn.getDisplayName(), itextcomponent});
+	        return !itemstack.isEmpty() && itemstack.hasDisplayName() && I18n.canTranslate(s1) ? new TextComponentTranslation(s1, entityLivingBaseIn.getDisplayName(), itextcomponent, itemstack.getTextComponent()) : new TextComponentTranslation(s, entityLivingBaseIn.getDisplayName(), itextcomponent);
 	    }
 		
 		public static TGDamageSource copyWithNewEnt(TGDamageSource other, Entity damagingEntity, Entity attacker) {
@@ -179,34 +174,20 @@ public class TGDamageSource extends EntityDamageSource {
 		public void setBehaviourForVanilla(){
 			switch(damageType){
 				case ENERGY:
+				case FIRE:
+				case ICE:
+				case LIGHTNING:
+				case POISON:
+				case RADIATION:
+				case DARK:
+					//not set as fire damage since this would cause immunity with fire resistance :-/
 					this.setMagicDamage();
 					break;
 				case EXPLOSION:
 					this.setExplosion();
 					break;
-				case FIRE:
-					//not set as fire damage since this would cause immunity with fire resistance :-/
-					this.setMagicDamage();
-					break;
-				case ICE:
-					this.setMagicDamage();
-					break;
-				case LIGHTNING:
-					this.setMagicDamage();
-					break;
-				case PHYSICAL:
-					break;
-				case POISON:
-					this.setMagicDamage();
-					break;
 				case PROJECTILE:
 					this.setProjectile();
-					break;
-				case RADIATION:
-					this.setMagicDamage();
-					break;
-				case DARK:
-					this.setMagicDamage();
 					break;
 				case UNRESISTABLE:
 					this.setDamageBypassesArmor();
@@ -351,9 +332,4 @@ public class TGDamageSource extends EntityDamageSource {
 			return this.knockbackOnShieldBlock;
 		}
 
-		public TGDamageSource setKnockbackOnShieldBlock(boolean knockbackOnShieldBlock) {
-			this.knockbackOnShieldBlock = knockbackOnShieldBlock;
-			return this;
-		}
-		
 }

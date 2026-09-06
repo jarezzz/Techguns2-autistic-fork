@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumLampType implements IStringSerializable {
 	YELLOW,
@@ -9,7 +10,7 @@ public enum EnumLampType implements IStringSerializable {
 	WHITE_LANTERN;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return this.name().toLowerCase();
 	}
 }

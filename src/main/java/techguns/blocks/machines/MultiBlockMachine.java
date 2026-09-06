@@ -23,10 +23,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.machines.IMachineType;
 import techguns.tileentities.MultiBlockMachineTileEntMaster;
 import techguns.tileentities.MultiBlockMachineTileEntSlave;
 import techguns.util.BlockUtils;
+
+import java.util.Objects;
 
 public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachineType> extends BasicMachine<T> {
 	public static final PropertyBool FORMED = PropertyBool.create("formed");
@@ -36,23 +39,21 @@ public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachin
 	public MultiBlockMachine(String name, Class<T> clazz) {
 		super(name, clazz);
 		this.blockStateOverride = new BlockStateContainer.Builder(this).add(MACHINE_TYPE).add(FORMED).add(MULTIBLOCK_DIRECTION).build();
-		this.setDefaultState( this.getBlockState().getBaseState().withProperty(FORMED, false).withProperty(MULTIBLOCK_DIRECTION, EnumFacing.SOUTH));
+		this.setDefaultState(this.getBlockState().getBaseState().withProperty(FORMED, false).withProperty(MULTIBLOCK_DIRECTION, EnumFacing.SOUTH));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return (state.getValue(FORMED)?8:0) + state.getValue(MACHINE_TYPE).getIndex();
+		return (state.getValue(FORMED) ? 8 : 0) + state.getValue(MACHINE_TYPE).getIndex();
 	}
 	
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState()
-	    .withProperty(FORMED, meta>=8)
-	    .withProperty(MACHINE_TYPE, clazz.getEnumConstants()[meta>=8?meta-8:meta]);
+	public @NotNull IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(FORMED, meta >= 8).withProperty(MACHINE_TYPE, clazz.getEnumConstants()[meta >= 8 ? meta - 8 : meta]);
 	}
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public @NotNull IBlockState getActualState(@NotNull IBlockState state, IBlockAccess world, @NotNull BlockPos pos) {
 		IBlockState s = world.getBlockState(pos);
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof MultiBlockMachineTileEntMaster) {
@@ -71,25 +72,20 @@ public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachin
      * IBlockstate
      */
 	@Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    public @NotNull IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer)
     {
         return this.getStateFromMeta(meta).withProperty(FORMED,false);
     }
 
-	/*@Override
-	public boolean hasCustomBreakingProgress(IBlockState state) {
-		return state.getValue(FORMED);
-	}*/
-
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
+	public @NotNull EnumBlockRenderType getRenderType(IBlockState state) {
 		T t = state.getValue(MACHINE_TYPE);
 		return t.getRenderType();
 	}
 	
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-			EntityPlayer player) {
+	public @NotNull ItemStack getPickBlock(IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos,
+										   @NotNull EntityPlayer player) {
 		if(state.getValue(MACHINE_TYPE).hideInCreative()) {
 			return ItemStack.EMPTY;
 		}
@@ -97,17 +93,17 @@ public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachin
 	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
+	public boolean isFullBlock(@NotNull IBlockState state) {
 		return this.isFullCube(state);
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(@NotNull IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(@NotNull IBlockState state) {
 		
 		/**
 		 * Required to check this, because vanilla block constructor calls this method too early.
@@ -120,7 +116,7 @@ public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachin
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 		if(blockState.getValue(FORMED)) {
 			
 			TileEntity tile = worldIn.getTileEntity(pos);
@@ -134,8 +130,8 @@ public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachin
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return this.getCollisionBoundingBox(state, source, pos);
+	public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess source, @NotNull BlockPos pos) {
+		return Objects.requireNonNull(this.getCollisionBoundingBox(state, source, pos));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -148,13 +144,13 @@ public class MultiBlockMachine<T extends Enum<T> & IStringSerializable & IMachin
 	}
 
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+	public boolean rotateBlock(@NotNull World world, @NotNull BlockPos pos, @NotNull EnumFacing axis) {
 		//NO ROTATING ON MULTIBLOCK MACHINES
 		return false;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public @NotNull BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess worldIn, IBlockState state, @NotNull BlockPos pos, @NotNull EnumFacing face) {
 		boolean formed = state.getValue(FORMED);
 		if(formed) {
 			return BlockFaceShape.UNDEFINED;

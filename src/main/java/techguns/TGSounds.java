@@ -8,7 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(Techguns.MODID)
+@ObjectHolder(Tags.MOD_ID)
 public class TGSounds {
 
 	private static ArrayList<SoundEvent> events = new ArrayList<>();
@@ -134,6 +134,7 @@ public class TGSounds {
 	
 	public static SoundEvent SHISHKEBAP_SWING = createSoundEvent("guns.shishkebabfire");
 	public static SoundEvent SHISHKEBAP_RELOAD = createSoundEvent("guns.shishkebabreload");
+	public static SoundEvent SWITCH_AMMO_TYPE = createSoundEvent("guns.switchammo");
 	
 	public static SoundEvent ANTI_GRAV_START = createSoundEvent("items.antiGravStart");
 	public static SoundEvent NIGHTVISION_ON = createSoundEvent("nightvision.on");
@@ -233,19 +234,21 @@ public class TGSounds {
 	public static SoundEvent TECHDOOR_OPEN = createSoundEvent("blocks.techdoor.open");
 	public static SoundEvent TECHDOOR_CLOSE = createSoundEvent("blocks.techdoor.close");
 	public static SoundEvent TECHDOOR_STATE_FINISHED = createSoundEvent("blocks.techdoor.statefinished");
-	
+
+	public static SoundEvent BLUEPRINT_UNLOCK = createSoundEvent("items.blueprint");
+
 	public static void registerSounds(RegistryEvent.Register<SoundEvent> event){
 		IForgeRegistry<SoundEvent> reg = event.getRegistry();
 		
-		events.forEach(ev -> reg.register(ev));
+		events.forEach(reg::register);
 		
 		//can be deleted afterwards
 		events = null;
 	}
 	
 	private static SoundEvent createSoundEvent(String name){
-		SoundEvent event = new SoundEvent(new ResourceLocation(Techguns.MODID, name));
-		event.setRegistryName(Techguns.MODID, name);
+		SoundEvent event = new SoundEvent(new ResourceLocation(Tags.MOD_ID, name));
+		event.setRegistryName(Tags.MOD_ID, name);
 		events.add(event);
 		return event;
 	}

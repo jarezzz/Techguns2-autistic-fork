@@ -1,0 +1,61 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": {
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_84",
+          "weight": 40,
+          "functions": [
+            { "function": "set_data", "data": 84 },
+            { "function": "set_count", "count": { "min": 1, "max": 4 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_82",
+          "weight": 40,
+          "functions": [
+            { "function": "set_data", "data": 82 },
+            { "function": "set_count", "count": { "min": 2, "max": 5 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:diamond",
+          "entryName": "diamond",
+          "weight": 15,
+          "functions": [
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:blaze_powder",
+          "entryName": "blaze_powder",
+          "weight": 15,
+          "functions": [
+            { "function": "set_count", "count": { "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_64",
+          "weight": 5,
+          "functions": [
+            { "function": "set_data", "data": 64 },
+            { "function": "set_count", "count": { "min": 2, "max": 5 } }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -89,7 +89,7 @@ public class ReactionChamberTweaker {
 
 		int RFTick;
 		
-		boolean valid=true;
+		boolean valid;
 		String msg;
 			
 		public addInputAction(String key,ItemStackOreDict input, ILiquidStack fluid, IItemStack[] outputs, IItemStack beamFocus, int ticks, int requiredCompletion,

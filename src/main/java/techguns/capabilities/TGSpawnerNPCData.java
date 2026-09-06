@@ -24,13 +24,13 @@ public class TGSpawnerNPCData {
 	}
 
 	public static TGSpawnerNPCData get(ITGSpawnerNPC npc){
-		return (TGSpawnerNPCData) npc.getCapability(TGSpawnerNPCDataCapProvider.TG_GENERICNPC_DATA);
+		return npc.getCapability(TGSpawnerNPCDataCapProvider.TG_GENERICNPC_DATA);
 	}
 	
 	public void tryRelink(World w, ITGSpawnerNPC npc) {
 		if(this.hasSpawner()) {
 			TileEntity tile = w.getTileEntity(this.getSpawnerPos());
-			if(tile!=null && tile instanceof TGSpawnerTileEnt) {
+			if(tile instanceof TGSpawnerTileEnt) {
 				((TGSpawnerTileEnt)tile).relinkNPC(npc);
 			}
 		}

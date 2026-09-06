@@ -4,6 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 import techguns.api.machines.IMachineType;
 import techguns.tileentities.ExplosiveChargeAdvTileEnt;
 import techguns.tileentities.ExplosiveChargeTileEnt;
@@ -13,7 +14,7 @@ public enum EnumExplosiveChargeType implements IStringSerializable, IMachineType
 	ADVANCED;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

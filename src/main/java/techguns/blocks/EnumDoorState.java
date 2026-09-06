@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumDoorState implements IStringSerializable {
 	CLOSED,
@@ -9,7 +10,7 @@ public enum EnumDoorState implements IStringSerializable {
 	CLOSING;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

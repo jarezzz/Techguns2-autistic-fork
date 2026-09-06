@@ -9,11 +9,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.npc.INPCTechgunsShooter;
 import techguns.entities.npcs.ITGSpawnerNPC;
 
-@Mod.EventBusSubscriber(modid = Techguns.MODID)
+@Mod.EventBusSubscriber(modid = Tags.MOD_ID)
 public class CapabilityEventHandler {
 		
 	@SubscribeEvent

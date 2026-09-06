@@ -10,7 +10,7 @@ import net.minecraftforge.server.permission.PermissionAPI;
 import techguns.init.ITGInitializer;
 
 public class TGPermissions implements ITGInitializer {
-	public static final String ALLOW_UNSAFE_MODE = Techguns.MODID+".allowunsafemode";
+	public static final String ALLOW_UNSAFE_MODE = Tags.MOD_ID+".allowunsafemode";
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -26,13 +26,10 @@ public class TGPermissions implements ITGInitializer {
 	}
 	
 	public boolean canUseUnsafeMode(EntityPlayer ply) {
-		boolean allow =  (!TGConfig.limitUnsafeModeToOP && PermissionAPI.hasPermission(ply, TGPermissions.ALLOW_UNSAFE_MODE)) || (TGConfig.limitUnsafeModeToOP && isPlayerOp(ply));
-		//System.out.println("LimitOP:"+TGConfig.limitUnsafeModeToOP+" isOp:"+isPlayerOp(ply)+ " Perm:"+PermissionAPI.hasPermission(ply, TGPermissions.ALLOW_UNSAFE_MODE)+" Return:"+allow);
-		return allow;
+        return (TGConfig.general.limitUnsafeModeToOP || !PermissionAPI.hasPermission(ply, TGPermissions.ALLOW_UNSAFE_MODE)) && (!TGConfig.general.limitUnsafeModeToOP || !isPlayerOp(ply));
 	}
 	
 	public static boolean isPlayerOp(EntityPlayer player){
-		boolean op = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile()) != null;
-		return op;
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getOppedPlayers().getEntry(player.getGameProfile()) != null;
 	}
 }

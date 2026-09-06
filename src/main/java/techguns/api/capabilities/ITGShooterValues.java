@@ -2,7 +2,7 @@ package techguns.api.capabilities;
 
 public interface ITGShooterValues {
 
-	public AttackTime getAttackTime(boolean offHand);
-	public boolean isRecoiling(boolean offHand);
-	public boolean isReloading(boolean offHand);
+	AttackTime getAttackTime(boolean offHand);
+	boolean isRecoiling(boolean offHand);
+	boolean isReloading(boolean offHand);
 }

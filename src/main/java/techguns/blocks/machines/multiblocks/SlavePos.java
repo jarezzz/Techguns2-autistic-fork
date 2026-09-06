@@ -44,9 +44,7 @@ public class SlavePos {
 			return false;
 		if (offsetY != other.offsetY)
 			return false;
-		if (offsetZ != other.offsetZ)
-			return false;
-		return true;
+		return offsetZ == other.offsetZ;
 	}
 	@Override
 	public String toString() {

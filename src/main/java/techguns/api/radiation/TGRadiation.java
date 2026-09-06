@@ -1,8 +1,6 @@
 package techguns.api.radiation;
 
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
-import techguns.Techguns;
 
 public class TGRadiation {
 	/**

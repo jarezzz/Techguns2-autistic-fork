@@ -12,11 +12,7 @@ public class ItemRadiationRegistry {
 	public static void addRadiationData(ItemStack stack, int radamount, int radduration) {
 		addRadiationDataInternal(stack.getItem(), (short)stack.getItemDamage(), (short)radamount, (short)radduration);
 	}
-	
-	public static void addRadiationData(Item item, int damagevalue, int radamount, int radduration) {
-		addRadiationDataInternal(item, (short)damagevalue, (short)radamount, (short)radduration);
-	}
-		
+
 	protected static void addRadiationDataInternal(Item item, short damagevalue, short radamount, short radduration) {
 		HashMap<Short, ItemRadiationData> entry = registry.get(item);
 		if ( entry!=null) {

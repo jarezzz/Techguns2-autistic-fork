@@ -25,7 +25,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 import techguns.items.armors.ICamoChangeable;
 import techguns.util.BlockUtils;
 
@@ -55,7 +56,7 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public @NotNull AxisAlignedBB getBoundingBox(IBlockState state, @NotNull IBlockAccess source, @NotNull BlockPos pos) {
 		switch (state.getValue(FACING)) {
 		case NORTH:
 			return LADDER_NORTH_AABB;
@@ -70,7 +71,7 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 	}
 
 	@Override
-	public BlockStateContainer getBlockState() {
+	public @NotNull BlockStateContainer getBlockState() {
 		return this.blockStateOverride;
 	}
 
@@ -79,12 +80,12 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 	 * render
 	 */
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(@NotNull IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(@NotNull IBlockState state) {
 		return false;
 	}
 	
@@ -93,7 +94,7 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 	     * IBlockstate
 	     */
 		@Override
-	    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+	    public @NotNull IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @NotNull EntityLivingBase placer)
 	    {
 			IBlockState basetype = this.getStateFromMeta(meta);
 	        if (facing.getAxis().isHorizontal() /*&& this.canAttachTo(worldIn, pos.offset(facing.getOpposite()), facing)*/)
@@ -125,32 +126,32 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 		}
 
 		@Override
-		public IBlockState getStateFromMeta(int meta) {
+		public @NotNull IBlockState getStateFromMeta(int meta) {
 			return this.getDefaultState()
-		    .withProperty(FACING, EnumFacing.getHorizontal(meta >> 2))
+		    .withProperty(FACING, EnumFacing.byHorizontalIndex(meta >> 2))
 		    .withProperty(TYPE, clazz.getEnumConstants()[meta & 0b11]);
 	    }
 
 		@Override
-		public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+		public boolean isLadder(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EntityLivingBase entity) {
 			return true;
 		}
 
 		@Override
-	    public BlockFaceShape getBlockFaceShape(IBlockAccess p_193383_1_, IBlockState p_193383_2_, BlockPos p_193383_3_, EnumFacing p_193383_4_)
+	    public @NotNull BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess p_193383_1_, @NotNull IBlockState p_193383_2_, @NotNull BlockPos p_193383_3_, @NotNull EnumFacing p_193383_4_)
 	    {
 	        return BlockFaceShape.UNDEFINED;
 	    }
 
 		@Override
-		public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
+		public void getSubBlocks(@NotNull CreativeTabs tab, @NotNull NonNullList<ItemStack> items) {
 			for (T t : clazz.getEnumConstants()) {
 				items.add(new ItemStack(this,1,this.getMetaFromState(getDefaultState().withProperty(TYPE, t))));
 			}
 		}
 		
 		@Override
-		public IBlockState withRotation(IBlockState state, Rotation rot) {
+		public @NotNull IBlockState withRotation(IBlockState state, Rotation rot) {
 			EnumFacing facing = state.getValue(FACING);
 			switch(rot) {
 			case CLOCKWISE_180:
@@ -181,7 +182,7 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 		}
 		
 		@Override
-		public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		public @NotNull IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 			EnumFacing facing = state.getValue(FACING);
 			return state.withProperty(FACING,mirrorIn.mirror(facing));
 		}
@@ -200,11 +201,11 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 
 		@Override
 		public String getCurrentCamoName(ItemStack item) {
-			return Techguns.MODID+"."+this.getRegistryName().getResourcePath()+".camoname."+getCurrentCamoIndex(item);
+			return Tags.MOD_ID+"."+this.getRegistryName().getPath()+".camoname."+getCurrentCamoIndex(item);
 		}
 
 		@Override
-		public int switchCamo(ItemStack item, boolean back) {
+		public void switchCamo(ItemStack item, boolean back) {
 			IBlockState state = this.getStateFromMeta(item.getMetadata());
 			
 			int type = state.getValue(TYPE).ordinal();
@@ -222,9 +223,8 @@ public class BlockTGLadder<T extends Enum<T> & IStringSerializable> extends Gene
 			}
 			int newmeta = this.getMetaFromState(state.withProperty(TYPE, clazz.getEnumConstants()[type]));
 			item.setItemDamage(newmeta);
-			
-			return newmeta;
-		}
+
+        }
 
 		@Override
 		public int getFirstItemCamoDamageValue() {

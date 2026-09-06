@@ -1,0 +1,1 @@
+- Fixed projectiles coming out of the head instead of at least somewhere near the barrel

@@ -2,14 +2,14 @@ package techguns.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
-import techguns.Techguns;
+import techguns.*;
 
 public class GenericItemBlock extends ItemBlock {
 
 	public GenericItemBlock(Block block) {
 		super(block);
 		this.setRegistryName(block.getRegistryName());
-		this.setUnlocalizedName(block.getUnlocalizedName());
+		this.setTranslationKey(block.getTranslationKey());
 		setCreativeTab(Techguns.tabTechgun);
 	}
 

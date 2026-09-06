@@ -7,21 +7,21 @@ import net.minecraft.util.math.Vec3d;
 
 public interface ITGParticle {
 
-	public Vec3d getPos();
+	Vec3d getPos();
 	
-	public boolean shouldRemove();
-	public void updateTick();
+	boolean shouldRemove();
+	void updateTick();
 	
-	public void doRender(BufferBuilder buffer, Entity entityIn, float partialTickTime, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ);
+	void doRender(BufferBuilder buffer, Entity entityIn, float partialTickTime, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ);
 	   
-	public AxisAlignedBB getRenderBoundingBox(float ptt, Entity viewEnt);
+	AxisAlignedBB getRenderBoundingBox(float ptt, Entity viewEnt);
 	
-	public default boolean doNotSort() {
+	default boolean doNotSort() {
 		return false;
 	}
 	
-	public double getDepth();
+	double getDepth();
 	
-	public void setDepth(double depth);
-	public void setItemAttached();
+	void setDepth(double depth);
+	void setItemAttached();
 }

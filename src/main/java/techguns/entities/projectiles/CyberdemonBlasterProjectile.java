@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import techguns.TGPackets;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.damagesystem.DamageType;
 import techguns.client.ClientProxy;
 import techguns.damagesystem.TGDamageSource;

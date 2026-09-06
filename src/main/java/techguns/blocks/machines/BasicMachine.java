@@ -17,14 +17,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
@@ -32,27 +25,22 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGConfig;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.machines.IMachineType;
 import techguns.blocks.GenericBlock;
 import techguns.blocks.GenericItemBlockMeta;
 import techguns.blocks.GenericItemBlockMetaMachineBlock;
 import techguns.blocks.machines.multiblocks.MultiBlockRegister;
 import techguns.events.TechgunsGuiHandler;
-import techguns.tileentities.BasicInventoryTileEnt;
-import techguns.tileentities.BasicOwnedTileEnt;
-import techguns.tileentities.BasicRedstoneTileEnt;
-import techguns.tileentities.MultiBlockMachineTileEntMaster;
-import techguns.tileentities.MultiBlockMachineTileEntSlave;
-import techguns.tileentities.TurretTileEnt;
+import techguns.tileentities.*;
 import techguns.util.TextUtil;
 
 /**
@@ -86,7 +74,7 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	
 	
 	@Override
-	public BlockStateContainer getBlockState() {
+	public @NotNull BlockStateContainer getBlockState() {
 		return this.blockStateOverride;
 	}
 	
@@ -96,20 +84,20 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	}
 	
 	@Override
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs tab, @NotNull NonNullList<ItemStack> items) {
 		for (T t : clazz.getEnumConstants()) {
-			if( (!t.debugOnly() || TGConfig.debug) && !(t.hideInCreative())) {
+			if( (!t.debugOnly() || TGConfig.misc.debug) && !(t.hideInCreative())) {
 				items.add(new ItemStack(this,1,this.getMetaFromState(getDefaultState().withProperty(MACHINE_TYPE, t))));
 			}
 		}
 	}
 	
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+	public void breakBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
 		TileEntity tile = worldIn.getTileEntity(pos);
-		if (tile!=null && tile instanceof BasicInventoryTileEnt) {
+		if (tile instanceof BasicInventoryTileEnt) {
 			((BasicInventoryTileEnt) tile).onBlockBreak();
-		} else if (tile!=null && tile instanceof MultiBlockMachineTileEntSlave) {
+		} else if (tile instanceof MultiBlockMachineTileEntSlave) {
 			((MultiBlockMachineTileEntSlave) tile).onBlockBreak();
 		}
 		super.breakBlock(worldIn, pos, state);
@@ -117,26 +105,22 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	
 	
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(@NotNull IBlockState state, World worldIn, @NotNull BlockPos pos, @NotNull Block blockIn, @NotNull BlockPos fromPos) {
 		TileEntity tile = worldIn.getTileEntity(pos);
-		if(tile!=null && tile instanceof BasicRedstoneTileEnt){
+		if(tile instanceof BasicRedstoneTileEnt){
 			((BasicRedstoneTileEnt)tile).onNeighborBlockChange();		
 		}
 	}
 
 	@Override
-	public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean shouldCheckWeakPower(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EnumFacing side) {
 		return true;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		  /* if (world.isRemote) {
-	            return true;
-	        } else {*/
-
+	public boolean onBlockActivated(World world, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EntityPlayer player, @NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
 				TileEntity tile = world.getTileEntity(pos);
-				if (!world.isRemote && tile!=null && tile instanceof BasicInventoryTileEnt) {
+				if (!world.isRemote && tile instanceof BasicInventoryTileEnt) {
 					BasicInventoryTileEnt tileent = (BasicInventoryTileEnt) tile;
 					
 					if (tileent.isUseableByPlayer(player)) {
@@ -159,7 +143,7 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 						ItemStack helditem = player.getHeldItem(hand);
 						if (!helditem.isEmpty() && helditem.getItem().getToolClasses(helditem).contains("wrench")) {
 							
-							if (player.isSneaking() && tileent.canBeWrenchDismantled() && !world.isRemote) {
+							if (player.isSneaking() && tileent.canBeWrenchDismantled()) {
 								
 								NBTTagCompound tileEntTags =new NBTTagCompound();
 								tileent.writeNBTforDismantling(tileEntTags);
@@ -189,32 +173,34 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 							boolean interacted = tileent.onFluidContainerInteract(player, hand, fluidhandler, helditem);
 							
 							if(interacted) {
-								if(!world.isRemote) {
-									world.playSound(null, pos.getX()+0.5d,pos.getY()+0.5d,pos.getZ()+0.5d, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1f, 1f);
-								}
-								
+								world.playSound(null, pos.getX() + 0.5d, pos.getY() + 0.5d, pos.getZ() + 0.5d, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1f, 1f);
+
 								return true;
-							} else if (!world.isRemote) {
-								TechgunsGuiHandler.openGuiForPlayer(player, tile);
+							} else {
+								if (tile instanceof MultiBlockMachineTileEntMaster) {
+									MultiBlockMachineTileEntMaster masterEnt = (MultiBlockMachineTileEntMaster) tile;
+									if (masterEnt.isFormed()) TechgunsGuiHandler.openGuiForPlayer(player, tile);
+								} else TechgunsGuiHandler.openGuiForPlayer(player, tile);
 							}
 							
 						} else {
-							if(!world.isRemote) {
-								TechgunsGuiHandler.openGuiForPlayer(player, tile);
-							}
+							if (tile instanceof MultiBlockMachineTileEntMaster) {
+								MultiBlockMachineTileEntMaster masterEnt = (MultiBlockMachineTileEntMaster) tile;
+								if (masterEnt.isFormed()) TechgunsGuiHandler.openGuiForPlayer(player, tile);
+							} else TechgunsGuiHandler.openGuiForPlayer(player, tile);
 						}
 					
 					} else {
 						player.sendStatusMessage(new TextComponentString(TextUtil.trans("techguns.container.security.denied")), true);
 					}
 
-				} else if (tile!=null && tile instanceof MultiBlockMachineTileEntSlave) {
+				} else if (tile instanceof MultiBlockMachineTileEntSlave) {
 					
 					MultiBlockMachineTileEntSlave slave = (MultiBlockMachineTileEntSlave) tile;
 					if(slave.hasMaster()) {
 						if(!world.isRemote) {
 							TileEntity master = world.getTileEntity(slave.getMasterPos());
-							if (master!=null && master instanceof MultiBlockMachineTileEntMaster) {
+							if (master instanceof MultiBlockMachineTileEntMaster) {
 								TechgunsGuiHandler.openGuiForPlayer(player, master);
 							}
 						}
@@ -234,12 +220,12 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	}
 	
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(@NotNull World world, IBlockState state) {
 		return state.getValue(MACHINE_TYPE).getTile();
 	}
 	
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity(@NotNull IBlockState state) {
 		return true;
 	}
 
@@ -255,8 +241,7 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 		super.registerBlock(event);
 		for (T t : clazz.getEnumConstants()) {
 			if(TileEntity.getKey(t.getTileClass())==null) {
-				//GameRegistry.registerTileEntity(t.getTileClass(), Techguns.MODID+":"+t.getName());
-				GameRegistry.registerTileEntity(t.getTileClass(), new ResourceLocation(Techguns.MODID,t.getName()));
+				GameRegistry.registerTileEntity(t.getTileClass(), new ResourceLocation(Tags.MOD_ID,t.getName()));
 			}
 		}
 	}
@@ -267,34 +252,33 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState()
-	    .withProperty(MACHINE_TYPE, clazz.getEnumConstants()[meta]);
+	public @NotNull IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(MACHINE_TYPE, clazz.getEnumConstants()[meta]);
     }
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
+	public @NotNull EnumBlockRenderType getRenderType(IBlockState state) {
 		T t = state.getValue(MACHINE_TYPE);
 		return t.getRenderType();
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState state) {
+	public boolean isFullCube(@NotNull IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(@NotNull IBlockState state) {
 		return false;
 	}
 	
 	@Override
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+	public boolean canRenderInLayer(IBlockState state, @NotNull BlockRenderLayer layer) {
 		T t = state.getValue(MACHINE_TYPE);
 		return t.getBlockRenderLayer()==layer;
 	}
 
-	public void onBlockPlacedByExtended(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack, EnumFacing sideHit) {
+	public void onBlockPlacedByExtended(World world, BlockPos pos, EntityLivingBase placer, ItemStack stack, EnumFacing sideHit) {
 		
 		TileEntity tile = world.getTileEntity(pos);
 		
@@ -325,7 +309,7 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 			}
         	
         	if(!turret.turretDeath){
-        		turret.spawnTurret(world,pos);
+        		turret.spawnTurret(world);
         	}
 		}
 	}
@@ -345,7 +329,7 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 			IBlockState state = getDefaultState().withProperty(MACHINE_TYPE, clazz.getEnumConstants()[i]);
 			if(clazz.getEnumConstants()[i].getRenderType()==EnumBlockRenderType.MODEL) {
 				//ModelLoader.setCustomModelResourceLocation(itemblock, i, new ModelResourceLocation(this.getRegistryName(),BlockUtils.getBlockStateVariantString(state)));
-				ModelLoader.setCustomModelResourceLocation(itemblock, i, new ModelResourceLocation(new ResourceLocation(Techguns.MODID,clazz.getEnumConstants()[i].name().toLowerCase()),"inventory"));
+				ModelLoader.setCustomModelResourceLocation(itemblock, i, new ModelResourceLocation(new ResourceLocation(Tags.MOD_ID,clazz.getEnumConstants()[i].name().toLowerCase()),"inventory"));
 			} else {
 				ForgeHooksClient.registerTESRItemStack(itemblock, this.getMetaFromState(state), state.getValue(MACHINE_TYPE).getTileClass());
 				ModelLoader.setCustomModelResourceLocation(itemblock, i, new ModelResourceLocation(itemblock.getRegistryName(),"inventory"));
@@ -354,16 +338,16 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	}
 
 	@Override
-	public boolean hasCustomBreakingProgress(IBlockState state) {
+	public boolean hasCustomBreakingProgress(@NotNull IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+	public boolean rotateBlock(@NotNull World world, @NotNull BlockPos pos, @NotNull EnumFacing axis) {
 		
-		if (axis == EnumFacing.DOWN || axis==EnumFacing.UP) {
+		if (axis == EnumFacing.DOWN || axis == EnumFacing.UP) {
 			TileEntity tile = world.getTileEntity(pos);
-			if(tile!=null && tile instanceof BasicInventoryTileEnt) {
+			if(tile instanceof BasicInventoryTileEnt) {
 				BasicInventoryTileEnt invtile = (BasicInventoryTileEnt) tile;
 				if (invtile.hasRotation()) {
 					invtile.rotateTile();
@@ -376,7 +360,7 @@ public class BasicMachine<T extends Enum<T> & IStringSerializable & IMachineType
 	}
 
 	@Override
-	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity) {
+	public @NotNull SoundType getSoundType(IBlockState state, @NotNull World world, @NotNull BlockPos pos, Entity entity) {
 		return state.getValue(MACHINE_TYPE).getSoundType();
 	}
 

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import mezz.jei.api.IJeiHelpers;
-import mezz.jei.api.recipe.IStackHelper;
+import org.jetbrains.annotations.NotNull;
 import techguns.gui.PoweredTileEntGui;
 import techguns.gui.TGBaseGui;
 import techguns.tileentities.ChargingStationTileEnt;
@@ -27,7 +27,7 @@ public class ChargingStationJeiRecipe extends BasicRecipeWrapper {
 	}
 	
 	@Override
-	public List<String> getTooltipStrings(int mouseX, int mouseY) {
+	public @NotNull List<String> getTooltipStrings(int mouseX, int mouseY) {
 		if (TGBaseGui.isInRect(mouseX, mouseY, 8+BasicRecipeCategory.JEI_OFFSET_X, 17+BasicRecipeCategory.JEI_OFFSET_Y, 6, 60)) {
 			
 			List<String> tooltip = new ArrayList<>();
@@ -48,9 +48,8 @@ public class ChargingStationJeiRecipe extends BasicRecipeWrapper {
 	}
 
 	public static List<ChargingStationJeiRecipe> getRecipes(IJeiHelpers helpers) {
-		IStackHelper stackHelper = helpers.getStackHelper();
-	
-		List<ChargingStationJeiRecipe> recipes = new ArrayList<ChargingStationJeiRecipe>();
+
+        List<ChargingStationJeiRecipe> recipes = new ArrayList<>();
 		
 		ChargingStationRecipe.getRecipes().forEach(r -> recipes.add(new ChargingStationJeiRecipe(r)));
 		

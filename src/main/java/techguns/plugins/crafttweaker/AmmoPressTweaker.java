@@ -1,9 +1,5 @@
 package techguns.plugins.crafttweaker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.api.item.IIngredient;
@@ -15,11 +11,14 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import techguns.tileentities.operation.AmmoPressBuildPlans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ZenClass("mods.techguns.AmmoPress")
 public class AmmoPressTweaker {
 
-	private AmmoPressTweaker(){};
-	
+	private AmmoPressTweaker(){}
+
 	@ZenMethod
 	public static void addMetal1(IIngredient input){
 		CraftTweakerAPI.apply(new addInputAction(input, (byte)0));
@@ -53,10 +52,10 @@ public class AmmoPressTweaker {
 
 	private static void addToList(IIngredient item, ArrayList<ItemStack> list){
 		List<IItemStack> items = item.getItems();
-		
-		for(int i =0;i<items.size();i++){
-			ItemStack it = CraftTweakerMC.getItemStack(items.get(i));
-			if(it!=null){
+
+		for (IItemStack iItemStack : items) {
+			ItemStack it = CraftTweakerMC.getItemStack(iItemStack);
+			if (it != null) {
 				list.add(it);
 			}
 		}
@@ -64,32 +63,19 @@ public class AmmoPressTweaker {
 
 	private static void removeFromList(IIngredient item, ArrayList<ItemStack> list){
 		List<IItemStack> items = item.getItems();
-		
-		for(int i =0;i<items.size();i++){
-			ItemStack it = CraftTweakerMC.getItemStack(items.get(i));
-			
-			Iterator<ItemStack> iter = list.iterator();
-			while (iter.hasNext()){
-				ItemStack input = iter.next();
-				//System.out.println("Checking:"+it.toString()+"->"+input.toString());
-				if (OreDictionary.itemMatches(it, input, false)){
-					//System.out.println("MATCH!");
-					iter.remove();
-				}
-			}
+
+		for (IItemStack iItemStack : items) {
+			ItemStack it = CraftTweakerMC.getItemStack(iItemStack);
+			list.removeIf(input -> OreDictionary.itemMatches(it, input, false));
 		}
 	}
 
 	private static String getSlotName(byte type){
-		switch(type){
-			case 1:
-				return "Metal2";
-			case 2:
-				return "Powder";
-			case 0:
-			default:
-				return "Metal1";
-		}
+        return switch (type) {
+            case 1 -> "Metal2";
+            case 2 -> "Powder";
+            default -> "Metal1";
+        };
 	}
 	
 	private static class addInputAction implements IAction

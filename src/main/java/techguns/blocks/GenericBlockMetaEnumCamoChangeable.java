@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
-import techguns.Techguns;
+import techguns.*;
 import techguns.items.armors.ICamoChangeable;
 
 public class GenericBlockMetaEnumCamoChangeable<T extends Enum<T> & IStringSerializable> extends GenericBlockMetaEnum<T> implements ICamoChangeable {
@@ -35,7 +35,7 @@ public class GenericBlockMetaEnumCamoChangeable<T extends Enum<T> & IStringSeria
 	}
 
 	@Override
-	public int switchCamo(ItemStack item, boolean back) {
+	public void switchCamo(ItemStack item, boolean back) {
 		IBlockState state = this.getStateFromMeta(item.getMetadata());
 		
 		int type = state.getValue(TYPE).ordinal();
@@ -53,9 +53,8 @@ public class GenericBlockMetaEnumCamoChangeable<T extends Enum<T> & IStringSeria
 		}
 		int newmeta = this.getMetaFromState(state.withProperty(TYPE, clazz.getEnumConstants()[type]));
 		item.setItemDamage(newmeta);
-		
-		return newmeta;
-	}
+
+    }
 
 	@Override
 	public int getCurrentCamoIndex(ItemStack item) {
@@ -66,7 +65,7 @@ public class GenericBlockMetaEnumCamoChangeable<T extends Enum<T> & IStringSeria
 
 	@Override
 	public String getCurrentCamoName(ItemStack item) {
-		return "tile."+Techguns.MODID+"."+this.getRegistryName().getResourcePath()+"."+getCurrentCamoIndex(item)+".name";
+		return "tile."+Tags.MOD_ID+"."+this.getRegistryName().getPath()+"."+getCurrentCamoIndex(item)+".name";
 	}
 
 }

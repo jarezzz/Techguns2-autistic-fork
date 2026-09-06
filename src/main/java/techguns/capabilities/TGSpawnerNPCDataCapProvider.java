@@ -6,7 +6,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 
 public class TGSpawnerNPCDataCapProvider implements ICapabilitySerializable<NBTBase> {
 
@@ -16,24 +17,24 @@ public class TGSpawnerNPCDataCapProvider implements ICapabilitySerializable<NBTB
 	/**
 	 * The ID of this capability.
 	 */
-	public static final ResourceLocation ID = new ResourceLocation(Techguns.MODID, "genericNPCData");
+	public static final ResourceLocation ID = new ResourceLocation(Tags.MOD_ID, "genericNPCData");
 	
 	public static final EnumFacing DEFAULT_FACING = null;
 	
-	private TGSpawnerNPCData instance; // = TG_SHOOTER_VALUES.getDefaultInstance();
+	private final TGSpawnerNPCData instance; // = TG_SHOOTER_VALUES.getDefaultInstance();
 		
 	public TGSpawnerNPCDataCapProvider(TGSpawnerNPCData caps) {
 		this.instance = caps;
 	}
 	
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == TG_GENERICNPC_DATA;
+	public boolean hasCapability(@NotNull Capability<?> capability, EnumFacing facing) {
+		return false;
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == TG_GENERICNPC_DATA ? TG_GENERICNPC_DATA.<T> cast(this.instance) : null;
+	public <T> T getCapability(@NotNull Capability<T> capability, EnumFacing facing) {
+		return capability == TG_GENERICNPC_DATA ? TG_GENERICNPC_DATA.cast(this.instance) : null;
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import techguns.Techguns;
+import techguns.*;
 import techguns.gui.player.TGPlayerInventoryContainer;
 import techguns.gui.player.TGPlayerInventoryGui;
 
@@ -94,13 +94,6 @@ public class TechgunsGuiHandler implements IGuiHandler {
 			this.servergui=servergui;
 		}
 
-		public IGuiFactory<T> getClientGui() {
-			return clientgui;
-		}
-		
-		public IGuiFactory<T> getServerGui() {
-			return servergui;
-		}
 	}
 	
 }

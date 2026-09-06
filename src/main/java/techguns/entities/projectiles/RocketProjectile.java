@@ -9,7 +9,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import techguns.TGPackets;
-import techguns.Techguns;
+import techguns.*;
 import techguns.api.damagesystem.DamageType;
 import techguns.client.ClientProxy;
 import techguns.damagesystem.TGDamageSource;
@@ -66,7 +66,7 @@ public class RocketProjectile extends GenericProjectile implements ILightProvide
 
 	protected void explodeRocket(){
 		if (!this.world.isRemote){
-			TGPackets.network.sendToAllAround(new PacketSpawnParticle("RocketExplosion", this.posX,this.posY,this.posZ), TGPackets.targetPointAroundEnt(this, 50.0f));
+			TGPackets.wrapper.sendToAllAround(new PacketSpawnParticle("RocketExplosion", this.posX,this.posY,this.posZ), TGPackets.targetPointAroundEnt(this, 50.0f));
 			//TGPackets.network.sendToAllAround(new PacketSpawnParticle("TestFX", this.posX,this.posY,this.posZ), TGPackets.targetPointAroundEnt(this, 50.0f));
 
     		//ProjectileExplosion explosion = new ProjectileExplosion(worldObj, this.posX, this.posY, this.posZ, this.shooter, radius, (int)damage, radius*0.5f, radius*1.5f);

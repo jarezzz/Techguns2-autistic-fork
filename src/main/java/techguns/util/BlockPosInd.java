@@ -1,17 +1,18 @@
 package techguns.util;
 
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockPosInd extends BlockPos {
-	int index;
-	
-	public BlockPosInd(int x, int y, int z, int index) {
-		super(x, y, z);
-		this.index=index;
-	}
+    int index;
 
-	@Override
-	public String toString() {
-		return getX()+","+getY()+","+getZ()+","+index;
-	}
+    public BlockPosInd(int x, int y, int z, int index) {
+        super(x, y, z);
+        this.index = index;
+    }
+
+    @Override
+    public @NotNull String toString() {
+        return getX() + "," + getY() + "," + getZ() + "," + index;
+    }
 }

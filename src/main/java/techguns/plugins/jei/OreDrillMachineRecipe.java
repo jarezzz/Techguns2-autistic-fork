@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import techguns.TGBlocks;
 import techguns.TGFluids;
 import techguns.TGItems;
-import techguns.Techguns;
+import techguns.*;
 import techguns.TGOreClusters.OreClusterWeightedEntry;
 import techguns.blocks.EnumOreClusterType;
 import techguns.tileentities.operation.IMachineRecipe;
@@ -62,15 +62,15 @@ public class OreDrillMachineRecipe implements IMachineRecipe {
 	protected ArrayList<ItemStack> getDrills(){
 		if(drills==null) {
 			drills = new ArrayList<ItemStack>(9);
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_STEEL, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_OBSIDIANSTEEL, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_CARBON, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_MEDIUM_STEEL, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_MEDIUM_OBSIDIANSTEEL, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_MEDIUM_CARBON, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_LARGE_STEEL, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_LARGE_OBSIDIANSTEEL, 1));
-			drills.add(TGItems.newStack(TGItems.OREDRILLHEAD_LARGE_CARBON, 1));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_STEEL.getItem(), 1, TGItems.OREDRILLHEAD_STEEL.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_OBSIDIANSTEEL.getItem(), 1, TGItems.OREDRILLHEAD_OBSIDIANSTEEL.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_CARBON.getItem(), 1, TGItems.OREDRILLHEAD_CARBON.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_MEDIUM_STEEL.getItem(), 1, TGItems.OREDRILLHEAD_MEDIUM_STEEL.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_MEDIUM_OBSIDIANSTEEL.getItem(), 1, TGItems.OREDRILLHEAD_MEDIUM_OBSIDIANSTEEL.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_MEDIUM_CARBON.getItem(), 1, TGItems.OREDRILLHEAD_MEDIUM_CARBON.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_LARGE_STEEL.getItem(), 1, TGItems.OREDRILLHEAD_LARGE_STEEL.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_LARGE_OBSIDIANSTEEL.getItem(), 1, TGItems.OREDRILLHEAD_LARGE_OBSIDIANSTEEL.getItemDamage()));
+			drills.add(new ItemStack(TGItems.OREDRILLHEAD_LARGE_CARBON.getItem(), 1, TGItems.OREDRILLHEAD_LARGE_CARBON.getItemDamage()));
 		}
 		return drills;
 	}

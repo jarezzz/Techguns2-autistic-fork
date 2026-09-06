@@ -14,13 +14,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGArmors;
 import techguns.TGuns;
-import techguns.Techguns;
+import techguns.*;
 
 public class SkeletonSoldier extends GenericNPCUndead {
 
-	public static final ResourceLocation LOOT = new ResourceLocation(Techguns.MODID, "entities/skeletonsoldier");
+	public static final ResourceLocation LOOT = new ResourceLocation(Tags.MOD_ID, "entities/skeletonsoldier");
 	
 	public SkeletonSoldier(World world) {
 		super(world);
@@ -64,7 +65,14 @@ public class SkeletonSoldier extends GenericNPCUndead {
 			this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(TGArmors.t1_scout_Boots));
 		} else {
 			this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(TGArmors.t1_combat_Boots));
-		};
+		}
+
+		if (TGConfig.misc.disableArmorDrops) {
+			this.setDropChance(EntityEquipmentSlot.HEAD,  0f);
+			this.setDropChance(EntityEquipmentSlot.LEGS,  0f);
+			this.setDropChance(EntityEquipmentSlot.CHEST, 0f);
+			this.setDropChance(EntityEquipmentSlot.FEET,  0f);
+		}
 		
 		// Weapons
 		Random r = new Random();
@@ -83,7 +91,11 @@ public class SkeletonSoldier extends GenericNPCUndead {
 			weapon = Items.STONE_SHOVEL;
 			break;
 		}
-		if (weapon != null) this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+		if (weapon != null) {
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+			if (TGConfig.misc.disableGunDrops)
+				this.setDropChance(EntityEquipmentSlot.MAINHAND, 0f);
+		}
 	}
 	
 	@Override
@@ -92,12 +104,12 @@ public class SkeletonSoldier extends GenericNPCUndead {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	public @NotNull SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_SKELETON_HURT;
 	}
 
 	@Override
-	public SoundEvent getDeathSound() {
+	public @NotNull SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_SKELETON_DEATH;
 	}
 

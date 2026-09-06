@@ -7,11 +7,11 @@ public class AmmoVariant {
 	protected String key;
 	protected ItemStack[] ammo;
 	protected ItemStack[] bullet;
-	
+
 	public AmmoVariant(ItemStack[] ammo, ItemStack[] bullet) {
-		this(AmmoTypes.TYPE_DEFAULT,ammo,bullet);
+		this(AmmoTypes.TYPE_DEFAULT, ammo, bullet);
 	}
-	
+
 	public AmmoVariant(String key, ItemStack[] ammo, ItemStack[] bullet) {
 		super();
 		this.key = key;

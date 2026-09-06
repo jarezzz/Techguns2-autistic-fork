@@ -1,0 +1,81 @@
+{
+  "pools": [
+    {
+      "name": "main",
+      "rolls": {
+        "min": 1,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_84",
+          "weight": 35,
+          "functions": [
+            { "function": "set_data", "data": 84 },
+            { "function": "set_count", "count": { "min": 6, "max": 9 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:chorus_fruit",
+          "entryName": "chorus",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 4, "max": 6 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:ender_pearl",
+          "entryName": "ender_pearl",
+          "weight": 35,
+          "functions": [
+            { "function": "set_count", "count": { "min": 3, "max": 6 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_61",
+          "weight": 15,
+          "functions": [
+            { "function": "set_data", "data": 61},
+            { "function": "set_count", "count": { "min": 3, "max": 7 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_98",
+          "weight": 10,
+          "functions": [
+            { "function": "set_data", "data": 98 },
+            { "function": "set_count", "count": { "min": 1, "max": 3 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_127",
+          "weight": 10,
+          "functions": [
+            { "function": "set_data", "data": 127 },
+            { "function": "set_count", "count": { "min": 3, "max": 6 } }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "techguns:itemshared",
+          "entryName": "itemshared_78",
+          "weight": 4,
+          "functions": [
+            { "function": "set_data", "data": 78 },
+            { "function": "set_count", "count": { "min": 1, "max": 3 } }
+          ]
+        }
+      ]
+    }
+  ]
+}

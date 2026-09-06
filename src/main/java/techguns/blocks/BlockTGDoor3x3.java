@@ -37,8 +37,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGSounds;
-import techguns.Techguns;
+import techguns.*;
 import techguns.events.TechgunsGuiHandler;
 import techguns.items.ItemTGDoor3x3;
 import techguns.tileentities.Door3x3TileEntity;
@@ -48,12 +49,11 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	public static final PropertyBool MASTER = PropertyBool.create("master");
 	public static final PropertyBool ZPLANE = PropertyBool.create("zplane");
 	//public static final PropertyBool OPENED = PropertyBool.create("open");
-	public static final PropertyEnum<EnumDoorState> STATE = PropertyEnum.<EnumDoorState>create("state", EnumDoorState.class);
-	public static final PropertyEnum<EnumDoorType> TYPE = PropertyEnum.<EnumDoorType>create("type", EnumDoorType.class);
+	public static final PropertyEnum<EnumDoorState> STATE = PropertyEnum.create("state", EnumDoorState.class);
+	public static final PropertyEnum<EnumDoorType> TYPE = PropertyEnum.create("type", EnumDoorType.class);
 	
 	
 	protected Class<T> clazz;
-	protected Class clazzBlock;
 	protected BlockStateContainer blockStateOverride;
 	
 	protected ItemTGDoor3x3<T> placer;
@@ -98,33 +98,33 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
     @Override
 	public void registerBlock(Register<Block> event) {
 		super.registerBlock(event);
-		GameRegistry.registerTileEntity(Door3x3TileEntity.class, new ResourceLocation(Techguns.MODID,"door3x3tileent"));
+		GameRegistry.registerTileEntity(Door3x3TileEntity.class, new ResourceLocation(Tags.MOD_ID,"door3x3tileent"));
 	}
 
     @Override
-	public boolean isOpaqueCube(IBlockState state)
+	public boolean isOpaqueCube(@NotNull IBlockState state)
     {
 		return false;
     }
 
 	@Override
-    public boolean isFullCube(IBlockState state)
+    public boolean isFullCube(@NotNull IBlockState state)
     {
         return false;
     }
 
 	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState state) {
+	public @NotNull EnumPushReaction getPushReaction(@NotNull IBlockState state) {
 		return EnumPushReaction.BLOCK;
 	}
 
-	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side)
+	public @NotNull BlockFaceShape getBlockFaceShape(@NotNull IBlockAccess world, @NotNull IBlockState state, @NotNull BlockPos pos, @NotNull EnumFacing side)
     {
         return BlockFaceShape.UNDEFINED;
     }
     
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
+	public @NotNull EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
 		/*if(state.getValue(STATE)==EnumDoorState.CLOSING || state.getValue(STATE)==EnumDoorState.OPENING ) {
 			return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 		} else {*/
@@ -138,7 +138,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
     }
 	
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(@NotNull World world, IBlockState state) {
 		if(state.getValue(MASTER)) {
 			return new Door3x3TileEntity();
 		}
@@ -175,11 +175,11 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 		if(state.getValue(ZPLANE)) {
 			offsets=pos_z;
 		}
-		
-		for(int i=0;i<offsets.length; i++) {
-			BlockPos p = pos.add(offsets[i]);
+
+		for (Vec3i offset : offsets) {
+			BlockPos p = pos.add(offset);
 			IBlockState s = w.getBlockState(p);
-			if(s.getBlock()==this && s.getValue(MASTER)) {
+			if (s.getBlock() == this && s.getValue(MASTER)) {
 				return p;
 			}
 		}
@@ -193,11 +193,13 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if(tile!=null && tile instanceof Door3x3TileEntity) {
+	public @NotNull IBlockState getActualState(@NotNull IBlockState state, IBlockAccess worldIn, @NotNull BlockPos pos) {
+		TileEntity tile = worldIn.getTileEntity(this.findMaster(worldIn, pos, state));
+		if(tile instanceof Door3x3TileEntity) {
 			Door3x3TileEntity door = (Door3x3TileEntity) tile;
-			return state.withProperty(TYPE, EnumDoorType.values()[door.getDoorType()]);
+			EnumDoorType[] types = EnumDoorType.values();
+			int type = door.getDoorType();
+			return state.withProperty(TYPE, types[type>=0 && type<types.length ? type : 0]);
 		}
 		
 		return state;
@@ -205,7 +207,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 
 	public static AxisAlignedBB NO_COLLIDE=new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess source, @NotNull BlockPos pos) {
 			
 		if(!isStateOpen(state)) {
 			return getBBforPlane(state);
@@ -287,7 +289,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(@NotNull IBlockState blockState, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 		if(isStateOpen(blockState)) {
 			return NULL_AABB;
 		} else {
@@ -349,27 +351,26 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 		if(masterstate.getValue(ZPLANE)) {
 			offsets=pos_z;
 		}
-		
-		for(int i=0;i<offsets.length; i++) {
-			BlockPos p = masterPos.add(offsets[i]);
+
+		for (Vec3i offset : offsets) {
+			BlockPos p = masterPos.add(offset);
 			this.setOpenedStateForBlock(w, p, nextState);
 		}
 		this.setOpenedStateForBlock(w, masterPos, nextState);
-		 //w.playEvent((EntityPlayer)null, this.getOpenSound() /*: TODO this.getCloseSound()*/, masterPos, 0);
 		SoundEvent sound = this.getSoundEvent(nextState);
 		if(sound!=null) {
 			w.playSound(null, masterPos, sound, SoundCategory.BLOCKS, (float) (0.9+Math.random()*0.2), (float) (0.9+Math.random()*0.2));
 		}
 		
 		 TileEntity tile = w.getTileEntity(masterPos);
-		 if(tile!=null && tile instanceof Door3x3TileEntity) {
+		 if(tile instanceof Door3x3TileEntity) {
 			 Door3x3TileEntity door = (Door3x3TileEntity) tile;
 			 if(!w.isRemote) {
 				door.changeStateServerSide();
 				 
 				EnumDoorType type = masterstate.getActualState(w, masterPos).getValue(TYPE);
 				if(checkNeighbours && (type==EnumDoorType.HANGAR_DOWN||type==EnumDoorType.HANGAR_UP)) {
-					checkOpenNeighbours(w, masterPos, masterstate.getActualState(w, masterPos), door);
+					checkOpenNeighbours(w, masterPos, masterstate.getActualState(w, masterPos));
 				}
 				
 				if(nextState==EnumDoorState.OPENING || nextState==EnumDoorState.CLOSING) {
@@ -385,14 +386,11 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 		 } 
 	}
 	
-	public void checkOpenNeighbours(World w, BlockPos masterPos, IBlockState masterstate, Door3x3TileEntity tile) {
-		
-		//EnumDoorState nextState = this.getNextOpenState(masterstate.getValue(STATE));
-		
+	public void checkOpenNeighbours(World w, BlockPos masterPos, IBlockState masterstate) {
 		boolean zplane = masterstate.getValue(ZPLANE);
 		//check sideways
 		
-		BlockPos pos = null;
+		BlockPos pos;
 	
 		for(int i=0; i<2; i++) {
 			for(int z = 3; z<=9; z+=3) {
@@ -412,18 +410,6 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 						pos = pos.add(z,0,0);
 					}
 				}
-				//state = w.getBlockState(pos);
-				//state = state.getActualState(w, pos);
-						
-				/*if (isMatchingDoorType(masterstate, state)) {
-					Block b = state.getBlock();
-					if(b.getClass() == this.getClass()) {
-						BlockTGDoor3x3<T> d = this.getClass().cast(b);
-						d.toggleState(w, pos,false);						
-					}
-				} else {
-					break;
-				}*/
 				if (!checkBlockAndToggleState(w, pos, masterstate)) {
 					break;
 				}
@@ -503,12 +489,12 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 	
 	@Override
-	public BlockStateContainer getBlockState() {
+	public @NotNull BlockStateContainer getBlockState() {
 		return this.blockStateOverride;
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public @NotNull IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(STATE, EnumDoorState.values()[meta&3]).withProperty(ZPLANE, (meta&4)>0).withProperty(MASTER, (meta&8)>0);
 	}
 
@@ -526,17 +512,17 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public @NotNull Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
 		return this.placer;
 	}
 
 	@Override
-	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
-			EntityPlayer player) {
+	public @NotNull ItemStack getPickBlock(@NotNull IBlockState state, @NotNull RayTraceResult target, @NotNull World world, @NotNull BlockPos pos,
+										   @NotNull EntityPlayer player) {
 
 		BlockPos masterPos = this.findMaster(world, pos, state);
 		TileEntity tile = world.getTileEntity(masterPos);
-		if(tile!=null && tile instanceof Door3x3TileEntity) {
+		if(tile instanceof Door3x3TileEntity) {
 			Door3x3TileEntity door = (Door3x3TileEntity) tile;
 			return new ItemStack(this.placer,1,door.getDoorType());
 		}
@@ -545,26 +531,26 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-			int fortune) {
+	public void getDrops(@NotNull NonNullList<ItemStack> drops, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull IBlockState state,
+						 int fortune) {
 	}
 
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+	public void onBlockHarvested(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, EntityPlayer player) {
 		if (player.capabilities.isCreativeMode || worldIn.isRemote) return;
 		
 		ItemStack drop =ItemStack.EMPTY;
 		BlockPos masterPos = this.findMaster(worldIn, pos, state);
 		TileEntity tile = worldIn.getTileEntity(masterPos);
 
-		if(tile!=null && tile instanceof Door3x3TileEntity) {
+		if(tile instanceof Door3x3TileEntity) {
 			Door3x3TileEntity door = (Door3x3TileEntity) tile;
 			drop = new ItemStack(this.placer,1,door.getDoorType());
 		}
 		
 		if (!drop.isEmpty() && !worldIn.restoringBlockSnapshots) // do not drop items while restoring blockstates, prevents item dupe
 		{
-			NonNullList<ItemStack> drops = NonNullList.<ItemStack>withSize(1, drop);
+			NonNullList<ItemStack> drops = NonNullList.withSize(1, drop);
 			float chance = net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(drops, worldIn, pos, state, 0, 1.0f, false, player);
 
 			if (chance>=1.0f || worldIn.rand.nextFloat() <= chance) {
@@ -619,19 +605,19 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 	
 	@Override
-	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+	public boolean isPassable(IBlockAccess worldIn, @NotNull BlockPos pos) {
 		IBlockState state = worldIn.getBlockState(pos);
 		return this.isStateOpen(state);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EntityPlayer playerIn,
+									@NotNull EnumHand hand, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
 		BlockPos master = this.findMaster(worldIn, pos, state);
 		
 		TileEntity tile = worldIn.getTileEntity(master);
-		if(tile!=null && tile instanceof Door3x3TileEntity) {
+		if(tile instanceof Door3x3TileEntity) {
 			Door3x3TileEntity door = (Door3x3TileEntity) tile;
 			if(door.isUseableByPlayer(playerIn)) {
 			
@@ -660,7 +646,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 	
 	@Override
-	public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean shouldCheckWeakPower(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EnumFacing side) {
 		return true;
 	}
 
@@ -670,10 +656,10 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 		if(masterstate.getValue(ZPLANE)) {
 			offsets=pos_z;
 		}
-		
-		for(int i=0;i<offsets.length; i++) {
-			BlockPos p = masterPos.add(offsets[i]);
-			if(w.isBlockPowered(p)) {
+
+		for (Vec3i offset : offsets) {
+			BlockPos p = masterPos.add(offset);
+			if (w.isBlockPowered(p)) {
 				return true;
 			}
 		}
@@ -682,7 +668,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	
 	public void updateRedstoneState(IBlockAccess world, BlockPos masterPos) {
 		TileEntity tile = world.getTileEntity(masterPos);
-		if(tile!=null && tile instanceof Door3x3TileEntity) {
+		if(tile instanceof Door3x3TileEntity) {
 			Door3x3TileEntity door = (Door3x3TileEntity) tile;
 			if(door.isRedstoneMode() && door.getRedstoneBehaviour()!=0) {
 				IBlockState masterstate = world.getBlockState(masterPos);
@@ -704,7 +690,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+	public void neighborChanged(IBlockState state, @NotNull World world, @NotNull BlockPos pos, @NotNull Block blockIn, @NotNull BlockPos fromPos) {
 		if(!state.getValue(MASTER)) {
 			BlockPos masterpos = this.findMaster(world, pos, state);
 			this.updateRedstoneState(world, masterpos);
@@ -712,7 +698,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+	public void breakBlock(@NotNull World worldIn, @NotNull BlockPos pos, IBlockState state) {
 		if (state.getValue(MASTER)) {
 			breakSlave(worldIn,pos.up());
 			breakSlave(worldIn,pos.down());
@@ -762,7 +748,7 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public IBlockState withRotation(IBlockState state, Rotation rot) {
+	public @NotNull IBlockState withRotation(@NotNull IBlockState state, @NotNull Rotation rot) {
 		if (rot == Rotation.COUNTERCLOCKWISE_90 || rot == Rotation.CLOCKWISE_90) {
 			return state.withProperty(ZPLANE, !state.getValue(ZPLANE));
 		}
@@ -770,19 +756,19 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+	public @NotNull IBlockState withMirror(@NotNull IBlockState state, @NotNull Mirror mirrorIn) {
 		return state;
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs itemIn, @NotNull NonNullList<ItemStack> items) {
 	}
 
 	@Override
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+	public void onBlockAdded(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
 		if(!worldIn.isRemote && state.getValue(MASTER)) {
 			TileEntity tile = worldIn.getTileEntity(pos);
-			if(tile!=null && tile instanceof Door3x3TileEntity) {
+			if(tile instanceof Door3x3TileEntity) {
 				Door3x3TileEntity door = (Door3x3TileEntity) tile;
 				
 				if(door.isPlayerDetector()) {
@@ -795,13 +781,13 @@ public class BlockTGDoor3x3<T extends Enum<T> & IStringSerializable> extends Gen
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void updateTick(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Random rand) {
 		if(worldIn.isRemote || (state.getBlock()!=this) || !state.getValue(MASTER)) return;
 		
 		//System.out.println("Block Update Tick!");
 		
 		TileEntity tile = worldIn.getTileEntity(pos);
-		if(tile!=null && tile instanceof Door3x3TileEntity) {
+		if(tile instanceof Door3x3TileEntity) {
 			Door3x3TileEntity door = (Door3x3TileEntity) tile;
 
 			boolean openstate = state.getValue(STATE)==EnumDoorState.OPENED;

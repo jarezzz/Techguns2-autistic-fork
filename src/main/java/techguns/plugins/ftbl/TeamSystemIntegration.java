@@ -1,11 +1,9 @@
 package techguns.plugins.ftbl;
 
-import java.util.UUID;
-
-import com.feed_the_beast.ftblib.lib.data.FTBLibAPI;
 import com.feed_the_beast.ftblib.lib.data.ForgePlayer;
-import com.feed_the_beast.ftblib.lib.data.ForgeTeam;
 import com.feed_the_beast.ftblib.lib.data.Universe;
+
+import java.util.UUID;
 
 public class TeamSystemIntegration {
 

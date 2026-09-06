@@ -1,65 +1,13 @@
 package techguns.deatheffects;
 
-import java.util.ArrayList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.*;
+import net.minecraft.entity.player.EntityPlayer;
+import techguns.entities.npcs.*;
+
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityCaveSpider;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityEvoker;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityHusk;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraft.entity.monster.EntityShulker;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityStray;
-import net.minecraft.entity.monster.EntityVex;
-import net.minecraft.entity.monster.EntityVindicator;
-import net.minecraft.entity.monster.EntityWitch;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.EntityZombieVillager;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityDonkey;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityLlama;
-import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityMule;
-import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntityRabbit;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
-import techguns.entities.npcs.AlienBug;
-import techguns.entities.npcs.ArmySoldier;
-import techguns.entities.npcs.Bandit;
-import techguns.entities.npcs.Commando;
-import techguns.entities.npcs.CyberDemon;
-import techguns.entities.npcs.DictatorDave;
-import techguns.entities.npcs.Ghastling;
-import techguns.entities.npcs.Outcast;
-import techguns.entities.npcs.PsychoSteve;
-import techguns.entities.npcs.SkeletonSoldier;
-import techguns.entities.npcs.StormTrooper;
-import techguns.entities.npcs.SuperMutantBasic;
-import techguns.entities.npcs.SuperMutantElite;
-import techguns.entities.npcs.SuperMutantHeavy;
-import techguns.entities.npcs.ZombieFarmer;
-import techguns.entities.npcs.ZombieMiner;
-import techguns.entities.npcs.ZombiePigmanSoldier;
-import techguns.entities.npcs.ZombieSoldier;
 
 /**
  * Server and client side, needed by server to know to send out packets
@@ -84,7 +32,6 @@ public class EntityDeathUtils {
 		goreMap.add(EntityPig.class);
 		goreMap.add(EntityChicken.class);
 		goreMap.add(EntityPigZombie.class);
-		goreMap.add(ZombieSoldier.class);
 		goreMap.add(ArmySoldier.class);
 		goreMap.add(CyberDemon.class);
 		goreMap.add(ZombiePigmanSoldier.class);
@@ -96,7 +43,6 @@ public class EntityDeathUtils {
 		goreMap.add(ZombieMiner.class);
 		goreMap.add(Bandit.class);
 		goreMap.add(ZombieSoldier.class);
-		goreMap.add(EntityHorse.class);
 		goreMap.add(EntityMooshroom.class);
 		goreMap.add(EntityWolf.class);
 		goreMap.add(EntitySquid.class);
@@ -151,21 +97,17 @@ public class EntityDeathUtils {
 		if (deathtype == DeathType.BIO || deathtype == DeathType.LASER) return true;
 		
 		//GenericGore
-		if (entityDeathTypes.get(DeathType.GORE).contains(entityLiving.getClass())){
-			return true;
-		}
-		
-		return false;
-		
+		return entityDeathTypes.get(DeathType.GORE).contains(entityLiving.getClass());
+
 
 	}
 	
     public enum DeathType {
     	DEFAULT(0), GORE(1), BIO(2), LASER(3), DISMEMBER(4);
     	
-    	int value;
+    	final int value;
     	
-    	private DeathType(int value) {
+    	DeathType(int value) {
     		this.value = value;
     	}
     	

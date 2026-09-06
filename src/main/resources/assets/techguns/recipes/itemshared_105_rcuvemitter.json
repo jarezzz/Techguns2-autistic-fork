@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "techguns:itemshared",
+    "data": 105
+  },
+  "pattern": [
+    "sss",
+    "fif",
+    "ttt"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "s": {
+      "item": "#PLATESTEEL"
+    },
+    "f": {
+      "item": "#CIRCUITELITE"
+    },
+    "i": {
+      "item": "techguns:itemshared",
+      "data": 160
+    },
+	"t": {
+	  "item": "#HARDENEDGLASSORGLASS"
+	}
+  }
+}

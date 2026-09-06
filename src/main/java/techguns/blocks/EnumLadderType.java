@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum EnumLadderType implements IStringSerializable {
 	METAL,
@@ -9,7 +10,7 @@ public enum EnumLadderType implements IStringSerializable {
 	CARBON;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return this.name().toLowerCase();
 	}
 }

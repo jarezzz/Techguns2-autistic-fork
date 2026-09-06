@@ -1,6 +1,7 @@
 package techguns.blocks;
 
 import net.minecraft.util.IStringSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public enum TGMetalPanelType implements IStringSerializable{
 	CONTAINER_RED,
@@ -10,10 +11,12 @@ public enum TGMetalPanelType implements IStringSerializable{
 	PANEL_LARGE_BORDER,
 	STEELFRAME_BLUE,
 	STEELFRAME_DARK,
-	STEELFRAME_SCAFFOLD;
+	STEELFRAME_SCAFFOLD,
+	CONTAINER_SCIFI,
+	CONTAINER_SCIFI_RUSTY;
 
 	@Override
-	public String getName() {
+	public @NotNull String getName() {
 		return name().toLowerCase();
 	}
 

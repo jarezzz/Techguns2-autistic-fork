@@ -78,22 +78,15 @@ public class TGShooterValues implements ITGShooterValues, ITGParticleAttachments
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public List<ITGParticle> getOrInitEntityParticles() {
-		if (this.entityParticles==null) this.entityParticles = new LinkedList<ITGParticle>();
-		return this.entityParticles;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
 	public List<TGParticleSystem> getOrInitParticleSysMainhand() {
-		if(this.particleSysMH==null) this.particleSysMH = new LinkedList<TGParticleSystem>();
+		if(this.particleSysMH==null) this.particleSysMH = new LinkedList<>();
 		return this.particleSysMH;
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public List<TGParticleSystem> getOrInitParticleSysOffhand() {
-		if(this.particleSysOH==null) this.particleSysOH = new LinkedList<TGParticleSystem>();
+		if(this.particleSysOH==null) this.particleSysOH = new LinkedList<>();
 		return this.particleSysOH;
 	}
 
@@ -109,13 +102,13 @@ public class TGShooterValues implements ITGShooterValues, ITGParticleAttachments
 
 	@Override
 	public List<ITGParticle> getOrInitEntityParticlesOH() {
-		if(this.entityParticlesOH==null) this.entityParticlesOH = new LinkedList<ITGParticle>();
+		if(this.entityParticlesOH==null) this.entityParticlesOH = new LinkedList<>();
 		return this.entityParticlesOH;
 	}
 
 	@Override
 	public List<ITGParticle> getOrInitEntityParticlesMH() {
-		if(this.entityParticlesMH==null) this.entityParticlesMH = new LinkedList<ITGParticle>();
+		if(this.entityParticlesMH==null) this.entityParticlesMH = new LinkedList<>();
 		return this.entityParticlesMH;
 	}
 	

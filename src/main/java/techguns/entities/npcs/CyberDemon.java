@@ -1,6 +1,7 @@
 package techguns.entities.npcs;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -10,12 +11,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import techguns.TGuns;
-import techguns.Techguns;
+import techguns.*;
+import techguns.api.npc.factions.ITGNpcTeam;
 
 public class CyberDemon extends GenericNPCUndead {
 
-	public static final ResourceLocation LOOT = new ResourceLocation(Techguns.MODID, "entities/cyberdemon");
+	public static final ResourceLocation LOOT = new ResourceLocation(Tags.MOD_ID, "entities/cyberdemon");
 	
 	public CyberDemon(World world) {
 		super(world);
@@ -43,7 +47,11 @@ public class CyberDemon extends GenericNPCUndead {
 		
 		weapon = TGuns.netherblaster;
 		
-		if (weapon != null) this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+		if (weapon != null) {
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(weapon));
+			if (TGConfig.misc.disableGunDrops)
+				this.setDropChance(EntityEquipmentSlot.MAINHAND, 0f);
+		}
 	}
 	
 	@Override
@@ -52,12 +60,12 @@ public class CyberDemon extends GenericNPCUndead {
 	}
 
 	@Override
-	public SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	public @NotNull SoundEvent getHurtSound(@NotNull DamageSource damageSourceIn) {
 		return techguns.TGSounds.CYBERDEMON_HURT;
 	}
 
 	@Override
-	public SoundEvent getDeathSound() {
+	public @NotNull SoundEvent getDeathSound() {
 		return techguns.TGSounds.CYBERDEMON_DEATH;
 	}
 
@@ -120,6 +128,41 @@ public class CyberDemon extends GenericNPCUndead {
 	protected boolean shouldBurnInDay() {
 		return false;
 	}
+
+    @Override
+    public boolean attackEntityFrom(@NotNull DamageSource source, float amount) {
+        if (this.isFriendlyDamage(source)) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
+
+    private boolean isFriendlyDamage(DamageSource source) {
+        return this.isFriendlyEntity(source.getTrueSource()) || this.isFriendlyEntity(source.getImmediateSource());
+    }
+
+    private boolean isFriendlyEntity(@Nullable Entity entity) {
+        if (entity == null) {
+            return false;
+        }
+        if (entity == this) {
+            return true;
+        }
+        if (entity instanceof ITGNpcTeam) {
+            return ((ITGNpcTeam) entity).getTGFaction() == this.getTGFaction();
+        }
+        return false;
+    }
+
+    @Override
+    public int getMaxFallHeight() {
+        return 1;
+    }
+
+    @Override
+    protected boolean useTargetOffsetPathing() {
+        return true;
+    }
 	
 	
 }

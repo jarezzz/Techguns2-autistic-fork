@@ -3,6 +3,7 @@ package techguns.plugins.crafttweaker;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import net.minecraft.item.ItemStack;
 import techguns.util.ItemStackOreDict;
 
 public class TGCraftTweakerHelper {
@@ -21,22 +22,16 @@ public class TGCraftTweakerHelper {
 		sb.append("]");
 		return sb.toString();
 	}
-	
-	public static ItemStackOreDict toItemStackOreDict(IItemStack stack){
-		return new ItemStackOreDict(CraftTweakerMC.getItemStack(stack));
+
+	public static ItemStackOreDict toItemStackOreDict(IItemStack stack) {
+		ItemStack itemStack = CraftTweakerMC.getItemStack(stack);
+		if (!itemStack.isEmpty() && itemStack.hasTagCompound()) {
+			return new ItemStackOreDict(itemStack.copy());
+		}
+		return new ItemStackOreDict(itemStack);
 	}
 	
 	public static ItemStackOreDict toItemStackOreDict(String oreDictName){
 		return new ItemStackOreDict(oreDictName);
-	}
-	
-	public static ItemStackOreDict toItemStackOreDict(Object o){
-		//System.out.println("OBJECT:"+o);
-		if (o instanceof IItemStack){
-			return new ItemStackOreDict(CraftTweakerMC.getItemStack((IItemStack)o));
-		} else if (o instanceof String){
-			return new ItemStackOreDict((String)o);
-		}
-		return ItemStackOreDict.EMPTY;
 	}
 }

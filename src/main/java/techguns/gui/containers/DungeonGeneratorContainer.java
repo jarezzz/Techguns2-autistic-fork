@@ -5,11 +5,11 @@ import techguns.tileentities.DungeonGeneratorTileEnt;
 
 public class DungeonGeneratorContainer extends OwnedTileContainer {
 
-	DungeonGeneratorTileEnt tile;
-	
-	public DungeonGeneratorContainer(InventoryPlayer player, DungeonGeneratorTileEnt ent) {
-		super(player, ent);
-		this.tile=ent;
-	}
+    DungeonGeneratorTileEnt tile;
+
+    public DungeonGeneratorContainer(InventoryPlayer player, DungeonGeneratorTileEnt ent) {
+        super(player, ent);
+        this.tile = ent;
+    }
 
 }

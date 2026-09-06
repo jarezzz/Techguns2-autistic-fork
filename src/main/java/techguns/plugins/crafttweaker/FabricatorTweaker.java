@@ -203,11 +203,7 @@ public class FabricatorTweaker {
 			}
 			
 			return true;
-		} else if ( (checkWire&&slotId==0&&!checkPowder&&!checkPlate) || (checkPowder&&slotId==1&&!checkWire&&!checkPlate) || (checkPlate&&slotId==2&&!checkWire&&!checkPowder)) {
-			return true;
-		} else {
-			return false;
-		}
+		} else return (checkWire && slotId == 0 && !checkPowder && !checkPlate) || (checkPowder && slotId == 1 && !checkWire && !checkPlate) || (checkPlate && slotId == 2 && !checkWire && !checkPowder);
 		
 	}
 	
@@ -288,45 +284,33 @@ public class FabricatorTweaker {
 	private static void removeFromLists(ItemStackOreDict wire, ItemStackOreDict powder, ItemStackOreDict plate){
 		
 		if (checkListRemoval(0, wire)){
-			removeFromList(FabricatorRecipe.items_wireslot, wire);
+			FabricatorRecipe.items_wireslot.removeIf(i -> i.matches(wire));
 		}
 		
 		if (checkListRemoval(1, powder)){
-			removeFromList(FabricatorRecipe.items_powderslot, powder);
+			FabricatorRecipe.items_powderslot.removeIf(i -> i.matches(powder));
 		}
 		
 		if (checkListRemoval(2, plate)){
-			removeFromList(FabricatorRecipe.items_plateslot, plate);
+			FabricatorRecipe.items_plateslot.removeIf(i -> i.matches(plate));
 		}
 		
 	}
-	
-	private static void removeFromList(ArrayList<ItemStackOreDict> list, ItemStackOreDict item){
-		
-		Iterator<ItemStackOreDict> it = list.iterator();
-		while (it.hasNext()){
-			ItemStackOreDict i = it.next();
-			
-			if (i.matches(item)){
-				it.remove();
-			}
-		}
-	}
-	
+
 	private static boolean checkListRemoval(int slot, ItemStackOreDict wire){
 		
 		ArrayList<FabricatorRecipe> rec = FabricatorRecipe.getRecipes();
-		for (int i=0; i<rec.size(); i++){
-			if (slot==0){
-				if (rec.get(i).wireSlot.matches(wire)){
+		for (FabricatorRecipe fabricatorRecipe : rec) {
+			if (slot == 0) {
+				if (fabricatorRecipe.wireSlot.matches(wire)) {
 					return false;
 				}
-			} else if (slot==1){
-				if (rec.get(i).powderSlot.matches(wire)){
+			} else if (slot == 1) {
+				if (fabricatorRecipe.powderSlot.matches(wire)) {
 					return false;
 				}
-			} else if (slot==2){
-				if (rec.get(i).plateSlot.matches(wire)){
+			} else if (slot == 2) {
+				if (fabricatorRecipe.plateSlot.matches(wire)) {
 					return false;
 				}
 			}

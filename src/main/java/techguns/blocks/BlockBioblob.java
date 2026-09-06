@@ -20,7 +20,8 @@ import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import techguns.Techguns;
+import org.jetbrains.annotations.NotNull;
+import techguns.*;
 import techguns.tileentities.BioBlobTileEnt;
 import techguns.util.BlockUtils;
 
@@ -50,7 +51,7 @@ public class BlockBioblob extends GenericBlock {
 	protected AxisAlignedBB getBB(IBlockState state, IBlockAccess w, BlockPos pos) {
 		int size=2;
 		TileEntity tile = w.getTileEntity(pos);
-		if(tile!=null && tile instanceof BioBlobTileEnt) {
+		if(tile instanceof BioBlobTileEnt) {
 			size = ((BioBlobTileEnt)tile).getBlobSize();
 		}
 		switch(size) {
@@ -66,7 +67,7 @@ public class BlockBioblob extends GenericBlock {
 	
 	
 	@Override
-	public int getLightValue(IBlockState state) {
+	public int getLightValue(@NotNull IBlockState state) {
 		return 7;
 	}
 
@@ -91,51 +92,51 @@ public class BlockBioblob extends GenericBlock {
 
 	@Deprecated
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess source, @NotNull BlockPos pos) {
 		return getBB(state,source,pos);
 	}
 
 	@Deprecated
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(@NotNull IBlockState blockState, @NotNull IBlockAccess worldIn, @NotNull BlockPos pos) {
 		return getBB(blockState,worldIn,pos);
 	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
+	public boolean isFullBlock(@NotNull IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return false;
-	}
-
-	@Deprecated
-	@Override
-	public boolean isFullCube(IBlockState state){
+	public boolean isNormalCube(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos) {
 		return false;
 	}
 
 	@Deprecated
 	@Override
-	public boolean isOpaqueCube(IBlockState state) {
+	public boolean isFullCube(@NotNull IBlockState state){
+		return false;
+	}
+
+	@Deprecated
+	@Override
+	public boolean isOpaqueCube(@NotNull IBlockState state) {
 		return false;
 	}
 
 	@Override
 	public void registerBlock(Register<Block> event) {
 		super.registerBlock(event);
-		GameRegistry.registerTileEntity(BioBlobTileEnt.class, new ResourceLocation(Techguns.MODID, "bioblob"));
+		GameRegistry.registerTileEntity(BioBlobTileEnt.class, new ResourceLocation(Tags.MOD_ID, "bioblob"));
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
+	protected @NotNull BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING_ALL, SIZE);
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public @NotNull IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(FACING_ALL, EnumFacing.VALUES[meta]);
 	}
 
@@ -145,10 +146,10 @@ public class BlockBioblob extends GenericBlock {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public @NotNull IBlockState getActualState(@NotNull IBlockState state, IBlockAccess worldIn, @NotNull BlockPos pos) {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		int size=0;
-		if(tile!=null && tile instanceof BioBlobTileEnt) {
+		if(tile instanceof BioBlobTileEnt) {
 			size = ((BioBlobTileEnt)tile).getBlobSize();
 		}
 		return state.withProperty(SIZE, size);		
@@ -170,12 +171,12 @@ public class BlockBioblob extends GenericBlock {
 	}
 
 	@Override
-	public boolean hasTileEntity(IBlockState state) {
+	public boolean hasTileEntity(@NotNull IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public TileEntity createTileEntity(@NotNull World world, @NotNull IBlockState state) {
 		return new BioBlobTileEnt();
 	}
 

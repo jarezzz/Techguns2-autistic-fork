@@ -15,9 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import techguns.TGItems;
 import techguns.TGRadiationSystem;
-import techguns.Techguns;
+import techguns.*;
 import techguns.util.TextUtil;
 
 public class ItemRadAway extends GenericItemConsumable {
@@ -35,7 +36,7 @@ public class ItemRadAway extends GenericItemConsumable {
 		player.addPotionEffect(new PotionEffect(TGRadiationSystem.radregen_effect, 400, 14, false, false));
 		
 		if(!worldIn.isRemote) {
-			ItemStack bottle = TGItems.newStack(TGItems.INFUSION_BAG, 1);
+			ItemStack bottle = new ItemStack(TGItems.INFUSION_BAG.getItem(), 1, TGItems.INFUSION_BAG.getItemDamage());
 			if(!player.addItemStackToInventory(bottle)) {
 				 worldIn.spawnEntity(new EntityItem(worldIn, player.posX, player.posY, player.posZ, bottle));
 			}
@@ -48,7 +49,7 @@ public class ItemRadAway extends GenericItemConsumable {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
+	public @NotNull EnumAction getItemUseAction(@NotNull ItemStack stack) {
 		return EnumAction.BOW;
 	}
 

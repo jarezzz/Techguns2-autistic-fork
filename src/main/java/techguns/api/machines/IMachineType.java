@@ -14,32 +14,32 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public interface IMachineType<E extends Enum<E>> {
-	public int getIndex();
-	public int getMaxMachineIndex();
-	public TileEntity getTile();
-	public Class<? extends TileEntity> getTileClass();
-	public EnumBlockRenderType getRenderType();
-	public boolean isFullCube();
-	public BlockRenderLayer getBlockRenderLayer();
-	public boolean debugOnly();
-	public default boolean hideInCreative() {
+public interface IMachineType {
+	int getIndex();
+	int getMaxMachineIndex();
+	TileEntity getTile();
+	Class<? extends TileEntity> getTileClass();
+	EnumBlockRenderType getRenderType();
+	boolean isFullCube();
+	BlockRenderLayer getBlockRenderLayer();
+	boolean debugOnly();
+	default boolean hideInCreative() {
 		return false;
 	}
-	public default SoundType getSoundType() {
+	default SoundType getSoundType() {
 		return SoundType.METAL;
 	}
 	
-	public default boolean hasCustomModelLocation() {
+	default boolean hasCustomModelLocation() {
 		return false;
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public default void setCustomModelLocation(Item itemblock, int meta, ResourceLocation registryName, IBlockState state) {
+	default void setCustomModelLocation(Item itemblock, int meta, ResourceLocation registryName, IBlockState state) {
 		//do nothing
 	}
 	
-	public default AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	default AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return Block.FULL_BLOCK_AABB;
 	}
 }
